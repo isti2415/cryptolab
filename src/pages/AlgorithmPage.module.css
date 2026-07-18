@@ -1,0 +1,116 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  max-width: 760px;
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.badges {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--fs-2xs);
+}
+
+.badge,
+.badgeDim {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+}
+.badge {
+  color: var(--signal);
+  border-color: var(--signal-dim);
+}
+
+.difficulty {
+  letter-spacing: 2px;
+  color: var(--signal);
+  font-size: var(--fs-2xs);
+}
+.difficultyOff {
+  color: var(--text-faint);
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  letter-spacing: -0.01em;
+}
+
+.tagline {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+  max-width: var(--maxw-read);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.sectionTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-xl);
+}
+.sectionKicker {
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--signal);
+}
+
+/* Prose ----------------------------------------------------------------- */
+.prose {
+  display: grid;
+  gap: 18px;
+}
+
+.block {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--border-strong);
+  border-radius: var(--r-md);
+  padding: 16px 20px;
+}
+.block p {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+.block p:last-child {
+  margin-bottom: 0;
+}
+
+.blockTitle {
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.blockWarn {
+  border-left-color: var(--warn);
+}
+.blockMuted {
+  background: transparent;
+  border-style: dashed;
+}
+.blockMuted p {
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+}

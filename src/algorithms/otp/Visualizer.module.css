@@ -1,0 +1,35 @@
+.viz {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+}
+
+.calc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 4px 0;
+}
+
+.char {
+  font-size: var(--fs-2xl);
+  line-height: 1;
+  color: var(--text);
+  min-width: 1.2em;
+  text-align: center;
+}
+.out {
+  color: var(--signal);
+}
+.key {
+  font-size: var(--fs-sm);
+  color: var(--signal);
+  border: 1px solid var(--signal-dim);
+  border-radius: var(--r-sm);
+  padding: 4px 10px;
+}
+.arrow {
+  color: var(--text-dim);
+}

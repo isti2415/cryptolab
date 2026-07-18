@@ -1,0 +1,38 @@
+.viz {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+  align-items: center;
+}
+
+.opRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.op {
+  font-size: var(--fs-md);
+  color: var(--signal);
+  font-weight: 600;
+}
+
+.round {
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+.result {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+.result b {
+  color: var(--signal);
+  font-weight: 600;
+}

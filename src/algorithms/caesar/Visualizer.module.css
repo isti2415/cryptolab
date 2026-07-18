@@ -1,0 +1,32 @@
+.viz {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+}
+
+.transform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 6px 0;
+}
+
+.tChar {
+  font-size: var(--fs-2xl);
+  line-height: 1;
+  color: var(--text);
+  min-width: 1.2em;
+  text-align: center;
+}
+
+.tOut {
+  color: var(--signal);
+}
+
+.tArrow {
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--tracking-wide);
+}

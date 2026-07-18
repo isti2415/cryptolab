@@ -1,0 +1,179 @@
+.console {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-panel);
+}
+
+/* Controls bar --------------------------------------------------------- */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+/* Input / output pair -------------------------------------------------- */
+.io {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+@media (min-width: 680px) {
+  .io {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.textarea,
+.input {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text);
+  padding: 10px 12px;
+  width: 100%;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+.textarea {
+  resize: vertical;
+  line-height: var(--lh-snug);
+  flex: 1;
+  min-height: 7.5em;
+}
+.textarea:focus,
+.input:focus {
+  outline: none;
+  border-color: var(--signal);
+}
+
+.inputNum {
+  width: 6.5em;
+}
+
+.inputBad {
+  border-color: var(--danger);
+}
+
+.help {
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+  max-width: 22ch;
+}
+
+.toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 2px;
+  width: max-content;
+}
+.toggleBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  padding: 6px 16px;
+  border-radius: var(--r-sm);
+  text-transform: capitalize;
+  transition: all var(--dur-fast) var(--ease);
+}
+.toggleBtn:hover {
+  color: var(--text);
+}
+.toggleOn {
+  background: var(--bg-hover);
+  color: var(--signal);
+}
+
+/* Output --------------------------------------------------------------- */
+.outputHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 1.4em;
+}
+
+.copy {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 2px 10px;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-xs);
+  transition: all var(--dur-fast) var(--ease);
+}
+.copy:hover {
+  color: var(--signal);
+  border-color: var(--signal-dim);
+}
+
+.result {
+  display: block;
+  flex: 1;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  color: var(--signal);
+  font-size: var(--fs-md);
+  word-break: break-word;
+  white-space: pre-wrap;
+  min-height: 7.5em;
+}
+
+.placeholder {
+  color: var(--text-faint);
+}
+
+.error {
+  margin: 0;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(255, 107, 107, 0.06);
+  border: 1px solid var(--danger-dim);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  min-height: 7.5em;
+}
+
+.errBadge {
+  color: var(--danger);
+  border: 1px solid var(--danger-dim);
+  border-radius: var(--r-sm);
+  padding: 1px 7px;
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  flex: 0 0 auto;
+}

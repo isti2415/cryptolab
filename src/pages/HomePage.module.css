@@ -1,0 +1,109 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 12px;
+  max-width: 660px;
+}
+
+.kicker {
+  margin: 0;
+  color: var(--signal);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+.headline {
+  font-size: clamp(1.7rem, 4.4vw, var(--fs-2xl));
+  line-height: var(--lh-tight);
+  letter-spacing: -0.01em;
+}
+
+.sub {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+}
+
+.gridTitle {
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  padding: 18px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  color: var(--text);
+  transition:
+    border-color var(--dur) var(--ease),
+    transform var(--dur) var(--ease),
+    background var(--dur) var(--ease);
+}
+.card:hover {
+  color: var(--text);
+  border-color: var(--signal-dim);
+  transform: translateY(-2px);
+  background: var(--bg-raised);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--fs-2xs);
+}
+.cardCat {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--signal);
+}
+.cardEra {
+  color: var(--text-faint);
+}
+
+.cardName {
+  font-size: var(--fs-lg);
+}
+
+.cardTag {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  flex: 1;
+}
+
+.cardGo {
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  transition: color var(--dur) var(--ease);
+}
+.card:hover .cardGo {
+  color: var(--signal);
+}

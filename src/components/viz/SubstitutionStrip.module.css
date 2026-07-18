@@ -1,0 +1,67 @@
+.strip {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-x: auto;
+  min-width: 0;
+  padding: 4px 2px 8px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rowLabel {
+  flex: 0 0 auto;
+  width: 3.8em;
+  text-align: right;
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.cells {
+  display: flex;
+  gap: 3px;
+}
+
+.cell {
+  flex: 0 0 auto;
+  width: 1.55em;
+  height: 1.9em;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.toCell {
+  color: var(--text-dim);
+}
+
+.activeFrom {
+  border-color: var(--signal);
+  color: var(--text);
+  background: var(--bg-hover);
+  transform: translateY(-2px);
+}
+
+.activeTo {
+  border-color: var(--signal);
+  background: var(--signal);
+  color: var(--signal-ink);
+  font-weight: 600;
+  transform: translateY(2px);
+  box-shadow: 0 0 0 4px var(--signal-glow);
+}

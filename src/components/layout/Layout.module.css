@@ -1,0 +1,197 @@
+.shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(8, 9, 11, 0.8);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+}
+.brand:hover {
+  color: var(--text);
+}
+.brandMark {
+  color: var(--signal);
+  font-size: var(--fs-lg);
+  line-height: 1;
+}
+.brandName {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+}
+
+.tagline {
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+}
+@media (max-width: 620px) {
+  .tagline {
+    display: none;
+  }
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  width: 100%;
+  max-width: var(--maxw-page);
+  margin: 0 auto;
+}
+
+.sidebar {
+  flex: 0 0 248px;
+  padding: 24px 12px;
+  position: sticky;
+  top: 57px;
+  align-self: flex-start;
+  max-height: calc(100dvh - 57px);
+  overflow-y: auto;
+}
+
+.navGroup + .navGroup {
+  margin-top: 6px;
+}
+
+/* Accordion header ----------------------------------------------------- */
+.navToggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  border-radius: var(--r-sm);
+  color: var(--text-dim);
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+.navToggle:hover {
+  background: var(--bg-raised);
+  color: var(--text-muted);
+}
+
+.navTitle {
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+.navCount {
+  font-size: var(--fs-2xs);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.chevron {
+  margin-left: auto;
+  color: var(--text-dim);
+  transform: rotate(-90deg);
+  transition: transform var(--dur) var(--ease);
+}
+.chevronOpen {
+  transform: rotate(0deg);
+}
+
+/* Collapsible panel: animate via grid-template-rows 0fr -> 1fr. --------- */
+.navPanel {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows var(--dur) var(--ease);
+}
+.navPanelOpen {
+  grid-template-rows: 1fr;
+}
+.navPanel > .navList {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.navList {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.navLink {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px 7px 18px;
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  border-left: 2px solid transparent;
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+.navLink:hover {
+  background: var(--bg-raised);
+  color: var(--text);
+}
+.navActive {
+  background: var(--bg-raised);
+  color: var(--signal);
+  border-left-color: var(--signal);
+}
+.navLinkName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.navEra {
+  font-size: var(--fs-2xs);
+  color: var(--text-faint);
+  flex: 0 0 auto;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 32px 24px 80px;
+}
+
+/* Mobile: sidebar becomes a stacked accordion nav above the content. */
+@media (max-width: 760px) {
+  .body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sidebar {
+    position: static;
+    flex: none;
+    width: 100%;
+    max-height: none;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .main {
+    padding: 24px 16px 64px;
+  }
+}

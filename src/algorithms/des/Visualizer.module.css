@@ -1,0 +1,123 @@
+.viz {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+  align-items: center;
+}
+
+.halves {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.half {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.halfLabel {
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-dim);
+}
+
+.word {
+  display: flex;
+  gap: 2px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+}
+.wordAccent {
+  border-color: var(--signal-dim);
+  background: color-mix(in srgb, var(--signal) 6%, var(--bg-inset));
+}
+.nib {
+  width: 1.3em;
+  height: 1.8em;
+  display: grid;
+  place-items: center;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 4px;
+}
+.op {
+  color: var(--text-dim);
+  font-size: var(--fs-lg);
+}
+.key {
+  font-size: var(--fs-2xs);
+  color: var(--signal);
+  border: 1px solid var(--signal-dim);
+  border-radius: var(--r-sm);
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+.phase {
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-dim);
+}
+
+.result {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+.result b {
+  color: var(--signal);
+  font-weight: 600;
+}
+
+.schedule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  width: 100%;
+}
+.scheduleLabel {
+  flex: 0 0 auto;
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.chip {
+  flex: 0 0 auto;
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  color: var(--text-dim);
+  font-size: var(--fs-2xs);
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+.chipActive {
+  border-color: var(--signal);
+  background: var(--signal);
+  color: var(--signal-ink);
+  font-weight: 600;
+}

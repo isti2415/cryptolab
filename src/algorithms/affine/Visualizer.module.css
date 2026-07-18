@@ -1,0 +1,34 @@
+.viz {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+}
+
+.calc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 4px 0;
+}
+
+.char {
+  font-size: var(--fs-2xl);
+  line-height: 1;
+  color: var(--text);
+  min-width: 1.2em;
+  text-align: center;
+}
+.out {
+  color: var(--signal);
+}
+
+.expr {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+.arrow {
+  color: var(--text-dim);
+}

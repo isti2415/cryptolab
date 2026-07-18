@@ -1,0 +1,119 @@
+.tapes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.tapeRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.tapeLabel {
+  flex: 0 0 auto;
+  width: 3.8em;
+  text-align: right;
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.tape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+  min-width: 0;
+  min-height: 2em;
+  padding: 4px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  overflow-x: auto;
+}
+
+.tapeAccent {
+  background: color-mix(in srgb, var(--signal) 6%, var(--bg-inset));
+  border-color: var(--signal-dim);
+}
+
+.slot {
+  flex: 0 0 auto;
+  min-width: 1.15em;
+  height: 1.7em;
+  padding: 0 2px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  white-space: pre;
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.slotSpace {
+  min-width: 0.7em;
+  padding: 0;
+  position: relative;
+}
+.slotSpace::after {
+  content: '';
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 4px;
+  height: 1px;
+  background: var(--text-faint);
+}
+
+.slotDone {
+  color: var(--text-dim);
+}
+
+.slotActive {
+  background: var(--bg-hover);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--signal);
+  transform: translateY(-1px);
+}
+
+.slotJust {
+  background: var(--signal);
+  color: var(--signal-ink);
+  font-weight: 600;
+}
+
+.cursor {
+  width: 0.55em;
+  height: 1.3em;
+  background: var(--signal);
+  opacity: 0.8;
+  border-radius: 1px;
+  animation: blink 1.1s steps(2, start) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
+}
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 0.8;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.empty {
+  color: var(--text-faint);
+  padding: 0 6px;
+}

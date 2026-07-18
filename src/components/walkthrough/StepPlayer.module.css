@@ -1,0 +1,161 @@
+.player {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-panel);
+}
+.player:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stepMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--fs-xs);
+}
+
+.phase {
+  color: var(--signal);
+  border: 1px solid var(--signal-dim);
+  border-radius: 999px;
+  padding: 1px 9px;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.counter {
+  color: var(--text-dim);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: var(--fs-lg);
+  color: var(--text);
+}
+
+.desc {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  max-width: var(--maxw-read);
+}
+
+.stage {
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 22px 18px;
+  min-height: 220px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+.stage > * {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Controls -------------------------------------------------------------- */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.ctrl {
+  min-width: 2.4em;
+  height: 2.4em;
+  display: grid;
+  place-items: center;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.ctrl:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.ctrl:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.play {
+  color: var(--signal);
+  border-color: var(--signal-dim);
+}
+.play:hover:not(:disabled) {
+  border-color: var(--signal);
+  color: var(--signal-bright);
+}
+
+.scrubberWrap {
+  flex: 1 1 180px;
+  display: flex;
+  align-items: center;
+}
+
+.scrubber {
+  width: 100%;
+  accent-color: var(--signal);
+  cursor: pointer;
+}
+
+.speed {
+  display: flex;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 2px;
+}
+.speedBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  padding: 3px 8px;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-xs);
+  transition: all var(--dur-fast) var(--ease);
+}
+.speedBtn:hover {
+  color: var(--text);
+}
+.speedOn {
+  background: var(--bg-hover);
+  color: var(--signal);
+}
+
+.empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-dim);
+  background: var(--bg-panel);
+  border: 1px dashed var(--border);
+  border-radius: var(--r-lg);
+}
