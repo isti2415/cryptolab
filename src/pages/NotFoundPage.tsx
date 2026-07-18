@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom';
+import { Seo } from '@/components/Seo';
+import { SITE_NAME } from '@/core/site';
 
 export function NotFoundPage() {
   return (
     <div style={{ padding: '40px 0', maxWidth: '48ch' }}>
+      <Seo
+        title={`Page not found | ${SITE_NAME}`}
+        description="The page you were looking for doesn’t exist."
+        path="/404"
+        noindex
+      />
       <p
         style={{
           color: 'var(--signal)',

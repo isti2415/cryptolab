@@ -1,11 +1,8 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './App';
+import { ViteReactSSG } from 'vite-react-ssg';
+import { routes } from './App';
 import './styles/global.css';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
-);
+// vite-react-ssg drives both the static prerender (Node) and client hydration
+// from this single entry, using the shared `routes` table so the two can't
+// diverge.
+export const createRoot = ViteReactSSG({ routes });

@@ -3,5 +3,7 @@ dist
 dist-ssr
 *.local
 .vite
+.vite-react-ssg-temp
 coverage
 .DS_Store
+*.tsbuildinfo

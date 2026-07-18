@@ -2,10 +2,52 @@ import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Console } from '@/components/playground/Console';
 import { StepPlayer } from '@/components/walkthrough/StepPlayer';
+import { Seo } from '@/components/Seo';
 import { getAlgorithm } from '@/core/registry';
+import { SITE_NAME, SITE_URL, absoluteUrl } from '@/core/site';
 import type { AnyAlgorithm, Direction, Params } from '@/core/types';
 import { NotFoundPage } from './NotFoundPage';
 import styles from './AlgorithmPage.module.css';
+
+function algorithmSeo(algo: AnyAlgorithm) {
+  const { meta, content } = algo;
+  const path = `/a/${meta.id}`;
+  const title = `${meta.name} — Interactive Visualizer & Playground | ${SITE_NAME}`;
+  const description =
+    `${content.tagline} Step through ${meta.name} on real input and experiment with your own keys in a live playground.`.slice(
+      0,
+      160,
+    );
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'LearningResource',
+      name: meta.name,
+      headline: `${meta.name} — how it works, step by step`,
+      description: content.overview[0] ?? content.tagline,
+      url: absoluteUrl(path),
+      learningResourceType: 'Interactive visualization',
+      educationalLevel: 'Beginner to intermediate',
+      about: { '@type': 'Thing', name: `${meta.name} (cryptographic algorithm)` },
+      isAccessibleForFree: true,
+      inLanguage: 'en',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: SITE_NAME, item: SITE_URL },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: meta.name,
+          item: absoluteUrl(path),
+        },
+      ],
+    },
+  ];
+  return { title, description, path, jsonLd };
+}
 
 export function AlgorithmPage() {
   const { id } = useParams();
@@ -39,8 +81,17 @@ function AlgorithmExperience({ algo }: { algo: AnyAlgorithm }) {
     [algo, input, params, direction],
   );
 
+  const seo = algorithmSeo(algo);
+
   return (
     <article className={styles.page}>
+      <Seo
+        title={seo.title}
+        description={seo.description}
+        path={seo.path}
+        type="article"
+        jsonLd={seo.jsonLd}
+      />
       <header className={styles.head}>
         <div className={styles.badges}>
           <span className={styles.badge}>{algo.meta.category}</span>

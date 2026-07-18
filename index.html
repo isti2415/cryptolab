@@ -3,11 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="CryptoLab — learn cryptography by watching real algorithms transform real input, step by step, alongside a live playground."
-    />
-    <title>CryptoLab — cryptography, one step at a time</title>
+    <meta name="theme-color" content="#08090b" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!--
+      No <title> or <meta name="description"> here on purpose: every route
+      renders a <Seo> component whose tags are injected into <head> at prerender
+      time (see src/components/Seo.tsx). Duplicating them here would produce two
+      title/description tags per page.
+    -->
   </head>
   <body>
     <div id="root"></div>

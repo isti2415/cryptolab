@@ -1,10 +1,47 @@
 import { Link } from 'react-router-dom';
 import { algorithms } from '@/core/registry';
+import { Seo } from '@/components/Seo';
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_URL,
+  absoluteUrl,
+} from '@/core/site';
 import styles from './HomePage.module.css';
 
 export function HomePage() {
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: SITE_NAME,
+      alternateName: `${SITE_NAME} — ${SITE_TAGLINE}`,
+      url: SITE_URL,
+      description: SITE_DESCRIPTION,
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'Cryptographic algorithms',
+      itemListElement: algorithms.map((a, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: a.meta.name,
+        url: absoluteUrl(`/a/${a.meta.id}`),
+      })),
+    },
+  ];
+
   return (
     <div className={styles.home}>
+      <Seo
+        title={`${SITE_NAME} — ${SITE_TAGLINE}`}
+        description={SITE_DESCRIPTION}
+        path="/"
+        type="website"
+        jsonLd={jsonLd}
+      />
       <section className={styles.hero}>
         <p className={styles.kicker}>a hands-on cryptography lab</p>
         <h1 className={styles.headline}>
