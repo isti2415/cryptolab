@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Learn cryptography by watching real algorithms transform real input, step by step.",
+  "packageManager": "pnpm@10.32.1",
   "scripts": {
     "dev": "vite-react-ssg dev",
     "build": "tsc -b && vite-react-ssg build && node scripts/generate-sitemap.mjs",
