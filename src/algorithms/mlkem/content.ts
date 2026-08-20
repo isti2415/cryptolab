@@ -35,12 +35,12 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "n", meaning: "ring degree; 256 in FIPS 203, 8 here so coefficients fit on screen" },
-    { symbol: "k", meaning: "module rank: how many polynomials make up a vector" },
-    { symbol: "q", meaning: "the coefficient modulus, 3329; Kyber’s real value" },
-    { symbol: "A", meaning: "a k×k matrix of polynomials, expanded from a public seed" },
-    { symbol: "s, e", meaning: "secret and error vectors, coefficients from a narrow binomial" },
-    { symbol: "u, v", meaning: "the two halves of the ciphertext" },
+    { symbol: "n", meaning: "Ring degree; 256 in FIPS 203, 8 here so coefficients fit on screen" },
+    { symbol: "k", meaning: "Module rank: how many polynomials make up a vector" },
+    { symbol: "q", meaning: "The coefficient modulus, 3329; Kyber’s real value" },
+    { symbol: "A", meaning: "A k×k matrix of polynomials, expanded from a public seed" },
+    { symbol: "s, e", meaning: "Secret and error vectors, coefficients from a narrow binomial" },
+    { symbol: "u, v", meaning: "The two halves of the ciphertext" },
   ],
   overview: [
     'ML-KEM is a key encapsulation mechanism rather than an encryption scheme. It does not take your message; it produces a shared secret and a ciphertext that lets the key holder recover it. That is what a modern protocol actually needs; the shared secret keys a symmetric cipher, which does the real work.',

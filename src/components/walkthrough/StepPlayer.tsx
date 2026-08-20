@@ -202,7 +202,7 @@ export function StepPlayer<S>({
         <div className={styles.stepMeta}>
           {step.phase && <span className={styles.phase}>{step.phase}</span>}
           <span className={styles.counter}>
-            step {clamped + 1} / {count}
+            Step {clamped + 1} / {count}
           </span>
         </div>
         <h3 className={styles.title}>{step.title}</h3>

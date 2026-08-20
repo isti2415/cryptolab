@@ -25,10 +25,10 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "xᵢ, cᵢ", meaning: "the i-th plaintext and ciphertext letters, as numbers" },
-    { symbol: "kᵢ", meaning: "the i-th pad letter; random, secret, used exactly once" },
-    { symbol: "|k|, |x|", meaning: "lengths of the pad and the message" },
-    { symbol: "Pr[x | c]", meaning: "probability the message was x, given the ciphertext is c" },
+    { symbol: "xᵢ, cᵢ", meaning: "The i-th plaintext and ciphertext letters, as numbers" },
+    { symbol: "kᵢ", meaning: "The i-th pad letter; random, secret, used exactly once" },
+    { symbol: "|k|, |x|", meaning: "Lengths of the pad and the message" },
+    { symbol: "Pr[x | c]", meaning: "Probability the message was x, given the ciphertext is c" },
   ],
   overview: [
     'The one-time pad combines each character of the message with a character of key material, and never reuses that material. Mechanically it is a Vigenère cipher whose keyword is as long as the message; the difference is not in the arithmetic but in the conditions imposed on the key.',

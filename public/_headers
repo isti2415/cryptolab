@@ -5,11 +5,18 @@
 # caching on top of it.
 
 /*
-  # No third-party scripts, styles, fonts or frames: everything is self-hosted,
-  # including the webfonts, so the policy can be this tight. 'unsafe-inline' is
-  # needed for the pre-paint theme script in index.html and for the style
-  # attributes React writes for progress bars and grid spans.
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests
+  # Everything the site itself needs is self-hosted, fonts included, so the
+  # policy stays this tight. 'unsafe-inline' is needed for the pre-paint theme
+  # script in index.html and for the style attributes React writes for progress
+  # bars and grid spans.
+  #
+  # The one third party allowed is Cloudflare Web Analytics. Pages injects
+  # `static.cloudflareinsights.com/beacon.min.js` when it is enabled in the
+  # dashboard, and without the host here the browser blocks it and the panel
+  # silently reads zero. `connect-src 'self'` already covers the automatic
+  # setup, which reports to this domain's own /cdn-cgi/rum; the explicit host
+  # covers the manual snippet, which posts to cloudflareinsights.com directly.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   # No camera, microphone or geolocation is used anywhere on the site.

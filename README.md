@@ -207,11 +207,18 @@ Build settings, if the project is being connected for the first time:
 
 - `wrangler.toml` pins the project name and `pages_build_output_dir`, so
   `pnpm build && npx wrangler pages deploy` works from a checkout without flags.
-- `public/_headers` sets a strict CSP (everything is self-hosted, including
-  fonts), HSTS, `frame-ancestors 'none'`, immutable caching for fingerprinted
-  assets, day-long revalidating caching for the share cards and icons, and
-  no-cache for HTML, `sitemap.xml` and `robots.txt` so a deploy is visible
-  immediately.
+- `public/_headers` sets a strict CSP (everything the site needs is self-hosted,
+  fonts included), HSTS, `frame-ancestors 'none'`, immutable caching for
+  fingerprinted assets, day-long revalidating caching for the share cards and
+  icons, and no-cache for HTML, `sitemap.xml` and `robots.txt` so a deploy is
+  visible immediately.
+- The CSP allows exactly one third party: `static.cloudflareinsights.com`, so
+  Cloudflare Web Analytics works if it is enabled in the dashboard. It is
+  cookie-free and does no fingerprinting, which is why the landing page can
+  still say "no cookies" — what it does not say, deliberately, is "nothing is
+  sent to a server", because page views are. The claim that matters is that
+  input and keys never leave the browser, and that remains true: no algorithm
+  code performs any network I/O.
 - The 404 route is prerendered to `dist/404.html`, which Pages serves with a real
   `404` status for unmatched paths. There is deliberately no SPA catch-all in
   `_redirects`: every real route is its own file, so an unknown URL should 404

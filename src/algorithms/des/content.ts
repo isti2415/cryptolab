@@ -30,12 +30,12 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "L, R", meaning: "the left and right 32-bit halves of the block" },
-    { symbol: "Kₙ", meaning: "the 48-bit round key for round n" },
-    { symbol: "E", meaning: "expansion, 32 bits to 48 by duplicating sixteen of them" },
-    { symbol: "S", meaning: "the eight S-boxes, 48 bits in and 32 out" },
-    { symbol: "P", meaning: "a fixed 32-bit permutation, so each S-box feeds different ones next round" },
-    { symbol: "IP, FP", meaning: "initial and final permutations; exact inverses, and cryptographically inert" },
+    { symbol: "L, R", meaning: "The left and right 32-bit halves of the block" },
+    { symbol: "Kₙ", meaning: "The 48-bit round key for round n" },
+    { symbol: "E", meaning: "Expansion, 32 bits to 48 by duplicating sixteen of them" },
+    { symbol: "S", meaning: "The eight S-boxes, 48 bits in and 32 out" },
+    { symbol: "P", meaning: "A fixed 32-bit permutation, so each S-box feeds different ones next round" },
+    { symbol: "IP, FP", meaning: "Initial and final permutations; exact inverses, and cryptographically inert" },
   ],
   overview: [
     'DES encrypts a single 64-bit block under a 56-bit key, supplied as 64 bits including eight parity bits that carry no key material. The block passes through an initial permutation, sixteen rounds of a Feistel network, and a final permutation that is the exact inverse of the first.',

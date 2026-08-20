@@ -25,10 +25,10 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "L, R", meaning: "the two 32-bit halves of the 64-bit block" },
-    { symbol: "Pᵢ", meaning: "the i-th of 18 subkeys in the P-array" },
-    { symbol: "S₁…S₄", meaning: "four key-dependent S-boxes of 256 entries each" },
-    { symbol: "a, b, c, d", meaning: "the four bytes of the word entering f, most significant first" },
+    { symbol: "L, R", meaning: "The two 32-bit halves of the 64-bit block" },
+    { symbol: "Pᵢ", meaning: "The i-th of 18 subkeys in the P-array" },
+    { symbol: "S₁…S₄", meaning: "Four key-dependent S-boxes of 256 entries each" },
+    { symbol: "a, b, c, d", meaning: "The four bytes of the word entering f, most significant first" },
     { symbol: "⊕", meaning: "XOR; + is addition modulo 2³²" },
   ],
   overview: [

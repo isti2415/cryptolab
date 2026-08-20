@@ -6,7 +6,7 @@ export function NotFoundPage() {
   return (
     <div style={{ padding: '40px 0', maxWidth: '48ch' }}>
       <Seo
-        title={`Page not found | ${SITE_NAME}`}
+        title={`Page Not Found | ${SITE_NAME}`}
         description="The page you were looking for doesn’t exist."
         path="/404"
         noindex

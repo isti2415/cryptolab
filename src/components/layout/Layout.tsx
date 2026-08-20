@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { Icon } from "@/components/ui/Icon";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { algorithmGroups } from "@/core/registry";
+import { SITE_TAGLINE } from "@/core/site";
 import type { AnyAlgorithm } from "@/core/types";
 import styles from "./Layout.module.css";
 
@@ -125,9 +126,7 @@ export function Layout() {
             <span className={styles.brandMark}>▚</span>
             <span className={styles.brandName}>CryptoLab</span>
           </NavLink>
-          <span className={styles.tagline}>
-            cryptography, one step at a time
-          </span>
+          <span className={styles.tagline}>{SITE_TAGLINE}</span>
           <div className={styles.topbarRight}>
             <ThemeToggle />
           </div>

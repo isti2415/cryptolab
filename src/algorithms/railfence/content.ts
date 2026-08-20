@@ -20,10 +20,10 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "i", meaning: "position of a letter in the message, counting from 0" },
-    { symbol: "r", meaning: "the number of rails: the entire key" },
-    { symbol: "2r − 2", meaning: "the period of the zigzag" },
-    { symbol: "transposition", meaning: "a cipher that reorders letters rather than replacing them" },
+    { symbol: "i", meaning: "Position of a letter in the message, counting from 0" },
+    { symbol: "r", meaning: "The number of rails: the entire key" },
+    { symbol: "2r − 2", meaning: "The period of the zigzag" },
+    { symbol: "transposition", meaning: "A cipher that reorders letters rather than replacing them" },
   ],
   overview: [
     'Every other classical cipher on this site substitutes: it replaces each letter with a different one. The rail fence replaces nothing. It writes the message diagonally down and back up across a set of rails, then reads the rails off one at a time. The letters that come out are exactly the letters that went in, in a different order.',

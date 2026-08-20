@@ -16,10 +16,18 @@ export const SITE_URL = (
 
 export const SITE_NAME = 'CryptoLab';
 
-export const SITE_TAGLINE = 'cryptography, one step at a time';
+export const SITE_TAGLINE = 'Cryptography, One Step at a Time';
 
+/**
+ * Meta description. Google truncates around 150–160 characters, so this stays
+ * inside that; `SITE_DESCRIPTION_SOCIAL` is the shorter form for share cards,
+ * where mobile previews cut off nearer 125.
+ */
 export const SITE_DESCRIPTION =
-  'Learn cryptography by watching real algorithms transform real input into real output, step by step; then experiment yourself in a live playground. Caesar, Vigenère, AES, RSA and more.';
+  'Watch real cryptographic algorithms transform real input step by step, then try your own keys in a live playground. Caesar to AES, RSA and ML-KEM.';
+
+export const SITE_DESCRIPTION_SOCIAL =
+  'Watch real ciphers work step by step, then try your own keys. Caesar to AES, RSA and ML-KEM.';
 
 /** ISO 639-1 + region, for og:locale and <html lang>. */
 export const SITE_LOCALE = 'en_US';
@@ -45,4 +53,16 @@ export function ogImageForPath(path: string): string {
 export function absoluteUrl(path: string): string {
   if (!path.startsWith('/')) path = `/${path}`;
   return `${SITE_URL}${path}`;
+}
+
+/**
+ * Trim to a whole word within `max` characters, adding an ellipsis only when
+ * something was actually dropped. A hard `slice()` cuts mid-word, which is
+ * exactly what a search result should never show.
+ */
+export function clampText(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  const space = cut.lastIndexOf(' ');
+  return `${(space > max * 0.6 ? cut.slice(0, space) : cut).replace(/[,;:.\s]+$/, '')}…`;
 }

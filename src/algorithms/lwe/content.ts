@@ -35,12 +35,12 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "A", meaning: "a public matrix, chosen uniformly at random" },
-    { symbol: "s", meaning: "the secret vector: the private key" },
-    { symbol: "e", meaning: "the error vector, every entry small (here −2 to +2)" },
-    { symbol: "q", meaning: "the modulus; all arithmetic wraps at q" },
-    { symbol: "r", meaning: "a random 0/1 vector selecting which equations to add" },
-    { symbol: "⌊q/2⌋", meaning: "half the modulus: the gap the message hides in" },
+    { symbol: "A", meaning: "A public matrix, chosen uniformly at random" },
+    { symbol: "s", meaning: "The secret vector: the private key" },
+    { symbol: "e", meaning: "The error vector, every entry small (here −2 to +2)" },
+    { symbol: "q", meaning: "The modulus; all arithmetic wraps at q" },
+    { symbol: "r", meaning: "A random 0/1 vector selecting which equations to add" },
+    { symbol: "⌊q/2⌋", meaning: "Half the modulus: the gap the message hides in" },
   ],
   overview: [
     'Learning With Errors is the problem underneath ML-KEM and ML-DSA, and it is built on one change to something entirely ordinary. Given a matrix A and the product A·s, recovering the vector s is Gaussian elimination: a first-year linear algebra exercise. Publish A·s + e instead, where every entry of e is off by one or two, and the same problem is believed to be hard.',

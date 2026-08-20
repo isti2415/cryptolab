@@ -1,7 +1,7 @@
 {
-  "name": "CryptoLab, cryptography one step at a time",
+  "name": "CryptoLab: Cryptography, One Step at a Time",
   "short_name": "CryptoLab",
-  "description": "Learn cryptography by watching real algorithms transform real input into real output, step by step, then experiment yourself in a live playground.",
+  "description": "Watch real cryptographic algorithms transform real input step by step, then try your own keys in a live playground.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

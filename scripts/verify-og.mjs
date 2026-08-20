@@ -49,6 +49,27 @@ for (const file of pages) {
     if (!re.test(html)) problems.push(`${route}: missing ${label}`);
   }
 
+  /*
+   * Length ceilings, with a little headroom over where each surface actually
+   * truncates: Google cuts a description around 155-160 and a title around 60,
+   * and social previews cut a description nearer 125 on mobile. These are worth
+   * failing on rather than warning about, because nobody reads build warnings
+   * and a clipped description is invisible until someone shares the link.
+   */
+  const limits = [
+    ['description', /<meta[^>]+name="description"[^>]+content="([^"]*)"/, 160],
+    ['og:description', /<meta[^>]+property="og:description"[^>]+content="([^"]*)"/, 130],
+    ['title', /<title[^>]*>([^<]*)<\/title>/, 75],
+  ];
+  for (const [label, re, max] of limits) {
+    const value = html.match(re)?.[1] ?? '';
+    // Entities count as one character to a search engine, not as `&amp;`.
+    const length = value.replace(/&[a-z]+;|&#\d+;/gi, 'x').length;
+    if (length > max) {
+      problems.push(`${route}: ${label} is ${length} characters, over the ${max} limit`);
+    }
+  }
+
   const image = html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/)?.[1];
   if (image) {
     // og:image is absolute; map it back to the file the deploy will serve.
@@ -72,4 +93,6 @@ if (problems.length) {
   process.exit(1);
 }
 
-console.log(`SEO verified across ${pages.length} pages (titles, canonicals, og:image files).`);
+console.log(
+  `SEO verified across ${pages.length} pages (tags, lengths, canonicals, og:image files).`,
+);

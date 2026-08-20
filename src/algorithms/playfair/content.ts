@@ -25,10 +25,10 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "(r, c)", meaning: "a letter’s row and column in the 5×5 key square, each 0 to 4" },
-    { symbol: "mod 5", meaning: "wrap around the edge of the square" },
-    { symbol: "digraph", meaning: "the pair of letters enciphered together" },
-    { symbol: "I/J", meaning: "the two share one cell, so 25 letters fit a 5×5 grid" },
+    { symbol: "(r, c)", meaning: "A letter’s row and column in the 5×5 key square, each 0 to 4" },
+    { symbol: "mod 5", meaning: "Wrap around the edge of the square" },
+    { symbol: "digraph", meaning: "The pair of letters enciphered together" },
+    { symbol: "I/J", meaning: "The two share one cell, so 25 letters fit a 5×5 grid" },
   ],
   overview: [
     'Playfair enciphers pairs of letters rather than single ones. A keyword fills a 5×5 grid (duplicates dropped, then the rest of the alphabet in order), and I and J share a cell so that 25 letters fit. Every pair of plaintext letters is located in that grid and replaced according to where the two letters sit relative to each other.',

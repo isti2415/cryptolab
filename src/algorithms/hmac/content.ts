@@ -30,10 +30,10 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "H", meaning: "the underlying hash; SHA-256 here, but any will do" },
-    { symbol: "K, K′", meaning: "the key as supplied, and normalised to exactly one block" },
-    { symbol: "B", meaning: "the hash’s block size: 64 bytes for SHA-256, not its 32-byte output" },
-    { symbol: "‖", meaning: "concatenation" },
+    { symbol: "H", meaning: "The underlying hash; SHA-256 here, but any will do" },
+    { symbol: "K, K′", meaning: "The key as supplied, and normalised to exactly one block" },
+    { symbol: "B", meaning: "The hash’s block size: 64 bytes for SHA-256, not its 32-byte output" },
+    { symbol: "‖", meaning: "Concatenation" },
     { symbol: "⊕", meaning: "XOR, byte by byte across the block" },
   ],
   overview: [

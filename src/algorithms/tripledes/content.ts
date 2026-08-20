@@ -30,10 +30,10 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "E, D", meaning: "a single DES encryption and decryption of one 64-bit block" },
-    { symbol: "K1, K2, K3", meaning: "the three 56-bit DES keys" },
-    { symbol: "P, C", meaning: "the plaintext and ciphertext block" },
-    { symbol: "EDE", meaning: "the encrypt–decrypt–encrypt ordering" },
+    { symbol: "E, D", meaning: "A single DES encryption and decryption of one 64-bit block" },
+    { symbol: "K1, K2, K3", meaning: "The three 56-bit DES keys" },
+    { symbol: "P, C", meaning: "The plaintext and ciphertext block" },
+    { symbol: "EDE", meaning: "The encrypt–decrypt–encrypt ordering" },
   ],
   overview: [
     'By the 1990s DES’s 56-bit key was visibly too short, but DES hardware was installed everywhere, in ATMs, payment terminals and smartcards that could not simply be replaced. Triple DES is the answer that ran on what already existed: apply DES three times with two or three keys.',

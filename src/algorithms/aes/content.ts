@@ -30,12 +30,12 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "state", meaning: "the 4×4 byte matrix, filled column by column" },
-    { symbol: "GF(2⁸)", meaning: "the finite field of 256 elements AES does its arithmetic in" },
-    { symbol: "wᵢ", meaning: "the i-th 4-byte word of the expanded key" },
+    { symbol: "state", meaning: "The 4×4 byte matrix, filled column by column" },
+    { symbol: "GF(2⁸)", meaning: "The finite field of 256 elements AES does its arithmetic in" },
+    { symbol: "wᵢ", meaning: "The i-th 4-byte word of the expanded key" },
     { symbol: "g", meaning: "RotWord, then SubWord, then XOR with the round constant" },
-    { symbol: "Rcon", meaning: "the round constant, doubling in GF(2⁸) each round" },
-    { symbol: "∘", meaning: "function composition, apply the rightmost first" },
+    { symbol: "Rcon", meaning: "The round constant, doubling in GF(2⁸) each round" },
+    { symbol: "∘", meaning: "Function composition, apply the rightmost first" },
   ],
   overview: [
     'AES arranges the sixteen bytes of a 128-bit block into a 4×4 state matrix, filled column by column, and transforms that matrix over ten rounds for a 128-bit key (twelve for 192-bit, fourteen for 256-bit). Unlike DES it is not a Feistel network: every byte is transformed in every round, and each step is individually invertible.',

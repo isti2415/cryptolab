@@ -21,8 +21,14 @@ import {
 export interface SeoProps {
   /** Full <title> text. Also used for og:title / twitter:title. */
   title: string;
-  /** Meta description. Falls back to the site default. */
+  /** Meta description, for search results. Keep it under ~155 characters. */
   description?: string;
+  /**
+   * Shorter description for share cards. Social previews truncate nearer 125
+   * characters than Google's 155, so the two are written separately rather
+   * than one being a clipped version of the other. Falls back to `description`.
+   */
+  socialDescription?: string;
   /** Root-relative path of this page, e.g. "/" or "/a/caesar". */
   path: string;
   /** og:type; "website" for the home page, "article" for content pages. */
@@ -43,6 +49,7 @@ export interface SeoProps {
 export function Seo({
   title,
   description = SITE_DESCRIPTION,
+  socialDescription,
   path,
   type = 'website',
   image,
@@ -54,6 +61,7 @@ export function Seo({
   const resolved = image ?? ogImageForPath(path);
   const imageUrl = resolved.startsWith('http') ? resolved : absoluteUrl(resolved);
   const alt = imageAlt ?? title;
+  const social = socialDescription ?? description;
 
   return (
     <Head>
@@ -76,7 +84,7 @@ export function Seo({
       <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:locale" content={SITE_LOCALE} />
       <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
+      <meta property="og:description" content={social} />
       <meta property="og:url" content={url} />
       <meta property="og:image" content={imageUrl} />
       <meta property="og:image:type" content="image/png" />
@@ -87,7 +95,7 @@ export function Seo({
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
+      <meta name="twitter:description" content={social} />
       <meta name="twitter:image" content={imageUrl} />
       <meta name="twitter:image:alt" content={alt} />
       {TWITTER_HANDLE && <meta name="twitter:site" content={TWITTER_HANDLE} />}

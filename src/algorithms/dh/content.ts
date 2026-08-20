@@ -35,11 +35,11 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "p", meaning: "a large public prime: the modulus" },
-    { symbol: "g", meaning: "the public generator; its powers must cover a large subgroup" },
-    { symbol: "a, b", meaning: "the private exponents, one per party, never transmitted" },
-    { symbol: "A, B", meaning: "the public values that cross the channel" },
-    { symbol: "g^(ab)", meaning: "the shared secret; hashed through a KDF before use as a key" },
+    { symbol: "p", meaning: "A large public prime: the modulus" },
+    { symbol: "g", meaning: "The public generator; its powers must cover a large subgroup" },
+    { symbol: "a, b", meaning: "The private exponents, one per party, never transmitted" },
+    { symbol: "A, B", meaning: "The public values that cross the channel" },
+    { symbol: "g^(ab)", meaning: "The shared secret; hashed through a KDF before use as a key" },
   ],
   overview: [
     'Diffie–Hellman solves a problem every cipher before it simply assumed away. Symmetric encryption needs both parties to already share a key, but if they can already exchange a secret safely, they hardly needed the cipher. Diffie–Hellman lets two parties who have never met, talking over a channel an adversary is recording, end up holding the same secret number.',

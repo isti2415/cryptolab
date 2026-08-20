@@ -20,11 +20,11 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "x, c", meaning: "plaintext and ciphertext letters as numbers, A = 0 to Z = 25" },
-    { symbol: "a", meaning: "the multiplier: one of 1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25" },
-    { symbol: "b", meaning: "the shift, any value 0 to 25" },
-    { symbol: "a⁻¹", meaning: "modular inverse of a: the number with a·a⁻¹ ≡ 1 (mod 26)" },
-    { symbol: "gcd", meaning: "greatest common divisor; gcd(a, 26) = 1 means they share no factor" },
+    { symbol: "x, c", meaning: "Plaintext and ciphertext letters as numbers, A = 0 to Z = 25" },
+    { symbol: "a", meaning: "The multiplier: one of 1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25" },
+    { symbol: "b", meaning: "The shift, any value 0 to 25" },
+    { symbol: "a⁻¹", meaning: "Modular inverse of a: the number with a·a⁻¹ ≡ 1 (mod 26)" },
+    { symbol: "gcd", meaning: "Greatest common divisor; gcd(a, 26) = 1 means they share no factor" },
   ],
   overview: [
     'The affine cipher takes the Caesar cipher and adds a multiplication. Each letter index x is mapped to (a·x + b) mod 26: the multiplier a stretches the alphabet around its 26-position ring, and the shift b rotates it. Setting a = 1 collapses the whole thing back to Caesar, which makes it a clean illustration of what one extra operation buys you.',

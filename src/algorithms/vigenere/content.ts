@@ -25,10 +25,10 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "xᵢ, cᵢ", meaning: "the i-th plaintext and ciphertext letters, as numbers" },
-    { symbol: "k", meaning: "the keyword, as a sequence of shifts (A = 0, B = 1, …)" },
-    { symbol: "m", meaning: "the keyword length, and the period an attacker looks for" },
-    { symbol: "i mod m", meaning: "position within the repeating keyword" },
+    { symbol: "xᵢ, cᵢ", meaning: "The i-th plaintext and ciphertext letters, as numbers" },
+    { symbol: "k", meaning: "The keyword, as a sequence of shifts (A = 0, B = 1, …)" },
+    { symbol: "m", meaning: "The keyword length, and the period an attacker looks for" },
+    { symbol: "i mod m", meaning: "Position within the repeating keyword" },
   ],
   overview: [
     'The Vigenère cipher is a stack of Caesar ciphers used in rotation. A keyword is written repeatedly beneath the message, and each letter is shifted by the amount its key letter names: A shifts by 0, B by 1, and so on. With the keyword LEMON, the first letter shifts by 11, the second by 4, the third by 12, and after five letters the pattern begins again.',

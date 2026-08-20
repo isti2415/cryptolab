@@ -25,11 +25,11 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "x, c", meaning: "plaintext and ciphertext blocks as column vectors of letter numbers" },
-    { symbol: "K", meaning: "the key matrix, n×n with entries mod 26" },
-    { symbol: "K⁻¹", meaning: "its inverse mod 26, which exists only under the condition above" },
-    { symbol: "det K", meaning: "the determinant; for [[a,b],[c,d]] that is ad − bc" },
-    { symbol: "adj K", meaning: "the adjugate; for 2×2 it is [[d,−b],[−c,a]]" },
+    { symbol: "x, c", meaning: "Plaintext and ciphertext blocks as column vectors of letter numbers" },
+    { symbol: "K", meaning: "The key matrix, n×n with entries mod 26" },
+    { symbol: "K⁻¹", meaning: "Its inverse mod 26, which exists only under the condition above" },
+    { symbol: "det K", meaning: "The determinant; for [[a,b],[c,d]] that is ad − bc" },
+    { symbol: "adj K", meaning: "The adjugate; for 2×2 it is [[d,−b],[−c,a]]" },
   ],
   overview: [
     'The Hill cipher treats blocks of letters as vectors and multiplies them by a key matrix, modulo 26. This lab uses a 2×2 matrix, so letters are enciphered two at a time: the block [x₀, x₁] becomes K·[x₀, x₁] mod 26.',

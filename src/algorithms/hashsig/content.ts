@@ -35,12 +35,12 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "H", meaning: "the underlying hash: the only assumption in the scheme" },
-    { symbol: "w", meaning: "the Winternitz parameter: chain length, trading size against speed" },
-    { symbol: "cᵢ", meaning: "the i-th chunk of the message digest, in base w" },
-    { symbol: "leaf", meaning: "one WOTS+ public key, hashed to a single value" },
-    { symbol: "root", meaning: "the top of the Merkle tree: the published public key" },
-    { symbol: "‖", meaning: "concatenation" },
+    { symbol: "H", meaning: "The underlying hash: the only assumption in the scheme" },
+    { symbol: "w", meaning: "The Winternitz parameter: chain length, trading size against speed" },
+    { symbol: "cᵢ", meaning: "The i-th chunk of the message digest, in base w" },
+    { symbol: "leaf", meaning: "One WOTS+ public key, hashed to a single value" },
+    { symbol: "root", meaning: "The top of the Merkle tree: the published public key" },
+    { symbol: "‖", meaning: "Concatenation" },
   ],
   overview: [
     'Every other signature scheme rests on a number-theoretic assumption: factoring is hard, or discrete logarithms are, or lattice problems are. Hash-based signatures rest on nothing but the hash function. If the hash is secure, the signature is secure; there is no second assumption to be wrong about, which makes this the most conservative choice available and the only post-quantum standard whose security is genuinely well understood.',

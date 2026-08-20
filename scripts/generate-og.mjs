@@ -23,6 +23,8 @@ import { Resvg } from '@resvg/resvg-js';
 import { createServer } from 'vite';
 import woff2 from 'wawoff2';
 
+let TAGLINE = '';
+
 const W = 1200;
 const H = 630;
 const OUT = 'public/og';
@@ -122,7 +124,7 @@ const esc = (s) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
-function card({ eyebrow, title, body, footer }) {
+function card({ eyebrow, title, body, footer, cta }) {
   const PAD = 84;
   const MAXW = W - PAD * 2;
   const size = titleSize(title, MAXW);
@@ -150,7 +152,7 @@ function card({ eyebrow, title, body, footer }) {
   <!-- brand rail -->
   <rect x="${PAD}" y="72" width="8" height="30" fill="${C.signal}"/>
   <text x="${PAD + 22}" y="97" font-family="IBM Plex Sans" font-size="30" font-weight="600" fill="${C.text}">CryptoLab</text>
-  <text x="${PAD + 22 + Math.round(widthOf('CryptoLab', 30)) + 26}" y="96" font-family="IBM Plex Mono" font-size="20" fill="${C.dim}">cryptography, one step at a time</text>
+  <text x="${PAD + 22 + Math.round(widthOf('CryptoLab', 30)) + 26}" y="96" font-family="IBM Plex Mono" font-size="20" fill="${C.dim}">${esc(TAGLINE)}</text>
   <rect x="${PAD}" y="128" width="${MAXW}" height="1" fill="${C.border}"/>
 
   <text x="${PAD}" y="212" font-family="IBM Plex Mono" font-size="24" font-weight="500" letter-spacing="3" fill="${C.signal}">${esc(eyebrow)}</text>
@@ -165,8 +167,35 @@ function card({ eyebrow, title, body, footer }) {
     .join('\n  ')}
 
   <rect x="${PAD}" y="${H - 106}" width="${MAXW}" height="1" fill="${C.border}"/>
-  <text x="${PAD}" y="${H - 60}" font-family="IBM Plex Mono" font-size="23" fill="${C.dim}">${esc(footer)}</text>
+  <text x="${PAD}" y="${H - 56}" font-family="IBM Plex Mono" font-size="22" fill="${C.dim}">${esc(footer)}</text>
+${ctaMark(cta)}
 </svg>`;
+}
+
+/*
+ * A call to action, filled in the signal colour at the bottom-right. Share
+ * cards that are only a title and a sentence read as a banner; the button shape
+ * is what makes a preview look clickable, and it is the one thing the scrapers'
+ * own linting flags when it is missing.
+ */
+function ctaMark(label) {
+  if (!label) return '';
+  const PAD = 84;
+  const fs = 26;
+  const textW = Math.round(widthOf(label, fs));
+  /* The arrow is drawn, not typed: the latin font subsets carry no U+2192 and
+     resvg renders a tofu box for it. */
+  const arrowW = 24;
+  const w = textW + 18 + arrowW + 52;
+  const h = 56;
+  const x = W - PAD - w;
+  const y = H - 106 + 20;
+  const ax = x + 26 + textW + 18;
+  const ay = y + h / 2;
+  const ink = '#04120f';
+  return `  <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="12" fill="${C.signal}"/>
+  <text x="${x + 26}" y="${y + 37}" font-family="IBM Plex Sans" font-size="${fs}" font-weight="600" fill="${ink}">${esc(label)}</text>
+  <path d="M${ax} ${ay}h${arrowW}m-9-9 9 9-9 9" fill="none" stroke="${ink}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
 }
 
 function render(svg, fontPaths, file) {
@@ -195,9 +224,10 @@ const server = await createServer({
 
 try {
   const { algorithms, CATEGORIES } = await server.ssrLoadModule('/src/core/registry.ts');
+  ({ SITE_TAGLINE: TAGLINE } = await server.ssrLoadModule('/src/core/site.ts'));
   const { dir: fontDir, paths: fonts } = await loadFonts();
 
-  const FOOTER = 'step-by-step walkthrough · live playground · Python and TypeScript source';
+  const FOOTER = 'Step-by-step walkthrough · Live playground';
   let bytes = 0;
 
   bytes += render(
@@ -205,7 +235,8 @@ try {
       eyebrow: 'AN INTERACTIVE CRYPTOGRAPHY LAB',
       title: 'Real ciphers, one step at a time',
       body: `${algorithms.length} algorithms, from Caesar to lattice signatures, each running real cryptographic logic in your browser.`,
-      footer: `${algorithms.length} algorithms · ${CATEGORIES.length} families · classical to post-quantum`,
+      footer: `${algorithms.length} algorithms · ${CATEGORIES.length} families · Classical to post-quantum`,
+      cta: 'Explore the lab',
     }),
     fonts,
     join(OUT, 'home.png'),
@@ -220,6 +251,7 @@ try {
         title: a.meta.name,
         body: a.content.tagline,
         footer: FOOTER,
+        cta: `Open ${a.meta.name.length > 14 ? 'the walkthrough' : a.meta.name}`,
       }),
       fonts,
       join(OUT, 'a', `${a.meta.id}.png`),

@@ -35,12 +35,12 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "p, q", meaning: "the two secret primes" },
-    { symbol: "n", meaning: "the public modulus: all arithmetic happens mod n" },
+    { symbol: "p, q", meaning: "The two secret primes" },
+    { symbol: "n", meaning: "The public modulus: all arithmetic happens mod n" },
     { symbol: "φ(n)", meaning: "Euler’s totient; secret, because knowing it gives d" },
-    { symbol: "e", meaning: "the public exponent, commonly 65537" },
-    { symbol: "d", meaning: "the private exponent, e⁻¹ mod φ(n)" },
-    { symbol: "m, c", meaning: "the message and ciphertext, as numbers below n" },
+    { symbol: "e", meaning: "The public exponent, commonly 65537" },
+    { symbol: "d", meaning: "The private exponent, e⁻¹ mod φ(n)" },
+    { symbol: "m, c", meaning: "The message and ciphertext, as numbers below n" },
   ],
   overview: [
     'RSA is asymmetric: encryption and decryption use different keys. Two secret primes p and q give a modulus n = p·q and Euler’s totient φ(n) = (p−1)(q−1). A public exponent e is chosen coprime with φ(n), and the private exponent d is its modular inverse, so that e·d ≡ 1 (mod φ(n)). The public key is (n, e); the private key is (n, d).',

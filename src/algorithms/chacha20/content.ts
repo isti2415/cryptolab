@@ -25,11 +25,11 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "state", meaning: "sixteen 32-bit words: 4 constants, 8 key, 1 counter, 3 nonce" },
-    { symbol: "a, b, c, d", meaning: "the four state words a quarter-round touches" },
-    { symbol: "⋘ n", meaning: "rotate left by n bits" },
+    { symbol: "state", meaning: "Sixteen 32-bit words: 4 constants, 8 key, 1 counter, 3 nonce" },
+    { symbol: "a, b, c, d", meaning: "The four state words a quarter-round touches" },
+    { symbol: "⋘ n", meaning: "Rotate left by n bits" },
     { symbol: "constants", meaning: "0x61707865…: the ASCII of \"expand 32-byte k\"" },
-    { symbol: "counter", meaning: "block index, so each 64 bytes gets a different keystream" },
+    { symbol: "counter", meaning: "Block index, so each 64 bytes gets a different keystream" },
   ],
   overview: [
     'ChaCha20 builds a keystream from a 4×4 grid of 32-bit words: four fixed constants that spell "expand 32-byte k" in ASCII, eight words of key, a block counter, and three words of nonce. Twenty rounds stir the grid, the original state is added back, and the sixteen words are serialised into a 64-byte keystream block that is XORed with the message.',

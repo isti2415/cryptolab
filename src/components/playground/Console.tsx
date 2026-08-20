@@ -158,7 +158,7 @@ export function Console({
                 title="Copy output"
               >
                 <Icon name={copied ? 'check' : 'copy'} size={13} />
-                {copied ? 'copied' : 'copy'}
+                {copied ? 'Copied' : 'Copy'}
               </button>
             )}
           </div>

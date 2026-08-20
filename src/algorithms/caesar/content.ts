@@ -20,10 +20,10 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "x", meaning: "plaintext letter as a number, A = 0 through Z = 25" },
-    { symbol: "c", meaning: "ciphertext letter, in the same numbering" },
-    { symbol: "k", meaning: "the key: how many places to shift" },
-    { symbol: "mod 26", meaning: "wrap around the 26-letter alphabet, so Z + 1 is A" },
+    { symbol: "x", meaning: "Plaintext letter as a number, A = 0 through Z = 25" },
+    { symbol: "c", meaning: "Ciphertext letter, in the same numbering" },
+    { symbol: "k", meaning: "The key: how many places to shift" },
+    { symbol: "mod 26", meaning: "Wrap around the 26-letter alphabet, so Z + 1 is A" },
   ],
   overview: [
     'The Caesar cipher replaces each letter with the one a fixed number of positions further along the alphabet. That number, the shift, is the entire key, so the whole cipher fits in a sentence and can be worked by hand at conversational speed.',

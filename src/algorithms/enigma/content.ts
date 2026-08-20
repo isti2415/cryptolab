@@ -25,12 +25,12 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "R, M, L", meaning: "right, middle and left rotors, in signal order" },
+    { symbol: "R, M, L", meaning: "Right, middle and left rotors, in signal order" },
     { symbol: "UKW", meaning: "Umkehrwalze, the reflector; what makes the machine self-inverse" },
-    { symbol: "pos", meaning: "the letter showing in a rotor’s window" },
+    { symbol: "pos", meaning: "The letter showing in a rotor’s window" },
     { symbol: "ring", meaning: "Ringstellung, the wiring’s offset from the window letter" },
-    { symbol: "notch", meaning: "the window letter at which a rotor advances the next one" },
-    { symbol: "plug", meaning: "the Steckerbrett, a reciprocal swap of up to 13 letter pairs" },
+    { symbol: "notch", meaning: "The window letter at which a rotor advances the next one" },
+    { symbol: "plug", meaning: "The Steckerbrett, a reciprocal swap of up to 13 letter pairs" },
   ],
   overview: [
     'Enigma is a polyalphabetic substitution machine. Pressing a key first steps the rotors, then sends current from the key through the plugboard, right to left through three rotors, into the reflector, back left to right through the same three rotors by a different path, through the plugboard again, and out to a lamp.',

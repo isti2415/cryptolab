@@ -36,11 +36,11 @@ export const content: AlgorithmContent = {
   ],
   symbols: [
     { symbol: "state", meaning: "1600 bits as a 5×5 grid of 64-bit lanes" },
-    { symbol: "rate (r)", meaning: "the bytes the message is absorbed into, 136 for SHA3-256" },
-    { symbol: "capacity (c)", meaning: "the remainder, never touched directly; sets the security level" },
-    { symbol: "lane", meaning: "one 64-bit word of the state" },
+    { symbol: "rate (r)", meaning: "The bytes the message is absorbed into, 136 for SHA3-256" },
+    { symbol: "capacity (c)", meaning: "The remainder, never touched directly; sets the security level" },
+    { symbol: "lane", meaning: "One 64-bit word of the state" },
     { symbol: "pad byte", meaning: "0x06 for SHA-3, 0x1F for SHAKE: the domain separator" },
-    { symbol: "SHAKE", meaning: "the extendable-output variants, squeezing as many bytes as asked" },
+    { symbol: "SHAKE", meaning: "The extendable-output variants, squeezing as many bytes as asked" },
   ],
   overview: [
     'SHA-3 is not a faster SHA-2; it is a different shape entirely. SHA-2 compresses the message block by block into a small chaining value, and the final chaining value is the digest. SHA-3 keeps a large fixed state of 1600 bits and works a sponge: message blocks are XORed into part of that state and stirred, then the digest is read back out of it.',

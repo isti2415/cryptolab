@@ -8,7 +8,13 @@ import { Tabs, type TabSpec } from '@/components/ui/Tabs';
 import { StepPlayer } from '@/components/walkthrough/StepPlayer';
 import { Seo } from '@/components/Seo';
 import { CATEGORIES, getAlgorithm } from '@/core/registry';
-import { SITE_NAME, SITE_URL, absoluteUrl, ogImageForPath } from '@/core/site';
+import {
+  SITE_NAME,
+  SITE_URL,
+  absoluteUrl,
+  clampText,
+  ogImageForPath,
+} from '@/core/site';
 import type { AnyAlgorithm, Direction, Params } from '@/core/types';
 import { NotFoundPage } from './NotFoundPage';
 import styles from './AlgorithmPage.module.css';
@@ -21,12 +27,12 @@ function categoryLabel(id: AnyAlgorithm['meta']['category']): string {
 function algorithmSeo(algo: AnyAlgorithm) {
   const { meta, content } = algo;
   const path = `/a/${meta.id}`;
-  const title = `${meta.name}; Interactive Visualizer & Playground | ${SITE_NAME}`;
-  const description =
-    `${content.tagline} Step through ${meta.name} on real input and experiment with your own keys in a live playground.`.slice(
-      0,
-      160,
-    );
+  const title = `${meta.name}: Interactive Visualizer and Playground | ${SITE_NAME}`;
+  const description = clampText(
+    `${content.tagline} Step through it on real input, then try your own keys.`,
+    155,
+  );
+  const socialDescription = clampText(content.tagline, 125);
   const jsonLd = [
     {
       '@context': 'https://schema.org',
@@ -60,7 +66,7 @@ function algorithmSeo(algo: AnyAlgorithm) {
     },
   ];
   const imageAlt = `${meta.name}: ${content.tagline}`;
-  return { title, description, path, imageAlt, jsonLd };
+  return { title, description, socialDescription, path, imageAlt, jsonLd };
 }
 
 export function AlgorithmPage() {
@@ -102,6 +108,7 @@ function AlgorithmExperience({ algo }: { algo: AnyAlgorithm }) {
       <Seo
         title={seo.title}
         description={seo.description}
+        socialDescription={seo.socialDescription}
         path={seo.path}
         type="article"
         imageAlt={seo.imageAlt}

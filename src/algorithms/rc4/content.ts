@@ -25,9 +25,9 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "S", meaning: "the 256-byte state: a permutation of 0…255" },
-    { symbol: "K", meaning: "the key, as bytes, repeated to fill 256 iterations" },
-    { symbol: "i, j", meaning: "the two indices; i walks steadily, j jumps by state values" },
+    { symbol: "S", meaning: "The 256-byte state: a permutation of 0…255" },
+    { symbol: "K", meaning: "The key, as bytes, repeated to fill 256 iterations" },
+    { symbol: "i, j", meaning: "The two indices; i walks steadily, j jumps by state values" },
     { symbol: "⊕", meaning: "XOR, applied byte by byte" },
   ],
   overview: [

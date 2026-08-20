@@ -35,11 +35,11 @@ export const content: AlgorithmContent = {
     },
   ],
   symbols: [
-    { symbol: "p", meaning: "the field modulus; all coordinates are numbers mod p" },
-    { symbol: "a, b", meaning: "the curve’s coefficients, fixed and public" },
-    { symbol: "G", meaning: "the generator, a published base point" },
-    { symbol: "λ", meaning: "the slope of the chord or tangent" },
-    { symbol: "∞", meaning: "the point at infinity: the group’s identity element" },
+    { symbol: "p", meaning: "The field modulus; all coordinates are numbers mod p" },
+    { symbol: "a, b", meaning: "The curve’s coefficients, fixed and public" },
+    { symbol: "G", meaning: "The generator, a published base point" },
+    { symbol: "λ", meaning: "The slope of the chord or tangent" },
+    { symbol: "∞", meaning: "The point at infinity: the group’s identity element" },
     { symbol: "k·P", meaning: "P added to itself k times" },
   ],
   overview: [

@@ -7,6 +7,7 @@ import {
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_TAGLINE,
+  SITE_DESCRIPTION_SOCIAL,
   SITE_URL,
   absoluteUrl,
   ogImageForPath,
@@ -21,23 +22,23 @@ import styles from './HomePage.module.css';
 const STATS = [
   {
     value: String(algorithms.length),
-    label: 'algorithms',
+    label: 'Algorithms',
     note: 'Caesar through ML-DSA',
   },
   {
     value: String(CATEGORIES.length),
-    label: 'families',
-    note: 'classical to post-quantum',
+    label: 'Families',
+    note: 'Classical to post-quantum',
   },
   {
     value: '2',
-    label: 'languages',
+    label: 'Languages',
     note: 'Python and TypeScript, on every page',
   },
   {
     value: '1',
-    label: 'shared engine',
-    note: 'the walkthrough and the console cannot disagree',
+    label: 'Shared engine',
+    note: 'The walkthrough and the console cannot disagree',
   },
 ];
 
@@ -67,7 +68,7 @@ export function HomePage() {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: SITE_NAME,
-      alternateName: `${SITE_NAME}, ${SITE_TAGLINE}`,
+      alternateName: `${SITE_NAME}: ${SITE_TAGLINE}`,
       url: SITE_URL,
       description: SITE_DESCRIPTION,
       image: absoluteUrl(ogImageForPath('/')),
@@ -89,8 +90,9 @@ export function HomePage() {
   return (
     <div className={styles.home}>
       <Seo
-        title={`${SITE_NAME}, ${SITE_TAGLINE}`}
+        title={`${SITE_NAME} | ${SITE_TAGLINE}`}
         description={SITE_DESCRIPTION}
+        socialDescription={SITE_DESCRIPTION_SOCIAL}
         path="/"
         type="website"
         imageAlt={`${SITE_NAME}: ${algorithms.length} cryptographic algorithms, visualized step by step`}
@@ -126,8 +128,9 @@ export function HomePage() {
           </div>
 
           <p className={styles.trust}>
-            No accounts, no tracking, nothing sent to a server. Every
-            computation happens on this page.
+            No accounts, no cookies, nothing to install. Your message and your
+            keys never leave the browser; every computation happens on this
+            page.
           </p>
         </div>
 
