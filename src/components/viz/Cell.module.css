@@ -1,0 +1,117 @@
+.cell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.1em;
+  height: 2.1em;
+  padding: 0 0.35em;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-raised);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  transition:
+    color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.value {
+  white-space: nowrap;
+}
+
+/* Shrinks to its grid track instead of holding a minimum width. */
+.fluid {
+  min-width: 0;
+  padding: 0 1px;
+  height: 1.9em;
+  font-size: var(--fs-2xs);
+}
+
+.sub {
+  position: absolute;
+  top: -0.5em;
+  right: -0.35em;
+  font-size: 0.62em;
+  line-height: 1;
+  padding: 0.15em 0.25em;
+  border-radius: 2px;
+  background: var(--bg-panel);
+  color: var(--text-dim);
+}
+
+/* --- states -------------------------------------------------------------- */
+
+.idle {
+  color: var(--text-muted);
+}
+
+.active {
+  color: var(--signal-ink);
+  background: var(--signal);
+  border-color: var(--signal);
+  box-shadow: 0 0 0 3px var(--signal-glow);
+  /* Lift is motion, so it collapses to nothing under reduce via --dur. */
+  transform: translateY(-1px);
+}
+.active .sub {
+  color: var(--signal);
+}
+
+.done {
+  color: var(--text-dim);
+  background: transparent;
+}
+
+.changed {
+  color: var(--cat-3);
+  background: var(--cat-3-soft);
+  border-color: var(--cat-3);
+}
+
+.key {
+  color: var(--cat-2);
+  background: var(--cat-2-soft);
+  border-color: var(--cat-2);
+}
+
+.derived {
+  color: var(--cat-3);
+  background: var(--cat-3-soft);
+  border-color: var(--cat-3);
+}
+
+.output {
+  color: var(--cat-4);
+  background: var(--cat-4-soft);
+  border-color: var(--cat-4);
+}
+
+.dropped {
+  color: var(--cat-5);
+  background: transparent;
+  border-color: var(--cat-5);
+  border-style: dashed;
+}
+
+.muted {
+  color: var(--text-dim);
+  background: transparent;
+  border-color: transparent;
+}
+
+.empty {
+  color: var(--text-dim);
+  background: transparent;
+  border-style: dashed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .active {
+    transform: none;
+  }
+}

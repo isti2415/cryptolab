@@ -1,0 +1,78 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.equation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  min-width: 0;
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.op {
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+}
+
+.term {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.termLabel {
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* Square-bracket delimiters, so a matrix reads as a matrix. */
+.bracket {
+  position: relative;
+  padding: 4px 9px;
+}
+.bracket::before,
+.bracket::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  border: 1px solid var(--border-strong);
+}
+.bracket::before {
+  left: 0;
+  border-right: none;
+}
+.bracket::after {
+  right: 0;
+  border-left: none;
+}
+
+.matrix {
+  display: grid;
+  gap: 3px;
+}
+
+.workings {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}

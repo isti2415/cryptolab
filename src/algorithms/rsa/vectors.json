@@ -1,0 +1,38 @@
+{
+  "algorithm": "rsa",
+  "cases": [
+    {
+      "name": "classic n=3233 e=17",
+      "direction": "encrypt",
+      "input": "Hi",
+      "params": {
+        "p": 61,
+        "q": 53,
+        "e": 17
+      },
+      "output": "3000 3179"
+    },
+    {
+      "name": "decrypt with d=2753",
+      "direction": "decrypt",
+      "input": "3000 3179",
+      "params": {
+        "p": 61,
+        "q": 53,
+        "e": 17
+      },
+      "output": "Hi"
+    },
+    {
+      "name": "larger primes",
+      "direction": "encrypt",
+      "input": "RSA",
+      "params": {
+        "p": 137,
+        "q": 131,
+        "e": 7
+      },
+      "output": "3241 17781 12882"
+    }
+  ]
+}

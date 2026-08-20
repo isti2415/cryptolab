@@ -6,6 +6,7 @@
 }
 
 .calc {
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,4 +33,94 @@
 }
 .arrow {
   color: var(--text-dim);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Pad consumption ---------------------------------------------------------- */
+.meter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meterBar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--bg-hover);
+  overflow: hidden;
+}
+
+.meterFill {
+  display: block;
+  height: 100%;
+  background: var(--cat-2);
+  transition: width var(--dur) var(--ease);
+}
+
+.meterLabel {
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+}
+
+.combine {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.op {
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+}
+
+.mod {
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+}
+
+/* The forged-pad demonstration -------------------------------------------- */
+.forge {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.forgeRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.forgeLabel {
+  flex: 0 0 auto;
+  min-width: 8em;
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.forgeCells {
+  display: flex;
+  gap: 2px;
+  min-width: 0;
+  overflow-x: auto;
+  padding: 2px;
+  scrollbar-width: thin;
+}
+
+.note {
+  margin: 0;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
 }

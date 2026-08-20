@@ -84,7 +84,7 @@
   color: var(--signal);
 }
 .cardEra {
-  color: var(--text-faint);
+  color: var(--text-dim);
 }
 
 .cardName {
@@ -104,6 +104,8 @@
   letter-spacing: var(--tracking-wide);
   transition: color var(--dur) var(--ease);
 }
-.card:hover .cardGo {
+.card:hover .cardGo,
+.card:focus-visible .cardGo,
+.card:focus-within .cardGo {
   color: var(--signal);
 }

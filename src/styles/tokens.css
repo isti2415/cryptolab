@@ -1,76 +1,101 @@
 /*
  * CryptoLab design tokens — "Modern Terminal / Signal"
- * Near-black base, off-white text, one cool signal accent used sparingly.
- * Everything monochrome except the signal + a small categorical set reserved
- * for color-coding state inside visualizations.
+ *
+ * Two themes from one declaration each, via CSS `light-dark()`. The root sets
+ * `color-scheme: light dark`, so every token resolves against the system
+ * preference by default; `[data-theme]` on <html> pins it either way by
+ * overriding `color-scheme` alone. There is no second palette block to keep in
+ * sync — that duplication is exactly how theme drift starts.
+ *
+ * Contrast rule: every text token must clear WCAG AA against every surface it
+ * is used on, in BOTH themes. `scripts/audit-contrast.mjs` enforces this.
  */
 
 :root {
-  /* --- Type --------------------------------------------------------------- */
-  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code",
-    "Cascadia Code", "Roboto Mono", Menlo, Consolas, monospace;
-  --font-display: var(--font-mono);
+  color-scheme: light dark;
 
-  --fs-2xs: 0.6875rem; /* 11px */
-  --fs-xs: 0.75rem; /* 12px */
-  --fs-sm: 0.8125rem; /* 13px */
+  /* --- Type --------------------------------------------------------------- */
+  --font-text: "IBM Plex Sans Variable", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, monospace;
+  --font-display: var(--font-text);
+
+  /* Mono for cryptographic data, the text face for prose. Nothing below 12px:
+     the old 11px steps carried real content and were the worst contrast risk. */
+  --fs-2xs: 0.75rem; /* 12px */
+  --fs-xs: 0.8125rem; /* 13px */
+  --fs-sm: 0.875rem; /* 14px */
   --fs-base: 0.9375rem; /* 15px */
   --fs-md: 1.0625rem; /* 17px */
+  --fs-prose: 1.125rem; /* 18px, long-form reading text */
   --fs-lg: 1.375rem; /* 22px */
   --fs-xl: 1.875rem; /* 30px */
   --fs-2xl: 2.75rem; /* 44px */
-  --fs-3xl: 4rem; /* 64px */
 
   --lh-tight: 1.15;
   --lh-snug: 1.35;
   --lh-normal: 1.6;
 
   --tracking-wide: 0.06em;
-  --tracking-wider: 0.14em;
+  --tracking-wider: 0.12em;
 
-  /* --- Surfaces (near-black, layered) ------------------------------------- */
-  --bg: #08090b;
-  --bg-raised: #101216;
-  --bg-panel: #14171c;
-  --bg-inset: #0b0d10;
-  --bg-hover: #1b1f26;
+  /* --- Surfaces ----------------------------------------------------------- */
+  --bg: light-dark(#f7f8fa, #08090b);
+  --bg-raised: light-dark(#eef0f4, #101216);
+  --bg-panel: light-dark(#ffffff, #14171c);
+  --bg-inset: light-dark(#f2f4f7, #0b0d10);
+  --bg-hover: light-dark(#e4e8ee, #1b1f26);
 
-  --border: #23272f;
-  --border-strong: #333a45;
+  /* Page vignette top colour — gives the flat ground a little depth. */
+  --bg-vignette: light-dark(#ffffff, #0e1014);
+
+  --border: light-dark(#d5dae2, #2c313a);
+  --border-strong: light-dark(#aeb6c2, #3d4552);
 
   /* --- Text --------------------------------------------------------------- */
-  --text: #e6e9ef;
-  --text-muted: #9aa3b2;
-  --text-dim: #5f6875;
-  --text-faint: #3c434f;
+  --text: light-dark(#10131a, #e6e9ef);
+  --text-muted: light-dark(#4d5666, #a8b1c0);
+  --text-dim: light-dark(#5e6879, #8b95a5); /* AA at body sizes */
+  --text-faint: light-dark(#78828f, #6b7482); /* AA-large / decorative only */
 
-  /* --- Signal accent (the "look here" color) ------------------------------ */
-  --signal: #35e0d0; /* phosphor cyan */
-  --signal-bright: #62f4e6;
-  --signal-dim: #1f8f86;
-  --signal-glow: rgba(53, 224, 208, 0.18);
-  --signal-ink: #04120f; /* text placed on a signal fill */
+  /* --- Signal accent (the "look here" colour) ----------------------------- */
+  --signal: light-dark(#077068, #35e0d0);
+  --signal-bright: light-dark(#05564f, #62f4e6);
+  --signal-dim: light-dark(#5cc3b9, #2aa89e); /* borders, never text */
+  --signal-glow: light-dark(rgba(7, 112, 104, 0.1), rgba(53, 224, 208, 0.18));
+  --signal-ink: light-dark(#ffffff, #04120f); /* text on a signal fill */
 
   /* --- Semantic state ----------------------------------------------------- */
-  --danger: #ff6b6b;
-  --danger-dim: #7a2f30;
-  --warn: #f5c56b;
-  --ok: #7ee0a0;
+  --danger: light-dark(#b4302a, #ff8080);
+  --danger-dim: light-dark(#e8b4b1, #7a2f30);
+  --warn: light-dark(#8a5b00, #f5c56b);
+  --ok: light-dark(#16794a, #7ee0a0);
 
-  /* --- Categorical set for visualization state (accessible, muted) -------- */
-  --cat-1: #35e0d0; /* signal / primary */
-  --cat-2: #f5a35b; /* amber */
-  --cat-3: #a99cff; /* violet */
-  --cat-4: #6fc4ff; /* sky */
-  --cat-5: #f57b9b; /* rose */
+  /* --- Categorical roles inside visualizations ---------------------------- */
+  /* One meaning per colour, used consistently across every algorithm:
+     1 data · 2 key material · 3 derived · 4 output · 5 discarded. */
+  --cat-1: light-dark(#077068, #35e0d0);
+  --cat-2: light-dark(#87470a, #f5a35b);
+  --cat-3: light-dark(#5a41d6, #a99cff);
+  --cat-4: light-dark(#125596, #6fc4ff);
+  --cat-5: light-dark(#a8305a, #f57b9b);
 
-  /* --- Radii / spacing / shadow ------------------------------------------- */
+  /* Soft fills of the same roles, for cell backgrounds. */
+  --cat-1-soft: light-dark(rgba(7, 112, 104, 0.12), rgba(53, 224, 208, 0.16));
+  --cat-2-soft: light-dark(rgba(135, 71, 10, 0.1), rgba(245, 163, 91, 0.16));
+  --cat-3-soft: light-dark(rgba(90, 65, 214, 0.12), rgba(169, 156, 255, 0.16));
+  --cat-4-soft: light-dark(rgba(18, 85, 150, 0.1), rgba(111, 196, 255, 0.16));
+  --cat-5-soft: light-dark(rgba(168, 48, 90, 0.12), rgba(245, 123, 155, 0.16));
+
+  /* --- Radii / shadow ----------------------------------------------------- */
   --r-sm: 4px;
   --r-md: 7px;
   --r-lg: 12px;
 
-  --shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.02),
-    0 8px 30px rgba(0, 0, 0, 0.45);
+  --shadow-hi: light-dark(rgba(16, 19, 26, 0.04), rgba(255, 255, 255, 0.02));
+  --shadow-lo: light-dark(rgba(16, 19, 26, 0.08), rgba(0, 0, 0, 0.45));
+  --shadow-panel: 0 1px 0 var(--shadow-hi), 0 8px 30px var(--shadow-lo);
 
   /* --- Motion ------------------------------------------------------------- */
   --dur-fast: 120ms;
@@ -78,8 +103,21 @@
   --dur-slow: 420ms;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
-  --maxw-page: 1200px;
+  /* --- Measure ------------------------------------------------------------ */
+  --maxw-page: 1720px;
   --maxw-read: 68ch;
+
+  /* Minimum comfortable hit target. */
+  --tap: 44px;
+}
+
+/* An explicit choice pins the scheme; `light-dark()` follows it automatically,
+   so no palette needs restating here. */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 /* Reduced motion: neutralize all travel/pulse, keep instant state changes. */

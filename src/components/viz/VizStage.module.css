@@ -1,0 +1,77 @@
+/*
+ * `.viz` is the query container and `.grid` responds to it. Two elements
+ * because an element cannot match a container query against the container it
+ * establishes.
+ *
+ * Container queries rather than media queries throughout: this sits inside a
+ * grid column whose width is independent of the viewport, so viewport
+ * breakpoints would split at the wrong moments — the exact bug that used to
+ * render two 190px textareas side by side between 680px and 760px.
+ */
+.viz {
+  container-type: inline-size;
+  container-name: viz;
+  min-width: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "context"
+    "focus"
+    "track";
+  gap: 18px 24px;
+  align-items: start;
+  min-width: 0;
+}
+
+.context {
+  grid-area: context;
+  min-width: 0;
+}
+.focus {
+  grid-area: focus;
+  min-width: 0;
+}
+.track {
+  grid-area: track;
+  min-width: 0;
+}
+
+/*
+ * Side by side once both regions can have real room. The focus column carries a
+ * hard floor: with a plain `auto | 1fr` split, a wide context (an alphabet
+ * strip, a bit field) claimed nearly the whole row and squeezed the focus into
+ * a few characters of vertical text.
+ */
+@container viz (min-width: 660px) {
+  .grid:not(.stack):has(.context):has(.focus) {
+    grid-template-columns: minmax(0, auto) minmax(300px, 1fr);
+    grid-template-areas:
+      "context focus"
+      "track   track";
+  }
+}
+
+/* Never splits: every region keeps the full width. */
+.stack {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.label {
+  margin: 0 0 8px;
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.regionBody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}

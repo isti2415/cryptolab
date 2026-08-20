@@ -1,0 +1,41 @@
+{
+  "algorithm": "des",
+  "cases": [
+    {
+      "name": "FIPS 46-3 known-answer vector",
+      "direction": "encrypt",
+      "input": "0123456789ABCDEF",
+      "params": {
+        "key": "133457799BBCDFF1"
+      },
+      "output": "85E813540F0AB405"
+    },
+    {
+      "name": "decrypt the same vector",
+      "direction": "decrypt",
+      "input": "85E813540F0AB405",
+      "params": {
+        "key": "133457799BBCDFF1"
+      },
+      "output": "0123456789ABCDEF"
+    },
+    {
+      "name": "all-zero block",
+      "direction": "encrypt",
+      "input": "0000000000000000",
+      "params": {
+        "key": "AABB09182736CCDD"
+      },
+      "output": "77A03F93711C9F6B"
+    },
+    {
+      "name": "all-one block",
+      "direction": "encrypt",
+      "input": "FFFFFFFFFFFFFFFF",
+      "params": {
+        "key": "AABB09182736CCDD"
+      },
+      "output": "DE38475668AAB114"
+    }
+  ]
+}

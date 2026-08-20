@@ -1,0 +1,66 @@
+.strip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.label {
+  flex: 0 0 auto;
+  min-width: 3.6em;
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/*
+ * 26 equal columns rather than a scrolling row of fixed-width cells. The strip
+ * is the whole alphabet, and an alphabet with its last six letters off the edge
+ * is not one — so the cells shrink to whatever width the column gives them.
+ */
+.cells {
+  display: grid;
+  grid-template-columns: repeat(var(--slots, 26), minmax(0, 1fr));
+  gap: 2px;
+  min-width: 0;
+  padding: 2px;
+}
+
+.cells > * {
+  min-width: 0;
+}
+
+/* Connector lane: one slot per column, so ticks line up with their cells. */
+.link {
+  height: 10px;
+  position: relative;
+  min-width: 0;
+}
+
+.linkFrom::after,
+.linkTo::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  border-radius: 1px;
+}
+
+.linkFrom::after {
+  background: var(--signal);
+}
+
+.linkTo::after {
+  background: var(--cat-4);
+}

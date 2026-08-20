@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { algorithms } from '@/core/registry';
+import { CATEGORIES, algorithms } from '@/core/registry';
 import { Seo } from '@/components/Seo';
 import {
   SITE_DESCRIPTION,
@@ -16,7 +16,7 @@ export function HomePage() {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: SITE_NAME,
-      alternateName: `${SITE_NAME} — ${SITE_TAGLINE}`,
+      alternateName: `${SITE_NAME}, ${SITE_TAGLINE}`,
       url: SITE_URL,
       description: SITE_DESCRIPTION,
     },
@@ -36,7 +36,7 @@ export function HomePage() {
   return (
     <div className={styles.home}>
       <Seo
-        title={`${SITE_NAME} — ${SITE_TAGLINE}`}
+        title={`${SITE_NAME}, ${SITE_TAGLINE}`}
         description={SITE_DESCRIPTION}
         path="/"
         type="website"
@@ -45,7 +45,7 @@ export function HomePage() {
       <section className={styles.hero}>
         <p className={styles.kicker}>a hands-on cryptography lab</p>
         <h1 className={styles.headline}>
-          Watch real ciphers turn real input into real output — one step at a
+          Watch real ciphers turn real input into real output: one step at a
           time.
         </h1>
         <p className={styles.sub}>
@@ -63,7 +63,10 @@ export function HomePage() {
             <li key={a.meta.id}>
               <Link to={`/a/${a.meta.id}`} className={styles.card}>
                 <div className={styles.cardTop}>
-                  <span className={styles.cardCat}>{a.meta.category}</span>
+                  <span className={styles.cardCat}>
+                    {CATEGORIES.find((c) => c.id === a.meta.category)?.title ??
+                      a.meta.category}
+                  </span>
                   {a.meta.era && (
                     <span className={styles.cardEra}>{a.meta.era}</span>
                   )}

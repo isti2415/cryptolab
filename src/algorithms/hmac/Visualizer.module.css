@@ -1,0 +1,75 @@
+.chain {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* Each stage feeds the next; the arrow says so without a diagram. */
+.stage + .stage {
+  position: relative;
+  margin-top: 12px;
+}
+.stage + .stage::before {
+  content: "↓";
+  position: absolute;
+  top: -14px;
+  left: 12px;
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  line-height: 1;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  min-width: 0;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.stageDone {
+  background: var(--bg-raised);
+}
+
+.stageOn {
+  border-color: var(--signal);
+  background: var(--signal-glow);
+}
+
+.stageLabel {
+  color: var(--text-dim);
+  font-size: var(--fs-2xs);
+}
+
+.stageValue {
+  color: var(--text-muted);
+  font-size: var(--fs-2xs);
+  overflow-wrap: anywhere;
+}
+
+.stageOn .stageValue {
+  color: var(--signal);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.note {
+  margin: 0;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}

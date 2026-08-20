@@ -1,4 +1,10 @@
 .shell {
+  /* Single source of truth for the sticky offset the sidebar has to clear.
+     Previously this was the magic number 57 repeated in two places, which
+     silently broke the moment the topbar's padding changed. */
+  --topbar-h: 60px;
+  --sidebar-w: 248px;
+
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -6,11 +12,14 @@
 
 .topbar {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 16px;
-  padding: 14px 24px;
+  height: var(--topbar-h);
+  padding: 0 24px;
   border-bottom: 1px solid var(--border);
-  background: rgba(8, 9, 11, 0.8);
+  /* Theme-aware translucency: hardcoding the dark ground here would leave the
+     bar a dark smear over the light theme. */
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
   backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
@@ -48,6 +57,13 @@
   }
 }
 
+.topbarRight {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .body {
   display: flex;
   flex: 1;
@@ -57,14 +73,59 @@
   margin: 0 auto;
 }
 
+.navButton {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: var(--tap);
+  height: var(--tap);
+  margin-left: -10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  color: var(--text-muted);
+  transition:
+    color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.navButton:hover {
+  color: var(--text);
+  background: var(--bg-raised);
+  border-color: var(--border);
+}
+.navButton[aria-expanded='true'] {
+  color: var(--signal);
+}
+
 .sidebar {
-  flex: 0 0 248px;
+  flex: 0 0 var(--sidebar-w);
   padding: 24px 12px;
   position: sticky;
-  top: 57px;
+  top: var(--topbar-h);
   align-self: flex-start;
-  max-height: calc(100dvh - 57px);
+  max-height: calc(100dvh - var(--topbar-h));
   overflow-y: auto;
+  /* Width, not display: the collapse animates and the panel is `inert` while
+     closed, so nothing inside it stays focusable. */
+  transition:
+    flex-basis var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+
+.navCollapsed .sidebar {
+  flex-basis: 0;
+  padding-left: 0;
+  padding-right: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.scrim {
+  display: none;
+  border: none;
+  padding: 0;
 }
 
 .navGroup + .navGroup {
@@ -99,7 +160,7 @@
 
 .navCount {
   font-size: var(--fs-2xs);
-  color: var(--text-faint);
+  color: var(--text-dim);
   font-variant-numeric: tabular-nums;
 }
 
@@ -167,7 +228,8 @@
 }
 .navEra {
   font-size: var(--fs-2xs);
-  color: var(--text-faint);
+  font-family: var(--font-mono);
+  color: var(--text-dim);
   flex: 0 0 auto;
 }
 
@@ -177,20 +239,67 @@
   padding: 32px 24px 80px;
 }
 
-/* Mobile: sidebar becomes a stacked accordion nav above the content. */
+/*
+ * Narrow screens: the sidebar becomes an overlay drawer sliding in from the
+ * left rather than a block stacked above the content. Stacked, a list of
+ * twenty-four algorithms pushed the actual page below the fold on every visit,
+ * which is the opposite of what navigation is for.
+ */
 @media (max-width: 760px) {
   .body {
-    flex-direction: column;
-    align-items: stretch;
+    display: block;
   }
+
   .sidebar {
-    position: static;
-    flex: none;
-    width: 100%;
+    position: fixed;
+    top: var(--topbar-h);
+    left: 0;
+    z-index: 30;
+    width: min(84vw, 300px);
+    /* `align-self` is a leftover from the flex-column layout above. Left in
+       place it feeds the fixed box a flex static position, which pins the
+       drawer to y=0 over the topbar once its content is taller than the
+       viewport. Reset it, and give the box an explicit height rather than
+       relying on top/bottom, which is what the same interaction breaks. */
+    align-self: auto;
+    height: calc(100dvh - var(--topbar-h));
     max-height: none;
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border);
+    padding: 20px 12px calc(20px + env(safe-area-inset-bottom));
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    box-shadow: var(--shadow-panel);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateX(0);
+    opacity: 1;
+    transition:
+      transform var(--dur) var(--ease),
+      visibility var(--dur) var(--ease);
   }
+
+  /* Closed: slid out and taken out of the layout entirely. */
+  .navCollapsed .sidebar {
+    transform: translateX(-100%);
+    visibility: hidden;
+    padding-left: 12px;
+    padding-right: 12px;
+    opacity: 1;
+  }
+
+  .scrim {
+    display: block;
+    position: fixed;
+    inset: var(--topbar-h) 0 0 0;
+    z-index: 29;
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
+    backdrop-filter: blur(2px);
+    cursor: default;
+  }
+
+  .navCollapsed .scrim {
+    display: none;
+  }
+
   .main {
     padding: 24px 16px 64px;
   }

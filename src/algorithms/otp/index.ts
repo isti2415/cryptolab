@@ -1,4 +1,7 @@
+import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import engineCode from './engine.ts?code';
+import pythonCode from './code/otp.py?code';
 import { content } from './content';
 import { run, type OtpStepState } from './engine';
 import { OtpVisualizer } from './Visualizer';
@@ -25,6 +28,7 @@ const otp: AlgorithmDefinition<OtpStepState> = {
   ],
   run,
   Visualizer: OtpVisualizer,
+  code: [pythonSample(pythonCode), tsEngine(engineCode)],
   sample: { input: 'HELLO', params: { pad: 'XMCKLZURPAQ' }, direction: 'encrypt' },
 };
 

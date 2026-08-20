@@ -1,0 +1,74 @@
+.wrap {
+  /* Wide tables scroll inside themselves; the page never scrolls sideways. */
+  overflow: auto;
+  max-width: 100%;
+  max-height: 22em;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-panel);
+  scrollbar-width: thin;
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--fs-2xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.dense {
+  font-size: 0.6875rem; /* 11px — headers only; body cells stay legible */
+}
+
+.head,
+.corner {
+  position: sticky;
+  z-index: 1;
+  background: var(--bg-raised);
+  color: var(--text-dim);
+  font-weight: 500;
+  padding: 0.3em 0.45em;
+  text-align: center;
+}
+
+thead .head,
+.corner {
+  top: 0;
+}
+
+tbody .head,
+.corner {
+  left: 0;
+}
+
+.corner {
+  z-index: 2;
+  color: var(--text-muted);
+}
+
+.headOn {
+  color: var(--signal);
+  background: var(--bg-hover);
+}
+
+.cell {
+  padding: 0.3em 0.45em;
+  text-align: center;
+  color: var(--text-muted);
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+/* The row and column leading to the lookup. */
+.cross {
+  background: var(--signal-glow);
+  color: var(--text);
+}
+
+/* The looked-up value itself. */
+.hit {
+  background: var(--signal);
+  color: var(--signal-ink);
+  font-weight: 600;
+}

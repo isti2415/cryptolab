@@ -1,0 +1,22 @@
+# Cloudflare Pages headers.
+
+/*
+  # No third-party scripts, styles, fonts or frames: everything is self-hosted,
+  # including the webfonts, so the policy can be this tight.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  # No camera, microphone or geolocation is used anywhere on the site.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+
+# Fingerprinted build output can be cached indefinitely.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Self-hosted fonts are fingerprinted too.
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML must revalidate so a deploy is picked up immediately.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

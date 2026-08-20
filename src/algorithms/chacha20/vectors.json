@@ -1,0 +1,27 @@
+{
+  "algorithm": "chacha20",
+  "cases": [
+    {
+      "name": "RFC 8439 section 2.4.2",
+      "direction": "encrypt",
+      "input": "Ladies and Gentlemen of the class of '99: If I could offer you only one tip for the future, sunscreen would be it.",
+      "params": {
+        "key": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+        "nonce": "000000000000004a00000000",
+        "counter": 1
+      },
+      "output": "6E2E359A2568F98041BA0728DD0D6981E97E7AEC1D4360C20A27AFCCFD9FAE0BF91B65C5524733AB8F593DABCD62B3571639D624E65152AB8F530C359F0861D807CA0DBF500D6A6156A38E088A22B65E52BC514D16CCF806818CE91AB77937365AF90BBF74A35BE6B40B8EEDF2785E42874D"
+    },
+    {
+      "name": "counter 0, zero nonce",
+      "direction": "encrypt",
+      "input": "ChaCha20 test",
+      "params": {
+        "key": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+        "nonce": "000000000000000000000000",
+        "counter": 0
+      },
+      "output": "7A954A3EB1A42B5AADC96604CC"
+    }
+  ]
+}

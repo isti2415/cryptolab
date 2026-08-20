@@ -6,18 +6,27 @@
  * private exponent is its inverse d = e⁻¹ mod φ(n). Then:
  *   Encrypt: c = mᵉ mod n.   Decrypt: m = c^d mod n.
  *
- * This is "textbook" RSA — no padding — encrypting one code point at a time, so
+ * This is "textbook" RSA, no padding, encrypting one code point at a time, so
  * it faithfully shows the maths while being explicitly NOT how RSA is used for
  * real (see the content notes). Uses native BigInt so the modular exponentiation
  * is genuinely exact.
  */
 
 import type { AlgorithmResult, Direction, Params, Step } from '@/core/types';
-import { gcd, isProbablePrime, modInverse, modpow, parseBig } from './bigmath';
+import {
+  gcd,
+  isProbablePrime,
+  modInverse,
+  modpow,
+  parseBig,
+  type EuclidRow,
+  type ModPowStep,
+} from '@/core/bigmath';
 
 export type RsaStepKind =
   | 'primes'
   | 'modulus'
+  | 'trapdoor'
   | 'totient'
   | 'public'
   | 'private'
@@ -39,11 +48,45 @@ export interface RsaStepState {
   outValue?: string; // c (encrypt) or m (decrypt)
   glyph?: string; // the character involved
   formula?: string;
+  /** Square-and-multiply ladder for this character's exponentiation. */
+  ladder?: ModPowStep[];
+  /** Exponent used, and its binary expansion, what the ladder walks. */
+  exponent?: string;
+  exponentBits?: string;
+  /** All characters/tokens in the message, for the progress track. */
+  units?: string[];
+
+  /** Extended-Euclid working that produced d, on the `private` step. */
+  euclid?: EuclidRow[];
+
+  /** The asymmetry, on the `trapdoor` step. */
+  trapdoor?: {
+    /** Multiplications needed to build n from p and q. */
+    forward: string;
+    /** Trial divisions needed to factor n back apart. */
+    backward: string;
+    /** Where trial division actually finds the factor. */
+    foundAt: string;
+  };
 }
 
 function err(message: string, paramKey?: string): AlgorithmResult<RsaStepState> {
   return { output: '', steps: [], error: { message, paramKey } };
 }
+
+/** Integer square root, for sizing the trial-division comparison. */
+function bigintSqrt(n: bigint): bigint {
+  if (n < 2n) return n;
+  let x = n;
+  let y = (x + 1n) / 2n;
+  while (y < x) {
+    x = y;
+    y = (x + n / x) / 2n;
+  }
+  return x;
+}
+
+const bits = (v: bigint) => v.toString(2);
 
 export function run(
   input: string,
@@ -68,7 +111,8 @@ export function run(
   if (gcd(e, phi) !== 1n) {
     return err(`e = ${e} is not coprime with φ(n) = ${phi}; no private key exists. Pick another e.`, 'e');
   }
-  const d = modInverse(e, phi)!;
+  const euclid: EuclidRow[] = [];
+  const d = modInverse(e, phi, euclid)!;
 
   const base = {
     direction,
@@ -85,13 +129,29 @@ export function run(
     kind: RsaStepKind,
     title: string,
     description: string,
-  ) => steps.push({ id: kind, title, description, phase: 'Key setup', state: { ...base, kind, outputSoFar: '' } });
+    extra?: Partial<RsaStepState>,
+  ) =>
+    steps.push({
+      id: kind,
+      title,
+      description,
+      phase: 'Key setup',
+      state: { ...base, kind, outputSoFar: '', ...extra },
+    });
 
-  setup('primes', `Two primes: p = ${p}, q = ${q}`, 'RSA starts from two secret prime numbers. Their product is easy to compute but, when the primes are large, extremely hard to factor back apart — that gap is the whole basis of the cipher.');
+  setup('primes', `Two primes: p = ${p}, q = ${q}`, 'RSA starts from two secret prime numbers. Both are checked with Miller–Rabin; a composite here would silently break the key rather than fail loudly.');
   setup('modulus', `Modulus n = p·q = ${n}`, 'The modulus n is public. All arithmetic happens mod n, and n is part of both the public and private keys.');
-  setup('totient', `φ(n) = (p−1)(q−1) = ${phi}`, 'Euler’s totient counts the numbers below n that are coprime with it. It stays secret — knowing φ(n) is equivalent to knowing the private key.');
-  setup('public', `Public exponent e = ${e}`, 'e is chosen coprime with φ(n). The public key is the pair (n, e) — anyone can use it to encrypt.');
-  setup('private', `Private exponent d = e⁻¹ mod φ(n) = ${d}`, 'd is the modular inverse of e modulo φ(n), so that e·d ≡ 1. The private key is (n, d); only its holder can decrypt.');
+
+  // How lopsided the trapdoor is, measured on the actual numbers in play.
+  const root = bigintSqrt(n);
+  const trials = root / 2n + 1n;
+  setup('trapdoor', 'One multiplication forward, a search backward', `Building n took a single multiplication. Recovering p and q from n by trial division takes roughly ${trials} divisions even for these tiny primes. That gap is the entire security of RSA, and it widens astronomically with key size.`, {
+    trapdoor: { forward: '1', backward: trials.toString(), foundAt: (p < q ? p : q).toString() },
+  });
+
+  setup('totient', `φ(n) = (p−1)(q−1) = ${phi}`, 'Euler’s totient counts the numbers below n that are coprime with it. It stays secret; knowing φ(n) is equivalent to knowing the private key, because d follows immediately from it.');
+  setup('public', `Public exponent e = ${e}`, 'e is chosen coprime with φ(n). The public key is the pair (n, e); anyone can use it to encrypt.');
+  setup('private', `Private exponent d = e⁻¹ mod φ(n) = ${d}`, `d is the modular inverse of e modulo φ(n), found by running the extended Euclidean algorithm on ${e} and ${phi}. Because e·d ≡ 1 (mod φ(n)), raising to e and then to d returns the original message.`, { euclid });
 
   // --- Message processing --------------------------------------------------
   let out = '';
@@ -102,15 +162,16 @@ export function run(
       const m = BigInt(chars[i].codePointAt(0)!);
       if (m >= n) {
         return err(
-          `The character “${chars[i]}” has code ${m}, which is ≥ n = ${n}. Textbook RSA needs n larger than every message value — choose bigger primes.`,
+          `The character “${chars[i]}” has code ${m}, which is ≥ n = ${n}. Textbook RSA needs n larger than every message value, choose bigger primes.`,
         );
       }
-      const c = modpow(m, e, n);
+      const ladder: ModPowStep[] = [];
+      const c = modpow(m, e, n, ladder);
       out += (out ? ' ' : '') + c.toString();
       steps.push({
         id: `c${i}`,
         title: `“${chars[i]}” (${m}) → ${c}`,
-        description: `Encrypt the code point m = ${m} as c = mᵉ mod n = ${m}^${e} mod ${n} = ${c}.`,
+        description: `Encrypt the code point m = ${m} as c = mᵉ mod n. The exponent ${e} is binary ${bits(e)}, so square-and-multiply gets there in ${ladder.length} squarings instead of ${e} multiplications.`,
         phase: 'Encrypt',
         state: {
           ...base,
@@ -121,6 +182,10 @@ export function run(
           outValue: c.toString(),
           glyph: chars[i],
           formula: `${m}^${e} mod ${n} = ${c}`,
+          ladder,
+          exponent: e.toString(),
+          exponentBits: bits(e),
+          units: chars,
         },
       });
     }
@@ -130,7 +195,8 @@ export function run(
       const c = parseBig(tokens[i]);
       if (c === null) return err(`“${tokens[i]}” is not a whole number. Ciphertext should be space-separated integers.`);
       if (c >= n) return err(`Ciphertext value ${c} is ≥ n = ${n}; it can’t have come from this key.`);
-      const m = modpow(c, d, n);
+      const ladder: ModPowStep[] = [];
+      const m = modpow(c, d, n, ladder);
       let glyph: string;
       try {
         glyph = String.fromCodePoint(Number(m));
@@ -141,7 +207,7 @@ export function run(
       steps.push({
         id: `m${i}`,
         title: `${c} → “${glyph}” (${m})`,
-        description: `Decrypt c = ${c} as m = c^d mod n = ${c}^${d} mod ${n} = ${m}, the code point for “${glyph}”.`,
+        description: `Decrypt c = ${c} as m = c^d mod n = ${m}, the code point for “${glyph}”. The private exponent ${d} is binary ${bits(d)}, walked bit by bit.`,
         phase: 'Decrypt',
         state: {
           ...base,
@@ -152,6 +218,10 @@ export function run(
           outValue: m.toString(),
           glyph,
           formula: `${c}^d mod ${n} = ${m}`,
+          ladder,
+          exponent: d.toString(),
+          exponentBits: bits(d),
+          units: tokens,
         },
       });
     }

@@ -6,6 +6,7 @@
 }
 
 .calc {
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,4 +33,23 @@
 }
 .arrow {
   color: var(--text-dim);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.note,
+.period {
+  margin: 0;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}
+
+.note strong {
+  color: var(--text-muted);
+  font-weight: 600;
 }

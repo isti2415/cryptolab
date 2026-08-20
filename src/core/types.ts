@@ -15,7 +15,17 @@ import type { ComponentType } from 'react';
 
 export type Direction = 'encrypt' | 'decrypt';
 
-export type Category = 'classical' | 'modern';
+/**
+ * Navigation grouping. Two buckets stopped scaling once the list outgrew a
+ * handful of ciphers: "modern" was covering block ciphers, hashes and
+ * public-key schemes at once, which is three unrelated things.
+ */
+export type Category =
+  | 'classical'
+  | 'symmetric'
+  | 'hash'
+  | 'publickey'
+  | 'pqc';
 
 /* ------------------------------------------------------------------ params */
 
@@ -76,7 +86,10 @@ export interface Step<S = unknown> {
   description: string;
   /** Algorithm-specific state snapshot for the Visualizer. */
   state: S;
-  /** Optional phase grouping, e.g. "Key schedule" vs "Rounds". */
+  /**
+   * Phase grouping, e.g. "Key schedule" vs "Rounds". Drives the walkthrough's
+   * chapter markers, so long traces (DES ~70 steps, AES ~80) stay navigable.
+   */
   phase?: string;
 }
 
@@ -89,12 +102,54 @@ export interface ValidationError {
 }
 
 export interface AlgorithmResult<S = unknown> {
-  /** Final output — what the playground displays. Empty string when errored. */
+  /** Final output, what the playground displays. Empty string when errored. */
   output: string;
-  /** Ordered trace — what the walkthrough displays. Empty when errored. */
+  /** Ordered trace, what the walkthrough displays. Empty when errored. */
   steps: Step<S>[];
   /** Present when input/params could not be processed. Never throws instead. */
   error?: ValidationError;
+}
+
+export interface FormulaLine {
+  /** What the expression is for, e.g. "encrypt" or "round key". */
+  label: string;
+  /** The expression itself, in plain Unicode notation. */
+  expr: string;
+  /** What it does, in a sentence or two. Required: an unexplained equation teaches nothing. */
+  note: string;
+}
+
+export interface SymbolGloss {
+  symbol: string;
+  meaning: string;
+}
+
+/* ------------------------------------------------------------------- code */
+
+export type CodeLang = 'python' | 'typescript';
+
+/**
+ * A real, runnable implementation shown beside the walkthrough: the project's
+ * founding promise of "the actual code that performs each step".
+ *
+ * `source` is the file with its comments stripped (see `plugins/stripComments.ts`).
+ * The repo keeps its commentary; the panel shows the algorithm, because reading
+ * a cipher and reading prose about a cipher are different activities and the
+ * page already has somewhere for the prose.
+ *
+ * Correctness matters as much here as in the engines: a sample that disagrees
+ * with the running code actively misteaches. Every non-TypeScript sample is
+ * asserted against the same `vectors.json` fixture the engine's tests use, so
+ * drift fails CI rather than shipping.
+ */
+export interface CodeSample {
+  lang: CodeLang;
+  /** Shown on the tab, e.g. "Python" or "TypeScript (this engine)". */
+  label: string;
+  /** Full source text, comments removed. */
+  source: string;
+  /** Repo-relative path, for the "view source" link. */
+  path: string;
 }
 
 /* ------------------------------------------------------------ definition */
@@ -102,14 +157,22 @@ export interface AlgorithmResult<S = unknown> {
 export interface AlgorithmContent {
   /** One-liner shown in cards/nav. */
   tagline: string;
+  /**
+   * The algorithm in notation, shown as its own tab.
+   *
+   * Every line carries an explanation as well as an expression: an equation a
+   * reader cannot decode is decoration, and the symbols are exactly the part
+   * that is unfamiliar.
+   */
+  formula: FormulaLine[];
+  /** What each symbol in the formulas stands for. */
+  symbols?: SymbolGloss[];
   /** What it does, plainly. Markdown-free plain paragraphs. */
   overview: string[];
   /** Where it came from / why it mattered. */
   history: string[];
-  /** How it breaks. Honest — this is a teaching tool. */
+  /** How it breaks. Honest; this is a teaching tool. */
   weaknesses: string[];
-  /** Optional extra notes (implementation caveats, etc.). */
-  notes?: string[];
 }
 
 export interface AlgorithmMeta {
@@ -125,6 +188,20 @@ export interface AlgorithmMeta {
 
 export interface AlgorithmVisualizerProps<S = unknown> {
   step: Step<S>;
+  /**
+   * The previous step, when there is one. Lets a visualizer highlight *what
+   * changed* rather than just re-rendering a new snapshot: the difference
+   * between "the hex is different now" and "these four bytes were substituted".
+   */
+  prev?: Step<S>;
+  /** Position of `step` within `steps`. */
+  index: number;
+  /**
+   * The whole trace. Lets a visualizer render persistent context: the full key
+   * schedule with the live subkey lit, the output produced so far, without
+   * every engine having to duplicate whole-trace data into every single step.
+   */
+  steps: Step<S>[];
   /** Direction the trace was produced for (some visuals mirror by direction). */
   direction: Direction;
   /** True while the player is animating toward this step (vs. jumped to it). */
@@ -147,12 +224,25 @@ export interface AlgorithmDefinition<S = unknown> {
   /** Whether this algorithm supports decrypt as well as encrypt. */
   supportsDecrypt: boolean;
   /**
+   * False for algorithms that transform no message: a key exchange derives a
+   * shared secret from its parameters alone. The playground then hides the
+   * input field rather than showing one that does nothing.
+   */
+  takesInput?: boolean;
+  /**
    * The one source of truth. Pure: same inputs → same result, no side effects,
    * never throws on bad input (returns `error` instead).
    */
   run(input: string, params: Params, direction: Direction): AlgorithmResult<S>;
   /** Renders a single step's state. */
   Visualizer: ComponentType<AlgorithmVisualizerProps<S>>;
+  /**
+   * Source implementations shown beside the walkthrough. Always contains at
+   * least the TypeScript engine itself (imported raw, so it cannot drift from
+   * what is actually running); a hand-written Python implementation is added
+   * per algorithm as the primary teaching version.
+   */
+  code: CodeSample[];
   /** Sensible starting values for the playground/walkthrough. */
   sample: { input: string; params: Params; direction?: Direction };
 }

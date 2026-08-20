@@ -1,0 +1,76 @@
+.pointers {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.pointer {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  color: var(--signal);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.pointerLabel {
+  color: var(--text-dim);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.pointerNote {
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}
+
+/* Sixteen by sixteen: the natural shape for a byte-indexed array. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(16, minmax(0, 1fr));
+  gap: 2px;
+  min-width: 0;
+}
+
+.keyRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 4px;
+}
+
+.note {
+  margin: 0;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}
+
+.bytes {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
+.bytesLabel {
+  flex: 0 0 auto;
+  min-width: 3em;
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.bytesValue {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--text-muted);
+  font-size: var(--fs-2xs);
+}
+
+.bytesOut {
+  color: var(--cat-4);
+}

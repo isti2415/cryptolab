@@ -1,0 +1,41 @@
+{
+  "algorithm": "blowfish",
+  "cases": [
+    {
+      "name": "all-zero key and block",
+      "direction": "encrypt",
+      "input": "0000000000000000",
+      "params": {
+        "key": "0000000000000000"
+      },
+      "output": "4EF997456198DD78"
+    },
+    {
+      "name": "all-ones key and block",
+      "direction": "encrypt",
+      "input": "FFFFFFFFFFFFFFFF",
+      "params": {
+        "key": "FFFFFFFFFFFFFFFF"
+      },
+      "output": "51866FD5B85ECB8A"
+    },
+    {
+      "name": "key 0123456789ABCDEF",
+      "direction": "encrypt",
+      "input": "1111111111111111",
+      "params": {
+        "key": "0123456789ABCDEF"
+      },
+      "output": "61F9C3802281B096"
+    },
+    {
+      "name": "decrypt back",
+      "direction": "decrypt",
+      "input": "0ACEAB0FC6A0A28D",
+      "params": {
+        "key": "FEDCBA9876543210"
+      },
+      "output": "0123456789ABCDEF"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
  *
  * `SITE_URL` is the single source of truth for absolute URLs (canonical tags,
  * Open Graph, sitemap, JSON-LD). Override it at build time with VITE_SITE_URL
- * when a custom domain is attached — e.g. `VITE_SITE_URL=https://cryptolab.dev`.
+ * when a custom domain is attached, e.g. `VITE_SITE_URL=https://cryptolab.dev`.
  * The postbuild sitemap script reads the same value from `SITE_URL`.
  */
 
@@ -19,7 +19,7 @@ export const SITE_NAME = 'CryptoLab';
 export const SITE_TAGLINE = 'cryptography, one step at a time';
 
 export const SITE_DESCRIPTION =
-  'Learn cryptography by watching real algorithms transform real input into real output, step by step — then experiment yourself in a live playground. Caesar, Vigenère, AES, RSA and more.';
+  'Learn cryptography by watching real algorithms transform real input into real output, step by step; then experiment yourself in a live playground. Caesar, Vigenère, AES, RSA and more.';
 
 /** Default social share image (1200×630). Lives in /public. */
 export const OG_IMAGE_PATH = '/og.png';

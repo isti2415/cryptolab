@@ -1,6 +1,6 @@
 /**
  * Shared number-theory + alphabet helpers used across algorithm engines.
- * Small, pure, and unit-tested — several ciphers depend on these being exact
+ * Small, pure, and unit-tested; several ciphers depend on these being exact
  * (e.g. Affine and Hill need a correct modular inverse).
  */
 

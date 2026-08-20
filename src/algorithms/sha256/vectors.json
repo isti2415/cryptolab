@@ -1,0 +1,33 @@
+{
+  "algorithm": "sha256",
+  "cases": [
+    {
+      "name": "empty string",
+      "direction": "encrypt",
+      "input": "",
+      "params": {},
+      "output": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "\"abc\"",
+      "direction": "encrypt",
+      "input": "abc",
+      "params": {},
+      "output": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    },
+    {
+      "name": "the 56-character two-block vector",
+      "direction": "encrypt",
+      "input": "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
+      "params": {},
+      "output": "248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1"
+    },
+    {
+      "name": "quick brown fox",
+      "direction": "encrypt",
+      "input": "The quick brown fox jumps over the lazy dog",
+      "params": {},
+      "output": "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592"
+    }
+  ]
+}

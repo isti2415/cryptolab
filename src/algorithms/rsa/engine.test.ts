@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { run } from './engine';
-import { isProbablePrime, modInverse, modpow } from './bigmath';
+import { isProbablePrime, modInverse, modpow } from '@/core/bigmath';
 
 const P = '61';
 const Q = '53';

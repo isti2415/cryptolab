@@ -5,7 +5,7 @@
  * never reused. Each plaintext letter is combined with the next pad letter:
  *   Encrypt: cᵢ = (pᵢ + padᵢ) mod 26.   Decrypt: pᵢ = (cᵢ − padᵢ) mod 26.
  *
- * Unlike Vigenère the pad is NOT repeated — if it is truly random, as long as
+ * Unlike Vigenère the pad is NOT repeated; if it is truly random, as long as
  * the message, and used only once, the result is information-theoretically
  * unbreakable. We enforce the length requirement; randomness and single-use are
  * the operator's responsibility (and explained in the content).
@@ -101,7 +101,7 @@ export function run(
       out += ch;
       steps.push({
         id: `p${pos}`,
-        title: `“${ch === ' ' ? '␣' : ch}” — kept as-is`,
+        title: `“${ch === ' ' ? '␣': ch}”, kept as-is`,
         description: 'Non-letters pass through and do not consume pad.',
         phase: 'Transform',
         state: { ...base, kind: 'passthrough', outputSoFar: out, pos },

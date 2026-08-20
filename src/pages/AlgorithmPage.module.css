@@ -1,15 +1,96 @@
 .page {
+  /*
+   * Query container for the work area below. The old fixed 760px cap left
+   * roughly 45% of a 1920px viewport empty while the AES state matrix rendered
+   * ~200px wide inside a ~720px stage.
+   */
+  container-type: inline-size;
+  container-name: page;
+
   display: flex;
   flex-direction: column;
-  gap: 36px;
-  max-width: 760px;
+  gap: 40px;
   min-width: 0;
 }
 
+/*
+ * The playground pairs with the walkthrough; the code sits full-width beneath
+ * them both.
+ *
+ * A third parallel column was tried and dropped. Splitting the row three ways
+ * left the middle column around 430px — too narrow for a 26-cell alphabet
+ * strip, a 64-bit permutation diagram or a Vigenère tableau — while the code
+ * gained no more room than it has down here. The visualization needs the width
+ * more than the code needs to be adjacent to it.
+ */
+.work {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px 24px;
+  align-items: start;
+  min-width: 0;
+}
+
+@container page (min-width: 940px) {
+  .work {
+    grid-template-columns: minmax(250px, 320px) minmax(0, 1fr);
+  }
+  /*
+   * Both columns pin. Whichever is shorter sticks while the taller one
+   * scrolls past, so a long parameter form keeps the walkthrough in view and a
+   * long walkthrough keeps the console in view, without either being told
+   * which case it is in.
+   */
+  .playground,
+  .walkthrough {
+    position: sticky;
+    top: calc(var(--topbar-h, 60px) + 24px);
+  }
+}
+
+.playground,
+.walkthrough,
+.implementation {
+  scroll-margin-top: calc(var(--topbar-h, 60px) + 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* Title block, full width — the notation moved into its own tab below. */
 .head {
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.headMain {
+  display: flex;
+  flex-direction: column;
   gap: 10px;
+  min-width: 0;
+}
+
+/*
+ * Wide enough to seat the jump links beside the title instead of under it.
+ * Baseline-ish alignment on the bottom edge keeps them tied to the tagline
+ * rather than floating against the badges.
+ */
+@container page (min-width: 900px) {
+  .head {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  .jump {
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    padding-bottom: 2px;
+  }
 }
 
 .badges {
@@ -38,6 +119,7 @@
   color: var(--signal);
   font-size: var(--fs-2xs);
 }
+/* Unfilled difficulty pips: decorative, and paired with a text label. */
 .difficultyOff {
   color: var(--text-faint);
 }
@@ -47,11 +129,85 @@
   letter-spacing: -0.01em;
 }
 
+/* Jump links -------------------------------------------------------------- */
+.jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.jumpLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--bg-panel);
+  color: var(--text-muted);
+  font-family: var(--font-text);
+  box-shadow: var(--shadow-panel);
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.jumpText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+}
+
+.jumpTitle {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.jumpHint {
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+}
+
+.jumpLink::after {
+  content: "↓";
+  margin-left: 2px;
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+}
+
+.jumpLink:hover {
+  border-color: var(--signal-dim);
+  background: var(--bg-hover);
+  transform: translateY(-1px);
+}
+.jumpLink:hover .jumpTitle,
+.jumpLink:hover::after {
+  color: var(--signal);
+}
+
+/* The interactive half is the more likely destination, so it leads. */
+.jumpPrimary {
+  border-color: var(--signal-dim);
+  color: var(--signal);
+}
+.jumpPrimary .jumpTitle {
+  color: var(--signal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jumpLink:hover {
+    transform: none;
+  }
+}
+
 .tagline {
   margin: 0;
   color: var(--text-muted);
   font-size: var(--fs-md);
-  max-width: var(--maxw-read);
 }
 
 .section {
@@ -65,7 +221,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: var(--fs-xl);
+  font-size: var(--fs-lg);
 }
 .sectionKicker {
   font-size: var(--fs-2xs);
@@ -75,42 +231,30 @@
 }
 
 /* Prose ----------------------------------------------------------------- */
-.prose {
-  display: grid;
-  gap: 18px;
+/*
+ * One column, running the full width of the section.
+ *
+ * A long measure needs more type and more leading to stay readable: at this
+ * width the eye has further to travel back to the start of the next line, and
+ * tight leading is what makes that go wrong. So the reading text is set larger
+ * than anything else on the page, with generous line spacing and a brighter
+ * ink than the surrounding interface chrome.
+ */
+.block {
+  border-left: 2px solid var(--border-strong);
+  padding-left: 20px;
 }
 
-.block {
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
-  border-left: 2px solid var(--border-strong);
-  border-radius: var(--r-md);
-  padding: 16px 20px;
-}
 .block p {
-  color: var(--text-muted);
-  font-size: var(--fs-sm);
+  color: var(--text);
+  font-size: var(--fs-prose);
+  line-height: 1.75;
+  margin-bottom: 1.25rem;
 }
 .block p:last-child {
   margin-bottom: 0;
 }
 
-.blockTitle {
-  font-size: var(--fs-2xs);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
-  color: var(--text-dim);
-  margin-bottom: 10px;
-}
-
 .blockWarn {
   border-left-color: var(--warn);
-}
-.blockMuted {
-  background: transparent;
-  border-style: dashed;
-}
-.blockMuted p {
-  color: var(--text-dim);
-  font-size: var(--fs-xs);
 }

@@ -69,7 +69,7 @@
   right: 20%;
   bottom: 4px;
   height: 1px;
-  background: var(--text-faint);
+  background: var(--text-dim);
 }
 
 .slotDone {
@@ -114,6 +114,6 @@
 }
 
 .empty {
-  color: var(--text-faint);
+  color: var(--text-dim);
   padding: 0 6px;
 }

@@ -1,0 +1,32 @@
+{
+  "algorithm": "ml-dsa",
+  "cases": [
+    {
+      "name": "sign and verify",
+      "direction": "encrypt",
+      "input": "attack at dawn",
+      "params": {
+        "seed": 12345
+      },
+      "output": "valid · 2 signing attempts"
+    },
+    {
+      "name": "another key",
+      "direction": "encrypt",
+      "input": "transfer 100",
+      "params": {
+        "seed": 7
+      },
+      "output": "valid · 2 signing attempts"
+    },
+    {
+      "name": "tampered message is rejected",
+      "direction": "decrypt",
+      "input": "transfer 100",
+      "params": {
+        "seed": 7
+      },
+      "output": "invalid · challenge mismatch"
+    }
+  ]
+}

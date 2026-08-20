@@ -1,0 +1,44 @@
+{
+  "algorithm": "enigma",
+  "cases": [
+    {
+      "name": "I-II-III at AAA, AAAAA",
+      "direction": "encrypt",
+      "input": "AAAAA",
+      "params": {
+        "rotors": "I II III",
+        "reflector": "B",
+        "positions": "AAA",
+        "rings": "AAA",
+        "plugboard": ""
+      },
+      "output": "BDZGO"
+    },
+    {
+      "name": "twenty-six As",
+      "direction": "encrypt",
+      "input": "AAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "params": {
+        "rotors": "I II III",
+        "reflector": "B",
+        "positions": "AAA",
+        "rings": "AAA",
+        "plugboard": ""
+      },
+      "output": "BDZGOWCXLTKSBTMCDLPBMUQOFX"
+    },
+    {
+      "name": "with plugboard and rings",
+      "direction": "encrypt",
+      "input": "ATTACKATDAWN",
+      "params": {
+        "rotors": "IV II V",
+        "reflector": "C",
+        "positions": "QRS",
+        "rings": "BCD",
+        "plugboard": "AV BS CG DL FU HZ IN KM OW RX"
+      },
+      "output": "XYDLOVWRLXSV"
+    }
+  ]
+}

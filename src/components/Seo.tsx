@@ -1,7 +1,7 @@
 /**
  * Per-page SEO. Renders into the document <head> via vite-react-ssg's <Head>
  * (react-helmet-async under the hood), so the tags land in the real <head> of
- * the prerendered HTML — which is what social scrapers and crawlers read.
+ * the prerendered HTML, which is what social scrapers and crawlers read.
  *
  * Every routed page should render exactly one <Seo>. Given a page's path it
  * derives the canonical + Open Graph URL, so titles/descriptions and share
@@ -24,7 +24,7 @@ export interface SeoProps {
   description?: string;
   /** Root-relative path of this page, e.g. "/" or "/a/caesar". */
   path: string;
-  /** og:type — "website" for the home page, "article" for content pages. */
+  /** og:type; "website" for the home page, "article" for content pages. */
   type?: 'website' | 'article';
   /** Absolute-or-relative share image. Defaults to the site OG image. */
   image?: string;

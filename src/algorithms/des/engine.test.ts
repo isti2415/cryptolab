@@ -30,10 +30,36 @@ describe('DES round-trips', () => {
 });
 
 describe('DES structure', () => {
-  it('produces setup + IP + 16 rounds + final = 19 steps', () => {
+  it('traces the key schedule, the permutations and every Feistel sub-step', () => {
     const r = run('0123456789ABCDEF', { key: '133457799BBCDFF1' }, 'encrypt');
-    expect(r.steps).toHaveLength(19);
-    expect(r.steps.filter((s) => s.state.kind === 'round')).toHaveLength(16);
+    const kinds = (k: string) => r.steps.filter((s) => s.state.kind === k).length;
+
+    // setup + PC-1 + 16 subkeys + IP + 16×(expand, xor, sbox, mix) + FP
+    expect(r.steps).toHaveLength(1 + 1 + 16 + 1 + 64 + 1);
+    expect(kinds('subkey')).toBe(16);
+    expect(kinds('expand')).toBe(16);
+    expect(kinds('xor')).toBe(16);
+    expect(kinds('sbox')).toBe(16);
+    expect(kinds('mix')).toBe(16);
+  });
+
+  it('exposes the real PC-1 output, dropping the eight parity bits', () => {
+    const r = run('0123456789ABCDEF', { key: '133457799BBCDFF1' }, 'encrypt');
+    const pc1 = r.steps.find((s) => s.state.kind === 'pc1')!;
+    expect(pc1.state.permutation?.output).toHaveLength(56);
+    expect(pc1.state.permutation?.dropped).toEqual([7, 15, 23, 31, 39, 47, 55, 63]);
+  });
+
+  it('S-box lookups use outer bits for the row and inner bits for the column', () => {
+    const r = run('0123456789ABCDEF', { key: '133457799BBCDFF1' }, 'encrypt');
+    const sbox = r.steps.find((s) => s.state.kind === 'sbox')!;
+    const boxes = sbox.state.feistel!.boxes;
+    expect(boxes).toHaveLength(8);
+    for (const b of boxes) {
+      const [b0, b1, b2, b3, b4, b5] = b.inBits;
+      expect(b.row).toBe((b0 << 1) | b5);
+      expect(b.col).toBe((b1 << 3) | (b2 << 2) | (b3 << 1) | b4);
+    }
   });
   it('derives 16 subkeys, reversed for decryption', () => {
     const e = run('0123456789ABCDEF', { key: '133457799BBCDFF1' }, 'encrypt');

@@ -1,0 +1,32 @@
+{
+  "algorithm": "playfair",
+  "cases": [
+    {
+      "name": "classic PLAYFAIR EXAMPLE",
+      "direction": "encrypt",
+      "input": "Hide the gold in the tree stump",
+      "params": {
+        "keyword": "PLAYFAIR EXAMPLE"
+      },
+      "output": "BM OD ZB XD NA BE KU DM UI XM MO UV IF"
+    },
+    {
+      "name": "doubled letters get a filler",
+      "direction": "encrypt",
+      "input": "BALLOON",
+      "params": {
+        "keyword": "MONARCHY"
+      },
+      "output": "IB SU PM NA"
+    },
+    {
+      "name": "decrypt",
+      "direction": "decrypt",
+      "input": "BM OD ZB XD NA BE KU DM UI XM MO UV IF",
+      "params": {
+        "keyword": "PLAYFAIR EXAMPLE"
+      },
+      "output": "HI DE TH EG OL DI NT HE TR EX ES TU MP"
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+.tree {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.level {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.levelLabel {
+  flex: 0 0 auto;
+  min-width: 3.5em;
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+}
+
+.nodes {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.node {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 4px 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.625rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.leaf {
+  color: var(--signal);
+  border-color: var(--signal);
+  background: var(--signal-glow);
+}
+.path {
+  color: var(--cat-2);
+  border-color: var(--cat-2);
+  background: var(--cat-2-soft);
+}
+.computed {
+  color: var(--cat-3);
+  border-color: var(--cat-3);
+  background: var(--cat-3-soft);
+}
+.root {
+  color: var(--cat-4);
+  border-color: var(--cat-4);
+  background: var(--cat-4-soft);
+}
+
+.legend {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}
+
+.swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  border: 1px solid currentColor;
+}
+
+.valid {
+  margin: 0;
+  color: var(--ok);
+  font-family: var(--font-text);
+  font-size: var(--fs-sm);
+}
+
+.invalid {
+  margin: 0;
+  color: var(--danger);
+  font-family: var(--font-text);
+  font-size: var(--fs-sm);
+}
+
+/* WOTS+ chains ------------------------------------------------------------ */
+.chains {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chain {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+  min-width: 0;
+}
+
+.chainOn {
+  background: var(--signal-glow);
+}
+
+.chainName {
+  min-width: 2em;
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+}
+
+.pips {
+  display: flex;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pip {
+  flex: 1 1 0;
+  height: 8px;
+  min-width: 0;
+  border-radius: 1px;
+  background: var(--bg-hover);
+}
+
+.pipWalked {
+  background: var(--cat-2);
+}
+
+.pipHere {
+  background: var(--signal);
+}
+
+.chainValue {
+  min-width: 1.5em;
+  text-align: right;
+  font-size: var(--fs-2xs);
+  color: var(--text-muted);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.note {
+  margin: 0;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}

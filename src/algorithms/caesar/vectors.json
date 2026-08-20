@@ -1,0 +1,50 @@
+{
+  "algorithm": "caesar",
+  "cases": [
+    {
+      "name": "classic shift 3",
+      "direction": "encrypt",
+      "input": "The die is cast",
+      "params": {
+        "shift": 3
+      },
+      "output": "Wkh glh lv fdvw"
+    },
+    {
+      "name": "wraps past Z",
+      "direction": "encrypt",
+      "input": "xyz XYZ",
+      "params": {
+        "shift": 3
+      },
+      "output": "abc ABC"
+    },
+    {
+      "name": "punctuation passes through",
+      "direction": "encrypt",
+      "input": "Hello, World! 123",
+      "params": {
+        "shift": 13
+      },
+      "output": "Uryyb, Jbeyq! 123"
+    },
+    {
+      "name": "decrypt round trip",
+      "direction": "decrypt",
+      "input": "Wkh glh lv fdvw",
+      "params": {
+        "shift": 3
+      },
+      "output": "The die is cast"
+    },
+    {
+      "name": "shift 0 is identity",
+      "direction": "encrypt",
+      "input": "Unchanged.",
+      "params": {
+        "shift": 0
+      },
+      "output": "Unchanged."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "algorithm": "hash-signatures",
+  "cases": [
+    {
+      "name": "sign and verify from leaf 3",
+      "direction": "encrypt",
+      "input": "attack at dawn",
+      "params": {
+        "seed": "cryptolab",
+        "leaf": 3
+      },
+      "output": "valid · root F6065783"
+    },
+    {
+      "name": "sign and verify from leaf 0",
+      "direction": "encrypt",
+      "input": "transfer 100",
+      "params": {
+        "seed": "cryptolab",
+        "leaf": 0
+      },
+      "output": "valid · root F6065783"
+    },
+    {
+      "name": "tampered message is rejected",
+      "direction": "decrypt",
+      "input": "transfer 100",
+      "params": {
+        "seed": "cryptolab",
+        "leaf": 0
+      },
+      "output": "invalid · expected F6065783, got 1154042E"
+    }
+  ]
+}

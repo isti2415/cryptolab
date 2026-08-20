@@ -1,0 +1,32 @@
+{
+  "algorithm": "ml-kem",
+  "cases": [
+    {
+      "name": "transport 10110011",
+      "direction": "encrypt",
+      "input": "10110011",
+      "params": {
+        "seed": 12345
+      },
+      "output": "10110011"
+    },
+    {
+      "name": "all ones",
+      "direction": "encrypt",
+      "input": "11111111",
+      "params": {
+        "seed": 7
+      },
+      "output": "11111111"
+    },
+    {
+      "name": "alternating",
+      "direction": "encrypt",
+      "input": "01010101",
+      "params": {
+        "seed": 99
+      },
+      "output": "01010101"
+    }
+  ]
+}

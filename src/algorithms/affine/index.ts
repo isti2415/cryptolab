@@ -1,4 +1,7 @@
+import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import engineCode from './engine.ts?code';
+import pythonCode from './code/affine.py?code';
 import { content } from './content';
 import { run, type AffineStepState } from './engine';
 import { AffineVisualizer } from './Visualizer';
@@ -32,6 +35,7 @@ const affine: AlgorithmDefinition<AffineStepState> = {
   ],
   run,
   Visualizer: AffineVisualizer,
+  code: [pythonSample(pythonCode), tsEngine(engineCode)],
   sample: { input: 'Affine Cipher', params: { a: 5, b: 8 }, direction: 'encrypt' },
 };
 

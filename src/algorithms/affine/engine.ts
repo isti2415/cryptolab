@@ -37,6 +37,17 @@ export interface AffineStepState {
   toChar?: string;
   /** Human-readable arithmetic for this character. */
   calc?: string;
+  /**
+   * The intermediate letter index after the multiply but before the shift
+   * (encrypting), or after the subtract but before the multiply (decrypting).
+   *
+   * The full substitution map is precomputed, which meant the walkthrough only
+   * ever showed the composed result, so the "multiply" half of "multiply, then
+   * shift" was invisible, and Affine looked like Caesar with a different table.
+   */
+  midIndex?: number;
+  /** Labels for the two hops, in order. */
+  stages?: [string, string];
 }
 
 /** a is only valid if gcd(a,26)=1. Returns [a,b] normalized, or null on bad a. */
@@ -97,7 +108,7 @@ export function run(
     title: `a = ${a}, b = ${b}  ·  a⁻¹ = ${aInv} (mod 26)`,
     description:
       direction === 'encrypt'
-        ? `Encryption maps each letter x to (a·x + b) mod 26. The whole alphabet is remapped at once — every letter has a fixed substitute.`
+        ? `Encryption maps each letter x to (a·x + b) mod 26. The whole alphabet is remapped at once; every letter has a fixed substitute.`
         : `Decryption inverts the multiply-then-shift: x = a⁻¹·(y − b) mod 26, using the modular inverse a⁻¹ = ${aInv}.`,
     phase: 'Setup',
     state: { ...base, kind: 'setup', outputSoFar: '', pos: -1 },
@@ -110,7 +121,7 @@ export function run(
       out += ch;
       steps.push({
         id: `p${pos}`,
-        title: `“${ch === ' ' ? '␣' : ch}” — kept as-is`,
+        title: `“${ch === ' ' ? '␣': ch}”, kept as-is`,
         description: 'Non-letters are passed through unchanged.',
         phase: 'Transform',
         state: { ...base, kind: 'passthrough', outputSoFar: out, pos },
@@ -123,6 +134,17 @@ export function run(
     const y = map[x];
     const outChar = upper ? indexToLetter(y) : indexToLetter(y).toLowerCase();
     out += outChar;
+
+    // Encrypt is ×a then +b; decrypt undoes them in the opposite order.
+    const midIndex =
+      direction === 'encrypt'
+        ? mod(a * x, ALPHABET_SIZE)
+        : mod(x - b, ALPHABET_SIZE);
+
+    const stages: [string, string] =
+      direction === 'encrypt'
+        ? [`× ${a}`, `+ ${b}`]
+        : [`− ${b}`, `× ${aInv}`];
 
     const calc =
       direction === 'encrypt'
@@ -144,6 +166,8 @@ export function run(
         fromChar: ch,
         toChar: outChar,
         calc,
+        midIndex,
+        stages,
       },
     });
   }

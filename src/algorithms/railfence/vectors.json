@@ -1,0 +1,41 @@
+{
+  "algorithm": "railfence",
+  "cases": [
+    {
+      "name": "textbook 3-rail example",
+      "direction": "encrypt",
+      "input": "WE ARE DISCOVERED FLEE AT ONCE",
+      "params": {
+        "rails": 3
+      },
+      "output": "WECRLTEERDSOEEFEAOCAIVDEN"
+    },
+    {
+      "name": "decrypt the 3-rail example",
+      "direction": "decrypt",
+      "input": "WECRLTEERDSOEEFEAOCAIVDEN",
+      "params": {
+        "rails": 3
+      },
+      "output": "WEAREDISCOVEREDFLEEATONCE"
+    },
+    {
+      "name": "same message on 4 rails",
+      "direction": "encrypt",
+      "input": "WEAREDISCOVEREDFLEEATONCE",
+      "params": {
+        "rails": 4
+      },
+      "output": "WIREEEDSEEEACAECVDLTNROFO"
+    },
+    {
+      "name": "two rails",
+      "direction": "encrypt",
+      "input": "DEFENDTHEEASTWALL",
+      "params": {
+        "rails": 2
+      },
+      "output": "DFNTEATALEEDHESWL"
+    }
+  ]
+}

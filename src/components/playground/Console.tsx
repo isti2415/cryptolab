@@ -1,10 +1,12 @@
 /**
  * The interactive console: input, parameter fields, direction, and the live
- * output. It is fully generic — it renders whatever `params` an algorithm
+ * output. It is fully generic; it renders whatever `params` an algorithm
  * declares and calls the same `run()` the walkthrough uses, so the output shown
  * here is by construction the output the walkthrough arrives at.
  */
 
+import { useState } from 'react';
+import { Icon } from '@/components/ui/Icon';
 import type {
   AlgorithmResult,
   AnyAlgorithm,
@@ -35,6 +37,19 @@ export function Console({
   onDirectionChange,
 }: ConsoleProps) {
   const err = result.error;
+  const takesInput = algo.takesInput !== false;
+  const [copied, setCopied] = useState(false);
+
+  async function copyOutput() {
+    try {
+      await navigator.clipboard.writeText(result.output);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1400);
+    } catch {
+      /* clipboard blocked (insecure context, denied permission): the output
+         is selectable text either way, so there is nothing to recover from */
+    }
+  }
 
   return (
     <section className={styles.console} aria-label="Interactive playground">
@@ -110,33 +125,40 @@ export function Console({
 
       {/* Input → output, read left-to-right (stacks on narrow screens). */}
       <div className={styles.io}>
-        <div className={styles.field}>
-          <label className={styles.label} htmlFor="pg-input">
-            {direction === 'encrypt' ? 'Plaintext' : 'Ciphertext'}
-          </label>
-          <textarea
-            id="pg-input"
-            className={styles.textarea}
-            value={input}
-            spellCheck={false}
-            rows={4}
-            onChange={(e) => onInputChange(e.target.value)}
-            placeholder="Type a message…"
-          />
-        </div>
+        {takesInput && (
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor="pg-input">
+              {direction === 'encrypt' ? 'Plaintext' : 'Ciphertext'}
+            </label>
+            <textarea
+              id="pg-input"
+              className={styles.textarea}
+              value={input}
+              spellCheck={false}
+              rows={4}
+              onChange={(e) => onInputChange(e.target.value)}
+              placeholder="Type a message…"
+            />
+          </div>
+        )}
 
         <div className={styles.field}>
           <div className={styles.outputHead}>
             <label className={styles.label}>
-              {direction === 'encrypt' ? 'Ciphertext' : 'Plaintext'}
+              {!takesInput
+                ? 'Shared secret'
+                : direction === 'encrypt'
+                  ? 'Ciphertext'
+                  : 'Plaintext'}
             </label>
             {!err && result.output && (
               <button
-                className={styles.copy}
-                onClick={() => navigator.clipboard?.writeText(result.output)}
+                className={`${styles.copy} ${copied ? styles.copied : ''}`}
+                onClick={copyOutput}
                 title="Copy output"
               >
-                copy
+                <Icon name={copied ? 'check' : 'copy'} size={13} />
+                {copied ? 'copied' : 'copy'}
               </button>
             )}
           </div>
@@ -146,7 +168,7 @@ export function Console({
             </p>
           ) : (
             <output className={styles.result}>
-              {result.output || <span className={styles.placeholder}>—</span>}
+              {result.output || <span className={styles.placeholder}>, </span>}
             </output>
           )}
         </div>

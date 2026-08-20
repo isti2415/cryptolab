@@ -1,0 +1,41 @@
+{
+  "algorithm": "3des",
+  "cases": [
+    {
+      "name": "three independent keys",
+      "direction": "encrypt",
+      "input": "0123456789ABCDEF",
+      "params": {
+        "key": "133457799BBCDFF10E329232EA6D0D73AABB09182736CCDD"
+      },
+      "output": "1ECC68F07E644795"
+    },
+    {
+      "name": "decrypt three-key",
+      "direction": "decrypt",
+      "input": "0123456789ABCDEF",
+      "params": {
+        "key": "133457799BBCDFF10E329232EA6D0D73AABB09182736CCDD"
+      },
+      "output": "A9D7DF114A57808B"
+    },
+    {
+      "name": "two-key mode",
+      "direction": "encrypt",
+      "input": "DEADBEEFCAFEBABE",
+      "params": {
+        "key": "133457799BBCDFF10E329232EA6D0D73"
+      },
+      "output": "76467E95EF16AF1F"
+    },
+    {
+      "name": "all keys equal collapses to single DES",
+      "direction": "encrypt",
+      "input": "0123456789ABCDEF",
+      "params": {
+        "key": "133457799BBCDFF1133457799BBCDFF1133457799BBCDFF1"
+      },
+      "output": "85E813540F0AB405"
+    }
+  ]
+}

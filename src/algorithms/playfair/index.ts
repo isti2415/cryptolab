@@ -1,4 +1,7 @@
+import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import engineCode from './engine.ts?code';
+import pythonCode from './code/playfair.py?code';
 import { content } from './content';
 import { run, type PlayfairStepState } from './engine';
 import { PlayfairVisualizer } from './Visualizer';
@@ -25,6 +28,7 @@ const playfair: AlgorithmDefinition<PlayfairStepState> = {
   ],
   run,
   Visualizer: PlayfairVisualizer,
+  code: [pythonSample(pythonCode), tsEngine(engineCode)],
   sample: {
     input: 'Hide the gold in the tree stump',
     params: { keyword: 'PLAYFAIR EXAMPLE' },

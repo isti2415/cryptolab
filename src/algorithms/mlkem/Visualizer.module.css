@@ -1,0 +1,52 @@
+.grids {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.budget {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.budgetLabel {
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+}
+
+.bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--bg-hover);
+  overflow: hidden;
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  background: var(--signal);
+  transition: width var(--dur) var(--ease);
+}
+
+.result {
+  margin: 0;
+  color: var(--signal);
+  font-size: var(--fs-sm);
+}
+
+.note {
+  margin: 0;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}

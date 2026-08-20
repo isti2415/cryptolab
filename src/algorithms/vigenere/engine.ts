@@ -1,5 +1,5 @@
 /**
- * Vigenère cipher engine — a polyalphabetic cipher. Each plaintext letter is
+ * Vigenère cipher engine: a polyalphabetic cipher. Each plaintext letter is
  * Caesar-shifted by the corresponding letter of a repeating keyword, so the
  * same plaintext letter can encrypt to different ciphertext letters depending
  * on its position. The key advances only over letters; other characters pass
@@ -95,7 +95,7 @@ export function run(
       out += ch;
       steps.push({
         id: `p${pos}`,
-        title: `“${ch === ' ' ? '␣' : ch}” — kept as-is`,
+        title: `“${ch === ' ' ? '␣': ch}”, kept as-is`,
         description: 'Non-letters pass through and do not consume a key letter.',
         phase: 'Transform',
         state: { ...base, kind: 'passthrough', outputSoFar: out, pos },

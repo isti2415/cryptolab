@@ -1,4 +1,7 @@
+import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import engineCode from './engine.ts?code';
+import pythonCode from './code/aes.py?code';
 import { content } from './content';
 import { run, type AesStepState } from './engine';
 import { AesVisualizer } from './Visualizer';
@@ -7,7 +10,7 @@ const aes: AlgorithmDefinition<AesStepState> = {
   meta: {
     id: 'aes',
     name: 'AES',
-    category: 'modern',
+    category: 'symmetric',
     era: '2001',
     difficulty: 5,
   },
@@ -25,6 +28,7 @@ const aes: AlgorithmDefinition<AesStepState> = {
   ],
   run,
   Visualizer: AesVisualizer,
+  code: [pythonSample(pythonCode), tsEngine(engineCode)],
   sample: {
     input: '00112233445566778899AABBCCDDEEFF',
     params: { key: '000102030405060708090A0B0C0D0E0F' },

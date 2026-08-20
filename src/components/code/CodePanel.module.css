@@ -1,0 +1,124 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px 0 8px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-raised);
+}
+
+.langs {
+  display: flex;
+  gap: 2px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.lang {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: 8px 10px;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+  white-space: nowrap;
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.lang:hover {
+  color: var(--text);
+}
+.langOn {
+  color: var(--signal);
+  border-bottom-color: var(--signal);
+}
+
+.copy {
+  margin-left: auto;
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  color: var(--text-dim);
+  transition: color var(--dur-fast) var(--ease);
+}
+.copy:hover {
+  color: var(--text);
+}
+.copied {
+  color: var(--ok);
+}
+
+.pre {
+  margin: 0;
+  padding: 10px 0;
+  overflow: auto;
+  /* The panel is a column of its own now, so it can run the full height of the
+     walkthrough beside it rather than being capped. */
+  flex: 1;
+  min-height: 0;
+  font-size: var(--fs-2xs);
+  line-height: 1.55;
+  scrollbar-width: thin;
+}
+.pre:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: -2px;
+}
+
+.line {
+  display: flex;
+  gap: 12px;
+  padding: 0 12px 0 0;
+}
+
+.gutter {
+  flex: 0 0 auto;
+  min-width: 2.6em;
+  padding-left: 8px;
+  text-align: right;
+  color: var(--text-dim);
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.text {
+  white-space: pre;
+  color: var(--text-muted);
+}
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 10px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-raised);
+  font-size: var(--fs-2xs);
+}
+
+.path {
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

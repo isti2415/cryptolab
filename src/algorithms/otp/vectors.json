@@ -1,0 +1,32 @@
+{
+  "algorithm": "otp",
+  "cases": [
+    {
+      "name": "pad consumed once",
+      "direction": "encrypt",
+      "input": "HELLO",
+      "params": {
+        "pad": "XMCKL"
+      },
+      "output": "EQNVZ"
+    },
+    {
+      "name": "decrypt",
+      "direction": "decrypt",
+      "input": "EQNVZ",
+      "params": {
+        "pad": "XMCKL"
+      },
+      "output": "HELLO"
+    },
+    {
+      "name": "spaces do not consume pad",
+      "direction": "encrypt",
+      "input": "HE LLO",
+      "params": {
+        "pad": "XMCKL"
+      },
+      "output": "EQ NVZ"
+    }
+  ]
+}

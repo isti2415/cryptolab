@@ -1,85 +1,104 @@
-import { Grid, type GridCell } from '@/components/viz/Grid';
+/**
+ * Hill visualizer.
+ *
+ * The matrix equation used to float in the upper-right of a mostly-empty box,
+ * with a bare "?" where the answer would go and the block tracks stranded
+ * lower-left. The equation is now the focus, anchored, with the dot-product
+ * terms written out underneath so the multiply is something you can follow
+ * rather than a box that emits numbers.
+ *
+ * The context region finally uses what the engine has been computing all along
+ * and the old visualizer ignored: the key matrix, its determinant, and the
+ * inverse that makes decryption possible.
+ */
+
+import { ChipTrack } from '@/components/viz/ChipTrack';
+import { MatrixOp } from '@/components/viz/MatrixOp';
+import { ValueLedger } from '@/components/viz/ValueLedger';
+import { VizStage } from '@/components/viz/VizStage';
 import type { AlgorithmVisualizerProps } from '@/core/types';
 import type { HillStepState } from './engine';
 import styles from './Visualizer.module.css';
 
+const fmt = (m: number[][]) => m.map((row) => row.map(String));
+
 export function HillVisualizer({ step }: AlgorithmVisualizerProps<HillStepState>) {
   const s = step.state;
-
-  const matrixCells: GridCell[][] = s.matrix.map((row) =>
-    row.map((n) => ({ text: String(n), state: 'secondary' as const })),
-  );
-
-  const vec = (v: [number, number] | undefined, active: boolean): GridCell[][] =>
-    (v ?? [0, 0]).map((n) => [
-      { text: v ? String(n) : '·', state: active ? ('primary' as const) : ('normal' as const) },
-    ]);
+  const encrypting = s.direction === 'encrypt';
+  const active = s.kind === 'block' && s.inVec;
 
   return (
-    <div className={styles.viz}>
-      <div className={styles.equation}>
-        <div className={styles.term}>
-          <span className={styles.termLabel}>
-            {s.direction === 'encrypt' ? 'key K' : 'K⁻¹'}
-          </span>
-          <Grid cells={matrixCells} size={2.4} mono ariaLabel="key matrix" />
+    <VizStage>
+      <VizStage.Context label="Key">
+        <ValueLedger
+          rows={[
+            {
+              key: 'det',
+              label: 'det K',
+              value: String(s.det),
+              active: s.kind === 'setup',
+              note: 'must be coprime with 26, or no inverse exists',
+            },
+            {
+              key: 'detInv',
+              label: 'det⁻¹',
+              value: String(s.detInv),
+              active: s.kind === 'setup',
+            },
+          ]}
+        />
+        <div className={styles.keyPair}>
+          <MatrixOp
+            terms={[
+              { rows: fmt(s.keyMatrix), label: 'K', state: encrypting ? 'key' : 'muted' },
+              { rows: fmt(s.invMatrix), label: 'K⁻¹ mod 26', state: encrypting ? 'muted' : 'key' },
+            ]}
+            operators={['']}
+          />
         </div>
+        <p className={styles.note}>
+          Encryption multiplies by K; decryption multiplies by K⁻¹. The one being
+          applied this run is highlighted.
+        </p>
+      </VizStage.Context>
 
-        <span className={styles.op}>×</span>
+      <VizStage.Focus label={active ? 'This block' : 'The transform'}>
+        {active ? (
+          <MatrixOp
+            terms={[
+              { rows: fmt(s.matrix), label: encrypting ? 'K' : 'K⁻¹', state: 'key' },
+              { rows: s.inVec!.map((n) => [String(n)]), label: s.inChars, state: 'idle' },
+              { rows: s.outVec!.map((n) => [String(n)]), label: s.outChars, state: 'output' },
+            ]}
+            operators={['×', '=']}
+            workings={[`${s.calc0} (mod 26)`, `${s.calc1} (mod 26)`]}
+          />
+        ) : (
+          <p className={styles.note}>
+            Letters are taken two at a time as a vector and multiplied by the key
+            matrix mod 26. Because every output letter depends on both input
+            letters, Hill diffuses information across the block: the property
+            single-letter substitution ciphers completely lack.
+          </p>
+        )}
+      </VizStage.Focus>
 
-        <div className={styles.term}>
-          <span className={styles.termLabel}>{s.inChars ?? 'block'}</span>
-          <Grid cells={vec(s.inVec, s.kind === 'block')} size={2.4} mono ariaLabel="input vector" />
-        </div>
-
-        <span className={styles.op}>=</span>
-
-        <div className={styles.term}>
-          <span className={`${styles.termLabel} ${styles.outLabel}`}>{s.outChars ?? '?'}</span>
-          <Grid cells={vec(s.outVec, s.kind === 'block')} size={2.4} mono ariaLabel="output vector" />
-        </div>
-      </div>
-
-      {s.kind === 'block' && (
-        <div className={styles.calc} aria-hidden>
-          <span>{s.calc0} (mod 26)</span>
-          <span>{s.calc1} (mod 26)</span>
-        </div>
-      )}
-
-      <div className={styles.tracks}>
-        <BlockTrack label="in" blocks={s.inputBlocks} active={s.blockIndex} />
-        <BlockTrack label="out" blocks={s.outputBlocks} active={s.outputBlocks.length - 1} out />
-      </div>
-    </div>
-  );
-}
-
-function BlockTrack({
-  label,
-  blocks,
-  active,
-  out = false,
-}: {
-  label: string;
-  blocks: string[];
-  active: number;
-  out?: boolean;
-}) {
-  return (
-    <div className={styles.trackRow}>
-      <span className={styles.trackLabel}>{label}</span>
-      <div className={styles.track}>
-        {blocks.map((b, i) => (
-          <span
-            key={i}
-            className={`${styles.chip} ${i === active ? (out ? styles.chipJust : styles.chipActive) : ''}`}
-          >
-            {b}
-          </span>
-        ))}
-        {blocks.length === 0 && <span className={styles.empty}>—</span>}
-      </div>
-    </div>
+      <VizStage.Track label="Blocks">
+        <ChipTrack
+          label="in"
+          chips={s.inputBlocks.map((b, i) => ({
+            text: b,
+            state: i === s.blockIndex ? 'active' : i < s.blockIndex ? 'done' : 'idle',
+          }))}
+        />
+        <ChipTrack
+          label="out"
+          chips={s.outputBlocks.map((b, i) => ({
+            text: b,
+            state: i === s.outputBlocks.length - 1 ? 'output' : 'done',
+          }))}
+        />
+      </VizStage.Track>
+    </VizStage>
   );
 }

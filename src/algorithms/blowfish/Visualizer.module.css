@@ -1,0 +1,74 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.words {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 2px;
+  min-width: 0;
+}
+
+/* Setup cost, made visible: 521 encryptions before any plaintext moves. */
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-hover);
+  overflow: hidden;
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  background: var(--cat-2);
+  transition: width var(--dur) var(--ease);
+}
+
+.progressLabel {
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.note {
+  margin: 0;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}
+
+.output {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.outputValue {
+  color: var(--cat-4);
+  font-size: var(--fs-sm);
+  overflow-wrap: anywhere;
+}

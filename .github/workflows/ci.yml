@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # The Python samples shown on the site are held to the same vectors as the
+      # TypeScript engines; both runners have to pass or a sample has drifted.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm test:python
+      - run: pnpm build
+
+      # Contrast is checked against the built site, in both themes, so a
+      # regression fails here rather than reaching a reader who cannot see it.
+      - name: Contrast audit
+        run: |
+          pnpm preview --port 4173 &
+          npx --yes wait-on http://localhost:4173 --timeout 60000
+          pnpm audit:contrast http://localhost:4173

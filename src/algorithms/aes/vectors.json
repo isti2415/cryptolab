@@ -1,0 +1,41 @@
+{
+  "algorithm": "aes",
+  "cases": [
+    {
+      "name": "FIPS-197 Appendix C.1",
+      "direction": "encrypt",
+      "input": "00112233445566778899aabbccddeeff",
+      "params": {
+        "key": "000102030405060708090a0b0c0d0e0f"
+      },
+      "output": "69C4E0D86A7B0430D8CDB78070B4C55A"
+    },
+    {
+      "name": "FIPS-197 Appendix B",
+      "direction": "encrypt",
+      "input": "3243f6a8885a308d313198a2e0370734",
+      "params": {
+        "key": "2b7e151628aed2a6abf7158809cf4f3c"
+      },
+      "output": "3925841D02DC09FBDC118597196A0B32"
+    },
+    {
+      "name": "decrypt Appendix C.1",
+      "direction": "decrypt",
+      "input": "69C4E0D86A7B0430D8CDB78070B4C55A",
+      "params": {
+        "key": "000102030405060708090a0b0c0d0e0f"
+      },
+      "output": "00112233445566778899AABBCCDDEEFF"
+    },
+    {
+      "name": "all-zero block",
+      "direction": "encrypt",
+      "input": "00000000000000000000000000000000",
+      "params": {
+        "key": "cafebabedeadbeef0011223344556677"
+      },
+      "output": "36853680201E52431CC19F3E82085196"
+    }
+  ]
+}

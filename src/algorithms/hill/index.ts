@@ -1,4 +1,7 @@
+import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import engineCode from './engine.ts?code';
+import pythonCode from './code/hill.py?code';
 import { content } from './content';
 import { run, type HillStepState } from './engine';
 import { HillVisualizer } from './Visualizer';
@@ -25,6 +28,7 @@ const hill: AlgorithmDefinition<HillStepState> = {
   ],
   run,
   Visualizer: HillVisualizer,
+  code: [pythonSample(pythonCode), tsEngine(engineCode)],
   sample: { input: 'HELP', params: { key: '3 3 2 5' }, direction: 'encrypt' },
 };
 

@@ -1,0 +1,118 @@
+.chain {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+/* Arrow between passes: the output of one is literally the input of the next. */
+.pass + .pass {
+  position: relative;
+  margin-top: 12px;
+}
+.pass + .pass::before {
+  content: "↓";
+  position: absolute;
+  top: -14px;
+  left: 14px;
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  line-height: 1;
+}
+
+.pass {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  min-width: 0;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.passDone {
+  background: var(--bg-raised);
+}
+
+.passOn {
+  border-color: var(--signal);
+  background: var(--signal-glow);
+}
+
+.passHead {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.passOp {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.8em;
+  padding: 1px 6px;
+  border: 1px solid var(--cat-2);
+  border-radius: var(--r-sm);
+  color: var(--cat-2);
+  font-size: var(--fs-2xs);
+}
+
+.passKey {
+  color: var(--text-dim);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+}
+
+.passValue {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  overflow-wrap: anywhere;
+}
+
+.passOn .passValue {
+  color: var(--signal);
+}
+
+.warn {
+  margin: 0;
+  color: var(--warn);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}
+
+.output {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.outputLabel {
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.outputValue {
+  color: var(--cat-4);
+  font-size: var(--fs-sm);
+  overflow-wrap: anywhere;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.note {
+  margin: 0;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}

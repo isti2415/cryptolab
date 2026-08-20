@@ -1,0 +1,41 @@
+{
+  "algorithm": "diffie-hellman",
+  "cases": [
+    {
+      "name": "textbook p=23 g=5 a=6 b=15",
+      "direction": "encrypt",
+      "input": "",
+      "params": {
+        "p": "23",
+        "g": "5",
+        "a": "6",
+        "b": "15"
+      },
+      "output": "2"
+    },
+    {
+      "name": "p=23 g=5 a=4 b=3",
+      "direction": "encrypt",
+      "input": "",
+      "params": {
+        "p": "23",
+        "g": "5",
+        "a": "4",
+        "b": "3"
+      },
+      "output": "18"
+    },
+    {
+      "name": "31-bit prime",
+      "direction": "encrypt",
+      "input": "",
+      "params": {
+        "p": "2147483647",
+        "g": "7",
+        "a": "12345",
+        "b": "67890"
+      },
+      "output": "579536727"
+    }
+  ]
+}

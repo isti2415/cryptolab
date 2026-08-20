@@ -1,0 +1,90 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* A 64-bit permutation is genuinely wide; it scrolls here rather than
+   compressing into illegibility or pushing the page sideways. */
+.scroll {
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.svg {
+  display: block;
+  font-family: var(--font-mono);
+}
+
+.wire {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  transition:
+    stroke var(--dur-fast) var(--ease),
+    opacity var(--dur-fast) var(--ease);
+}
+
+.wireDim {
+  opacity: 0.25;
+}
+
+.wireOn {
+  stroke: var(--signal);
+  stroke-width: 2;
+  opacity: 1;
+}
+
+.slot {
+  stroke-width: 1;
+  transition:
+    fill var(--dur-fast) var(--ease),
+    stroke var(--dur-fast) var(--ease);
+}
+
+.idle {
+  fill: var(--bg-raised);
+  stroke: var(--border);
+}
+.output {
+  fill: var(--cat-4-soft);
+  stroke: var(--cat-4);
+}
+.active {
+  fill: var(--signal);
+  stroke: var(--signal);
+}
+.dropped {
+  fill: transparent;
+  stroke: var(--cat-5);
+  stroke-dasharray: 2 2;
+}
+
+.text {
+  font-size: 10px;
+  fill: var(--text-muted);
+}
+.idleText {
+  fill: var(--text-muted);
+}
+.outputText {
+  fill: var(--cat-4);
+}
+.activeText {
+  fill: var(--signal-ink);
+  font-weight: 600;
+}
+.droppedText {
+  fill: var(--cat-5);
+}

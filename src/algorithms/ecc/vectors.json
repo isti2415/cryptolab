@@ -1,0 +1,38 @@
+{
+  "algorithm": "ecdh",
+  "cases": [
+    {
+      "name": "tiny curve, a=5 b=7",
+      "direction": "encrypt",
+      "input": "",
+      "params": {
+        "curve": "tiny",
+        "a": 5,
+        "b": 7
+      },
+      "output": "(6, 11)"
+    },
+    {
+      "name": "small curve, a=47 b=131",
+      "direction": "encrypt",
+      "input": "",
+      "params": {
+        "curve": "small",
+        "a": 47,
+        "b": 131
+      },
+      "output": "(48, 203)"
+    },
+    {
+      "name": "small curve, scalars swapped",
+      "direction": "encrypt",
+      "input": "",
+      "params": {
+        "curve": "small",
+        "a": 131,
+        "b": 47
+      },
+      "output": "(48, 203)"
+    }
+  ]
+}

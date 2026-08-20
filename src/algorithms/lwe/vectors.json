@@ -1,0 +1,32 @@
+{
+  "algorithm": "lwe",
+  "cases": [
+    {
+      "name": "round-trip 10110",
+      "direction": "decrypt",
+      "input": "10110",
+      "params": {
+        "seed": 12345
+      },
+      "output": "10110"
+    },
+    {
+      "name": "round-trip 000111",
+      "direction": "decrypt",
+      "input": "000111",
+      "params": {
+        "seed": 7
+      },
+      "output": "000111"
+    },
+    {
+      "name": "alternating bits",
+      "direction": "decrypt",
+      "input": "101010101010",
+      "params": {
+        "seed": 99
+      },
+      "output": "101010101010"
+    }
+  ]
+}

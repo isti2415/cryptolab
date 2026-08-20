@@ -11,10 +11,15 @@
     "preview": "vite preview --outDir dist",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc -b --noEmit"
+    "test:python": "python3 -m unittest discover -s tests",
+    "typecheck": "tsc -b --noEmit",
+    "vectors": "node scripts/gen-vectors.mjs",
+    "audit:contrast": "node scripts/audit-contrast.mjs",
+    "check": "pnpm typecheck && pnpm test && pnpm test:python"
   },
   "dependencies": {
-    "motion": "^11.15.0",
+    "@fontsource-variable/ibm-plex-sans": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^6.30.4"

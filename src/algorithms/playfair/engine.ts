@@ -1,5 +1,5 @@
 /**
- * Playfair cipher engine — a digraph substitution cipher over a 5×5 key square.
+ * Playfair cipher engine: a digraph substitution cipher over a 5×5 key square.
  *
  * A keyword fills a 5×5 grid (I and J share a cell), followed by the rest of the
  * alphabet. The message is split into letter pairs; each pair is transformed by

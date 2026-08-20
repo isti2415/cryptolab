@@ -1,0 +1,41 @@
+{
+  "algorithm": "vigenere",
+  "cases": [
+    {
+      "name": "classic LEMON",
+      "direction": "encrypt",
+      "input": "ATTACKATDAWN",
+      "params": {
+        "keyword": "LEMON"
+      },
+      "output": "LXFOPVEFRNHR"
+    },
+    {
+      "name": "decrypt LEMON",
+      "direction": "decrypt",
+      "input": "LXFOPVEFRNHR",
+      "params": {
+        "keyword": "LEMON"
+      },
+      "output": "ATTACKATDAWN"
+    },
+    {
+      "name": "key does not advance on spaces",
+      "direction": "encrypt",
+      "input": "attack at dawn",
+      "params": {
+        "keyword": "LEMON"
+      },
+      "output": "lxfopv ef rnhr"
+    },
+    {
+      "name": "single-letter key is Caesar",
+      "direction": "encrypt",
+      "input": "HELLO",
+      "params": {
+        "keyword": "D"
+      },
+      "output": "KHOOR"
+    }
+  ]
+}

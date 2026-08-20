@@ -7,3 +7,5 @@ dist-ssr
 coverage
 .DS_Store
 *.tsbuildinfo
+__pycache__/
+*.pyc

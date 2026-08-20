@@ -1,0 +1,32 @@
+{
+  "algorithm": "hill",
+  "cases": [
+    {
+      "name": "2x2 key 3 3 2 5",
+      "direction": "encrypt",
+      "input": "HELP",
+      "params": {
+        "key": "3 3 2 5"
+      },
+      "output": "HIAT"
+    },
+    {
+      "name": "decrypt",
+      "direction": "decrypt",
+      "input": "HIAT",
+      "params": {
+        "key": "3 3 2 5"
+      },
+      "output": "HELP"
+    },
+    {
+      "name": "odd length pads with X",
+      "direction": "encrypt",
+      "input": "ABCDE",
+      "params": {
+        "key": "3 3 2 5"
+      },
+      "output": "DFPTDT"
+    }
+  ]
+}

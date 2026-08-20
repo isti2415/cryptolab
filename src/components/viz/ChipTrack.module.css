@@ -1,0 +1,28 @@
+.track {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
+.label {
+  flex: 0 0 auto;
+  min-width: 3.5em;
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* Wraps, unlike BitField: these are independent units, not one wide value. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+}
+
+.placeholder {
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+}

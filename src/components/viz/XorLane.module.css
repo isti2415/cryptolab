@@ -1,0 +1,50 @@
+.lane {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* The result row sits under a rule, like a sum. */
+.row:last-child {
+  padding-top: 7px;
+  margin-top: 3px;
+  border-top: 1px solid var(--border);
+}
+
+.label {
+  flex: 0 0 auto;
+  min-width: 4em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.op {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.cells {
+  display: flex;
+  gap: 3px;
+  min-width: 0;
+  overflow-x: auto;
+  padding: 2px;
+  scrollbar-width: thin;
+}
+
+.gap {
+  margin-left: 9px;
+}

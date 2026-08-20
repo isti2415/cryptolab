@@ -1,0 +1,45 @@
+{
+  "algorithm": "affine",
+  "cases": [
+    {
+      "name": "a=5 b=8",
+      "direction": "encrypt",
+      "input": "AFFINE CIPHER",
+      "params": {
+        "a": 5,
+        "b": 8
+      },
+      "output": "IHHWVC SWFRCP"
+    },
+    {
+      "name": "decrypt a=5 b=8",
+      "direction": "decrypt",
+      "input": "IHHWVC SWFRCP",
+      "params": {
+        "a": 5,
+        "b": 8
+      },
+      "output": "AFFINE CIPHER"
+    },
+    {
+      "name": "a=1 reduces to Caesar",
+      "direction": "encrypt",
+      "input": "abc xyz",
+      "params": {
+        "a": 1,
+        "b": 3
+      },
+      "output": "def abc"
+    },
+    {
+      "name": "mixed case and symbols",
+      "direction": "encrypt",
+      "input": "Hello, World!",
+      "params": {
+        "a": 7,
+        "b": 2
+      },
+      "output": "Zebbw, Awrbx!"
+    }
+  ]
+}

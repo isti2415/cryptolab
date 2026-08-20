@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#08090b" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f8fa" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#08090b" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <!--
       No <title> or <meta name="description"> here on purpose: every route
@@ -11,6 +12,24 @@
       time (see src/components/Seo.tsx). Duplicating them here would produce two
       title/description tags per page.
     -->
+    <!--
+      Theme, applied before first paint. The pages are prerendered, so without
+      this the static HTML would paint in the system theme and then flip once
+      React hydrates and reads localStorage. Kept inline and tiny for that
+      reason; `light-dark()` in tokens.css does the rest from `color-scheme`.
+    -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('cryptolab-theme');
+          if (t === 'light' || t === 'dark') {
+            document.documentElement.setAttribute('data-theme', t);
+          }
+        } catch (e) {
+          /* private mode / storage disabled — fall back to the system theme */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

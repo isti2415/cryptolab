@@ -1,0 +1,41 @@
+{
+  "algorithm": "rc4",
+  "cases": [
+    {
+      "name": "key \"Key\" / \"Plaintext\"",
+      "direction": "encrypt",
+      "input": "Plaintext",
+      "params": {
+        "key": "Key"
+      },
+      "output": "BBF316E8D940AF0AD3"
+    },
+    {
+      "name": "key \"Wiki\" / \"pedia\"",
+      "direction": "encrypt",
+      "input": "pedia",
+      "params": {
+        "key": "Wiki"
+      },
+      "output": "1021BF0420"
+    },
+    {
+      "name": "key \"Secret\" / \"Attack at dawn\"",
+      "direction": "encrypt",
+      "input": "Attack at dawn",
+      "params": {
+        "key": "Secret"
+      },
+      "output": "45A01F645FC35B383552544B9BF5"
+    },
+    {
+      "name": "decrypt back to text",
+      "direction": "decrypt",
+      "input": "BBF316E8D940AF0AD3",
+      "params": {
+        "key": "Key"
+      },
+      "output": "Plaintext"
+    }
+  ]
+}

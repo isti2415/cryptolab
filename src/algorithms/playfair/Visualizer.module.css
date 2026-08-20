@@ -6,6 +6,7 @@
 }
 
 .readout {
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,6 +88,26 @@
   font-weight: 600;
 }
 .empty {
-  color: var(--text-faint);
+  color: var(--text-dim);
   padding: 3px 7px;
+}
+
+.square {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  gap: 3px;
+  width: max-content;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.note {
+  margin: 0;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
 }

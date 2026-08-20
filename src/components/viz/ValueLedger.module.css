@@ -1,0 +1,73 @@
+.ledger {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(6.5em, auto) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 12px;
+  padding: 7px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-raised);
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.on {
+  border-color: var(--signal);
+  background: var(--signal-glow);
+}
+
+.label {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0;
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-dim);
+}
+
+.on .label {
+  color: var(--text-muted);
+}
+
+/* The tinted active row raises the floor under the note, so it needs a step up
+   with it. */
+.on .note {
+  color: var(--text-muted);
+}
+
+/* Amber dot: this number is secret. Deliberately not a padlock glyph, which
+   renders as a colour emoji on several platforms. */
+.lock {
+  color: var(--cat-2);
+  font-size: 0.7em;
+}
+
+.value {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.on .value {
+  color: var(--signal);
+}
+
+.note {
+  display: block;
+  margin-top: 3px;
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+}

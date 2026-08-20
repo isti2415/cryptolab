@@ -9,7 +9,7 @@ import { algorithms } from './core/registry';
  * Route table consumed by vite-react-ssg (see `main.tsx`).
  *
  * `getStaticPaths` on the algorithm route is what makes every algorithm ship as
- * its own prerendered HTML page — derived straight from the registry, so adding
+ * its own prerendered HTML page; derived straight from the registry, so adding
  * an algorithm there automatically gives it a real, crawlable, share-previewable
  * page with zero routing changes.
  */

@@ -1,4 +1,7 @@
+import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import engineCode from './engine.ts?code';
+import pythonCode from './code/des.py?code';
 import { content } from './content';
 import { run, type DesStepState } from './engine';
 import { DesVisualizer } from './Visualizer';
@@ -7,7 +10,7 @@ const des: AlgorithmDefinition<DesStepState> = {
   meta: {
     id: 'des',
     name: 'DES',
-    category: 'modern',
+    category: 'symmetric',
     era: '1977',
     difficulty: 4,
   },
@@ -25,6 +28,7 @@ const des: AlgorithmDefinition<DesStepState> = {
   ],
   run,
   Visualizer: DesVisualizer,
+  code: [pythonSample(pythonCode), tsEngine(engineCode)],
   sample: {
     input: '0123456789ABCDEF',
     params: { key: '133457799BBCDFF1' },

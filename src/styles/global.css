@@ -1,4 +1,9 @@
-@import './tokens.css';
+/* Self-hosted so there are no third-party font requests to allow in the CSP. */
+@import "@fontsource-variable/ibm-plex-sans/wght.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/ibm-plex-mono/600.css";
+@import "./tokens.css";
 
 *,
 *::before,
@@ -14,15 +19,16 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-mono);
+  /* Prose reads in the text face; cryptographic data opts into mono via
+     `.mono` or a component rule. See the note above `.mono` below. */
+  font-family: var(--font-text);
   font-size: var(--fs-base);
   line-height: var(--lh-normal);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  /* faint scanline-free grid: a subtle vignette so the near-black has depth */
   background-image: radial-gradient(
     120% 80% at 50% -10%,
-    #0e1014 0%,
+    var(--bg-vignette) 0%,
     var(--bg) 60%
   );
   background-attachment: fixed;
@@ -68,7 +74,18 @@ select {
 }
 
 code,
-pre {
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono);
+}
+
+/*
+ * Anything that is literal cryptographic material — ciphertext, hex, keys,
+ * matrices, alphabets — is set in mono so columns align and glyphs stay
+ * unambiguous. Prose never is.
+ */
+.mono {
   font-family: var(--font-mono);
 }
 
@@ -108,7 +125,6 @@ pre {
   top: 12px;
 }
 
-/* Custom scrollbars, terminal-flavored */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--border-strong) transparent;

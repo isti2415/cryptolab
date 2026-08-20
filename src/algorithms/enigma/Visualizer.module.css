@@ -1,0 +1,124 @@
+.rotors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.rotor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.rotorId {
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-dim);
+}
+
+.rotorRing {
+  font-size: 0.625rem;
+  color: var(--text-dim);
+}
+
+.anomaly {
+  margin: 0;
+  color: var(--cat-2);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}
+
+.plugboard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.pairs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pair {
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text-dim);
+  font-size: var(--fs-2xs);
+}
+
+.pairOn {
+  color: var(--cat-2);
+  border-color: var(--cat-2);
+  background: var(--cat-2-soft);
+}
+
+.none {
+  color: var(--text-dim);
+  font-size: var(--fs-2xs);
+}
+
+/* The current's round trip, one hop per row. */
+.path {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 10px;
+  border-left: 2px solid var(--border);
+  min-width: 0;
+}
+
+/* The reflector is where the signal turns around. */
+.hopTurn {
+  border-left-color: var(--cat-3);
+  background: var(--cat-3-soft);
+}
+
+.hopStage {
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}
+
+.hopPair {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+
+.arrow {
+  color: var(--text-dim);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.note {
+  margin: 0;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}

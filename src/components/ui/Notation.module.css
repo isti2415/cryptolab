@@ -1,0 +1,104 @@
+.notation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px 48px;
+  align-items: start;
+  min-width: 0;
+}
+
+/* The glossary sits beside the expressions once there is room for both. */
+@container page (min-width: 1000px) {
+  .notation {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
+}
+
+.lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.line {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 18px;
+  border-left: 2px solid var(--signal-dim);
+  min-width: 0;
+}
+
+.label {
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.expr {
+  font-family: var(--font-mono);
+  font-size: var(--fs-md);
+  color: var(--text);
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+
+.note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  max-width: 68ch;
+}
+
+.glossary {
+  min-width: 0;
+}
+
+.glossaryTitle {
+  margin: 0 0 10px;
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.symbols {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.symbolRow {
+  display: grid;
+  grid-template-columns: minmax(4.5em, auto) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 12px;
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+}
+
+.symbolRow:nth-child(odd) {
+  background: var(--bg-raised);
+}
+
+.symbol {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--signal);
+}
+
+.meaning {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-base);
+}

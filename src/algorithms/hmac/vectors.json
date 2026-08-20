@@ -1,0 +1,35 @@
+{
+  "algorithm": "hmac",
+  "cases": [
+    {
+      "name": "RFC 4231 case 1",
+      "direction": "encrypt",
+      "input": "4869205468657265",
+      "params": {
+        "key": "0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b",
+        "format": "hex"
+      },
+      "output": "b0344c61d8db38535ca8afceaf0bf12b881dc200c9833da726e9376c2e32cff7"
+    },
+    {
+      "name": "RFC 4231 case 2 (key \"Jefe\")",
+      "direction": "encrypt",
+      "input": "what do ya want for nothing?",
+      "params": {
+        "key": "Jefe",
+        "format": "text"
+      },
+      "output": "5bdcc146bf60754e6a042426089575c75a003f089d2739839dec58b964ec3843"
+    },
+    {
+      "name": "RFC 4231 case 3",
+      "direction": "encrypt",
+      "input": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "params": {
+        "key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "format": "hex"
+      },
+      "output": "773ea91e36800e46854db8ebd09181a72959098b3ef8c122d9635514ced565fe"
+    }
+  ]
+}

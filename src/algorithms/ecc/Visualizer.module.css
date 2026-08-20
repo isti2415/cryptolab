@@ -1,0 +1,97 @@
+.legend {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
+.rowLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  min-width: 6em;
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+}
+
+.swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.generator {
+  background: var(--cat-3);
+}
+.public {
+  background: var(--cat-4);
+}
+.shared {
+  background: var(--signal);
+}
+
+.rowValue {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.formula {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  overflow-wrap: anywhere;
+}
+
+.ladder {
+  border-collapse: collapse;
+  font-size: var(--fs-2xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.ladder th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-dim);
+  padding: 4px 14px 6px 0;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.ladder td {
+  padding: 3px 14px 3px 0;
+  color: var(--text-muted);
+}
+
+.bitOn {
+  color: var(--signal);
+}
+.bitOff {
+  color: var(--text-dim);
+}
+.hot {
+  color: var(--signal);
+}
+
+.note {
+  margin: 0;
+  color: var(--text-dim);
+  font-family: var(--font-text);
+  font-size: var(--fs-2xs);
+}

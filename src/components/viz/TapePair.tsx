@@ -1,6 +1,6 @@
 /**
- * Two aligned character tapes — the input being consumed and the output being
- * produced — shared by every letter-oriented cipher (Caesar, Affine, Vigenère,
+ * Two aligned character tapes: the input being consumed and the output being
+ * produced; shared by every letter-oriented cipher (Caesar, Affine, Vigenère,
  * OTP, Playfair, Hill). The active input slot and the freshly-written output
  * slot are highlighted with the signal accent.
  */
@@ -89,7 +89,7 @@ function Tape({
             {ch === ' ' ? ' ' : ch}
           </span>
         ))}
-        {chars.length === 0 && <span className={styles.empty}>—</span>}
+        {chars.length === 0 && <span className={styles.empty}>, </span>}
         {cursor && <span className={styles.cursor} aria-hidden />}
       </div>
     </div>

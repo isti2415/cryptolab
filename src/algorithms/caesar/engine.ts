@@ -1,5 +1,5 @@
 /**
- * Caesar cipher engine — the reference implementation every other algorithm
+ * Caesar cipher engine: the reference implementation every other algorithm
  * follows. One pure `run()` produces the final output AND the step trace, so
  * the playground and the walkthrough are guaranteed consistent.
  *
@@ -36,6 +36,26 @@ export interface CaesarStepState {
   toIndex?: number;
   fromChar?: string;
   toChar?: string;
+  /**
+   * Letter counts (A–Z) for the input and for the output produced so far.
+   *
+   * Carried so the walkthrough can *show* the cipher's central weakness rather
+   * than only describing it: a Caesar shift slides the frequency profile along
+   * without changing its shape, which is exactly what makes it fall to
+   * frequency analysis.
+   */
+  inputFreq: number[];
+  outputFreq: number[];
+}
+
+/** Counts of A–Z in `text`, case-insensitive; other characters are ignored. */
+function letterFrequency(text: string): number[] {
+  const counts = new Array(ALPHABET_SIZE).fill(0);
+  for (const ch of text.toUpperCase()) {
+    const i = letterToIndex(ch);
+    if (i >= 0) counts[i]++;
+  }
+  return counts;
 }
 
 const KEY = 'shift';
@@ -64,6 +84,7 @@ export function run(
   const effectiveShift = direction === 'encrypt' ? shift : -shift;
   const steps: Step<CaesarStepState>[] = [];
   let out = '';
+  const inputFreq = letterFrequency(input);
 
   // --- Setup step: establish the shifted alphabet mapping. -----------------
   steps.push({
@@ -82,6 +103,8 @@ export function run(
       input,
       outputSoFar: '',
       pos: -1,
+      inputFreq,
+      outputFreq: new Array(ALPHABET_SIZE).fill(0),
     },
   });
 
@@ -95,7 +118,7 @@ export function run(
         ch === ' ' ? 'space' : ch === '\n' ? 'newline' : `“${ch}”`;
       steps.push({
         id: `p${pos}`,
-        title: `${label} — kept as-is`,
+        title: `${label}, kept as-is`,
         description: 'Non-letter characters are not enciphered; they pass through unchanged.',
         phase: 'Transform',
         state: {
@@ -106,6 +129,8 @@ export function run(
           input,
           outputSoFar: out,
           pos,
+          inputFreq,
+          outputFreq: letterFrequency(out),
         },
       });
       continue;
@@ -136,6 +161,8 @@ export function run(
         toIndex,
         fromChar: ch,
         toChar: outChar,
+        inputFreq,
+        outputFreq: letterFrequency(out),
       },
     });
   }
