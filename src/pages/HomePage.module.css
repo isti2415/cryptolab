@@ -111,7 +111,6 @@
 
 .sub {
   margin: 0;
-  max-width: 54ch;
   color: var(--text-muted);
   font-size: var(--fs-md);
   line-height: var(--lh-normal);
@@ -185,7 +184,7 @@
  */
 .stats {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
@@ -207,21 +206,29 @@
   background: var(--bg-panel);
 }
 
+.statTop {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: baseline;
+}
+
 .statValue {
   font-family: var(--font-mono);
-  font-size: var(--fs-xl);
+  font-size: var(--fs-2xl);
+  font-weight: 600;
   line-height: 1;
   color: var(--signal);
   font-variant-numeric: tabular-nums;
 }
 
 .statLabel {
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xl);
   color: var(--text);
 }
 
 .statNote {
-  font-size: var(--fs-2xs);
+  font-size: var(--fs-md);
   color: var(--text-dim);
   line-height: var(--lh-snug);
 }
@@ -239,7 +246,7 @@
   margin: 0;
   color: var(--signal);
   font-family: var(--font-mono);
-  font-size: var(--fs-2xs);
+  font-size: var(--fs-md);
   text-transform: uppercase;
   letter-spacing: var(--tracking-wider);
 }
@@ -254,7 +261,6 @@
 
 .sectionLead {
   margin: 0 0 22px;
-  max-width: 62ch;
   color: var(--text-muted);
   font-size: var(--fs-md);
   line-height: var(--lh-normal);
@@ -293,8 +299,8 @@
 .featureIcon {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--r-md);
   border: 1px solid var(--signal-dim);
   background: var(--signal-glow);
@@ -303,7 +309,8 @@
 
 .featureNum {
   font-family: var(--font-mono);
-  font-size: var(--fs-2xs);
+  font-size: var(--fs-2xl);
+  font-weight: 800;
   letter-spacing: var(--tracking-wider);
   color: var(--text-dim);
 }

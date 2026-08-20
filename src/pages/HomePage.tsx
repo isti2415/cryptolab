@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
-import { Seo } from '@/components/Seo';
-import { HeroDemo } from '@/components/home/HeroDemo';
-import { Icon } from '@/components/ui/Icon';
-import { CATEGORIES, algorithmGroups, algorithms } from '@/core/registry';
+import { Link } from "react-router-dom";
+import { Seo } from "@/components/Seo";
+import { HeroDemo } from "@/components/home/HeroDemo";
+import { Icon } from "@/components/ui/Icon";
+import { CATEGORIES, algorithmGroups, algorithms } from "@/core/registry";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -11,8 +11,8 @@ import {
   SITE_URL,
   absoluteUrl,
   ogImageForPath,
-} from '@/core/site';
-import styles from './HomePage.module.css';
+} from "@/core/site";
+import styles from "./HomePage.module.css";
 
 /*
  * Figures for the stat strip. Everything countable is counted from the
@@ -22,41 +22,41 @@ import styles from './HomePage.module.css';
 const STATS = [
   {
     value: String(algorithms.length),
-    label: 'Algorithms',
-    note: 'Caesar through ML-DSA',
+    label: "Algorithms",
+    note: "Caesar through ML-DSA",
   },
   {
     value: String(CATEGORIES.length),
-    label: 'Families',
-    note: 'Classical to post-quantum',
+    label: "Families",
+    note: "Classical to post-quantum",
   },
   {
-    value: '2',
-    label: 'Languages',
-    note: 'Python and TypeScript, on every page',
+    value: "2",
+    label: "Languages",
+    note: "Python and TypeScript, on every page",
   },
   {
-    value: '1',
-    label: 'Shared engine',
-    note: 'The walkthrough and the console cannot disagree',
+    value: "1",
+    label: "Shared engine",
+    note: "The walkthrough and the console cannot disagree",
   },
 ];
 
 const FEATURES = [
   {
-    icon: 'steps',
-    title: 'A walkthrough you drive',
-    body: 'Every algorithm is traced into real steps, not summarised into a black box. Move a step at a time, jump between phases, or let it play. Key schedules, S-box lookups, permutation wiring and round state are all on screen, with the intermediate values that actually produced them.',
+    icon: "steps",
+    title: "A walkthrough you drive",
+    body: "Every algorithm is traced into real steps, not summarised into a black box. Move a step at a time, jump between phases, or let it play. Key schedules, S-box lookups, permutation wiring and round state are all on screen, with the intermediate values that actually produced them.",
   },
   {
-    icon: 'terminal',
-    title: 'A console with your own input',
-    body: 'Type your own message and keys and get real output back. Bad keys are explained rather than swallowed: a Hill matrix that cannot be inverted, an affine multiplier that shares a factor with 26, a DES key of the wrong length all say so, and say why.',
+    icon: "terminal",
+    title: "A console with your own input",
+    body: "Type your own message and keys and get real output back. Bad keys are explained rather than swallowed: a Hill matrix that cannot be inverted, an affine multiplier that shares a factor with 26, a DES key of the wrong length all say so, and say why.",
   },
   {
-    icon: 'code',
-    title: 'The source, in two languages',
-    body: 'A readable, dependency-free Python implementation sits beside the exact TypeScript engine that produced the output above it. Both are checked against the same published test vectors on every build, so neither can quietly drift from what the page is teaching.',
+    icon: "code",
+    title: "The source, in two languages",
+    body: "A readable, dependency-free Python implementation sits beside the exact TypeScript engine that produced the output above it. Both are checked against the same published test vectors on every build, so neither can quietly drift from what the page is teaching.",
   },
 ] as const;
 
@@ -65,21 +65,21 @@ export function HomePage() {
 
   const jsonLd = [
     {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
+      "@context": "https://schema.org",
+      "@type": "WebSite",
       name: SITE_NAME,
       alternateName: `${SITE_NAME}: ${SITE_TAGLINE}`,
       url: SITE_URL,
       description: SITE_DESCRIPTION,
-      image: absoluteUrl(ogImageForPath('/')),
-      inLanguage: 'en',
+      image: absoluteUrl(ogImageForPath("/")),
+      inLanguage: "en",
     },
     {
-      '@context': 'https://schema.org',
-      '@type': 'ItemList',
-      name: 'Cryptographic algorithms',
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: "Cryptographic algorithms",
       itemListElement: algorithms.map((a, i) => ({
-        '@type': 'ListItem',
+        "@type": "ListItem",
         position: i + 1,
         name: a.meta.name,
         url: absoluteUrl(`/a/${a.meta.id}`),
@@ -107,7 +107,7 @@ export function HomePage() {
             an interactive cryptography lab
           </p>
           <h1 className={styles.headline}>
-            Real ciphers, taken apart{' '}
+            Real ciphers, taken apart{" "}
             <span className={styles.headlineAccent}>one step at a time.</span>
           </h1>
           <p className={styles.sub}>
@@ -126,12 +126,6 @@ export function HomePage() {
               Browse all {algorithms.length}
             </a>
           </div>
-
-          <p className={styles.trust}>
-            No accounts, no cookies, nothing to install. Your message and your
-            keys never leave the browser; every computation happens on this
-            page.
-          </p>
         </div>
 
         <div className={styles.heroDemo}>
@@ -143,8 +137,10 @@ export function HomePage() {
       <section className={styles.stats} aria-label="At a glance">
         {STATS.map((s) => (
           <div key={s.label} className={styles.stat}>
-            <span className={styles.statValue}>{s.value}</span>
-            <span className={styles.statLabel}>{s.label}</span>
+            <div className={styles.statTop}>
+              <span className={styles.statValue}>{s.value}</span>
+              <span className={styles.statLabel}>{s.label}</span>
+            </div>
             <span className={styles.statNote}>{s.note}</span>
           </div>
         ))}
@@ -165,9 +161,11 @@ export function HomePage() {
           {FEATURES.map((f, i) => (
             <li key={f.title} className={styles.feature}>
               <span className={styles.featureIcon}>
-                <Icon name={f.icon} size={18} />
+                <Icon name={f.icon} size={24} />
               </span>
-              <span className={styles.featureNum}>{String(i + 1).padStart(2, '0')}</span>
+              <span className={styles.featureNum}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
               <h3 className={styles.featureTitle}>{f.title}</h3>
               <p className={styles.featureBody}>{f.body}</p>
             </li>
@@ -176,7 +174,11 @@ export function HomePage() {
       </section>
 
       {/* Catalogue -------------------------------------------------------- */}
-      <section className={styles.section} id="catalogue" aria-labelledby="catalogue-title">
+      <section
+        className={styles.section}
+        id="catalogue"
+        aria-labelledby="catalogue-title"
+      >
         <p className={styles.eyebrow}>The catalogue</p>
         <h2 className={styles.sectionTitle} id="catalogue-title">
           Pick somewhere to start
@@ -189,7 +191,11 @@ export function HomePage() {
 
         <div className={styles.groups}>
           {groups.map((group) => (
-            <section key={group.id} className={styles.group} aria-labelledby={`g-${group.id}`}>
+            <section
+              key={group.id}
+              className={styles.group}
+              aria-labelledby={`g-${group.id}`}
+            >
               <header className={styles.groupHead}>
                 <h3 className={styles.groupTitle} id={`g-${group.id}`}>
                   {group.title}
@@ -203,15 +209,17 @@ export function HomePage() {
                   <li key={a.meta.id}>
                     <Link to={`/a/${a.meta.id}`} className={styles.card}>
                       <span className={styles.cardTop}>
-                        <span className={styles.cardEra}>{a.meta.era ?? ''}</span>
+                        <span className={styles.cardEra}>
+                          {a.meta.era ?? ""}
+                        </span>
                         <span className={styles.cardDiff}>
                           <span className="sr-only">
                             Difficulty {a.meta.difficulty} of 5
                           </span>
                           <span aria-hidden="true">
-                            {'●'.repeat(a.meta.difficulty)}
+                            {"●".repeat(a.meta.difficulty)}
                             <span className={styles.cardDiffOff}>
-                              {'●'.repeat(5 - a.meta.difficulty)}
+                              {"●".repeat(5 - a.meta.difficulty)}
                             </span>
                           </span>
                         </span>
