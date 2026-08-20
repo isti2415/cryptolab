@@ -4,17 +4,18 @@
  * the prerendered HTML, which is what social scrapers and crawlers read.
  *
  * Every routed page should render exactly one <Seo>. Given a page's path it
- * derives the canonical + Open Graph URL, so titles/descriptions and share
- * previews stay correct on every route.
+ * derives the canonical URL and the share image, so titles, descriptions and
+ * previews stay correct on every route without per-page configuration.
  */
 
 import { Head } from 'vite-react-ssg';
 import {
-  OG_IMAGE_PATH,
   SITE_DESCRIPTION,
+  SITE_LOCALE,
   SITE_NAME,
   TWITTER_HANDLE,
   absoluteUrl,
+  ogImageForPath,
 } from '@/core/site';
 
 export interface SeoProps {
@@ -26,8 +27,13 @@ export interface SeoProps {
   path: string;
   /** og:type; "website" for the home page, "article" for content pages. */
   type?: 'website' | 'article';
-  /** Absolute-or-relative share image. Defaults to the site OG image. */
+  /** Absolute-or-relative share image. Defaults to this route's own card. */
   image?: string;
+  /**
+   * Alt text for the share image. Defaults to the page title, which is what the
+   * card's own headline says; pass something fuller where the card carries more.
+   */
+  imageAlt?: string;
   /** Discourage indexing (e.g. the 404 page). */
   noindex?: boolean;
   /** Optional JSON-LD structured data objects to embed. */
@@ -39,35 +45,51 @@ export function Seo({
   description = SITE_DESCRIPTION,
   path,
   type = 'website',
-  image = OG_IMAGE_PATH,
+  image,
+  imageAlt,
   noindex = false,
   jsonLd,
 }: SeoProps) {
   const url = absoluteUrl(path);
-  const imageUrl = image.startsWith('http') ? image : absoluteUrl(image);
+  const resolved = image ?? ogImageForPath(path);
+  const imageUrl = resolved.startsWith('http') ? resolved : absoluteUrl(resolved);
+  const alt = imageAlt ?? title;
 
   return (
     <Head>
+      <html lang="en" />
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
-      {noindex && <meta name="robots" content="noindex, follow" />}
+      {noindex ? (
+        <meta name="robots" content="noindex, follow" />
+      ) : (
+        /* Allow full-size image and text previews; the default caps both. */
+        <meta
+          name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
+      )}
 
       {/* Open Graph */}
       <meta property="og:type" content={type} />
       <meta property="og:site_name" content={SITE_NAME} />
+      <meta property="og:locale" content={SITE_LOCALE} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
       <meta property="og:image" content={imageUrl} />
+      <meta property="og:image:type" content="image/png" />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={alt} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={imageUrl} />
+      <meta name="twitter:image:alt" content={alt} />
       {TWITTER_HANDLE && <meta name="twitter:site" content={TWITTER_HANDLE} />}
 
       {jsonLd?.map((data, i) => (

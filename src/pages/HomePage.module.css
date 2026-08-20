@@ -1,44 +1,386 @@
+/*
+ * Landing page.
+ *
+ * Two rules shape everything here:
+ *
+ * 1. Query the container, not the viewport. The page is capped and centred, so
+ *    its own width is what the layout should respond to; a viewport breakpoint
+ *    would keep firing long after the content stopped growing.
+ *
+ * 2. Keep the identity the rest of the site already has: mono for anything a
+ *    machine produced, one signal colour used sparingly, hairline rules instead
+ *    of cards-on-cards, and no decorative gradient blobs. The subject is
+ *    machinery, so the page should look like instrumentation.
+ */
+
 .home {
+  container-type: inline-size;
+  container-name: home;
+
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 96px;
+  min-width: 0;
+  /* Shared with the topbar, so the brand and the headline sit on one edge. */
+  width: 100%;
+  max-width: var(--maxw-landing);
+  margin-inline: auto;
 }
 
+/* ── Hero ─────────────────────────────────────────────────────────────── */
+
 .hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 44px;
+  align-items: center;
+  padding: 28px 0 8px;
+}
+
+/*
+ * A faint engineering grid behind the hero, fading out downward. It reads as
+ * graph paper rather than as a background image, and it is the only ornament
+ * on the page.
+ */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -40px -40px 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--border) 60%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--border) 60%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(120% 90% at 20% 0%, #000 0%, transparent 72%);
+  pointer-events: none;
+}
+
+@container home (min-width: 880px) {
+  .hero {
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+    gap: 64px;
+    padding: 44px 0 20px;
+  }
+}
+
+.heroCopy {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-top: 12px;
-  max-width: 660px;
+  align-items: flex-start;
+  gap: 22px;
+  min-width: 0;
 }
 
 .kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   margin: 0;
-  color: var(--signal);
-  font-size: var(--fs-xs);
+  padding: 6px 13px 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-panel);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
   text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
+  letter-spacing: var(--tracking-wide);
+}
+
+.kickerDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--signal);
+  box-shadow: 0 0 0 3px var(--signal-glow);
 }
 
 .headline {
-  font-size: clamp(1.7rem, 4.4vw, var(--fs-2xl));
-  line-height: var(--lh-tight);
-  letter-spacing: -0.01em;
+  margin: 0;
+  font-size: clamp(2.1rem, 5.4cqi, 3.7rem);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+/* The second clause is the promise the whole site is built on; colour it. */
+.headlineAccent {
+  color: var(--signal);
 }
 
 .sub {
   margin: 0;
+  max-width: 54ch;
   color: var(--text-muted);
   font-size: var(--fs-md);
   line-height: var(--lh-normal);
 }
 
-.gridTitle {
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.ctaPrimary,
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--tap);
+  padding: 0 22px;
+  border-radius: var(--r-lg);
+  border: 1px solid transparent;
+  font-size: var(--fs-base);
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.ctaPrimary {
+  background: var(--signal);
+  color: var(--signal-ink);
+}
+.ctaPrimary:hover {
+  color: var(--signal-ink);
+  background: var(--signal-bright);
+  transform: translateY(-1px);
+}
+
+.ctaSecondary {
+  border-color: var(--border-strong);
+  background: var(--bg-panel);
+  color: var(--text);
+}
+.ctaSecondary:hover {
+  color: var(--text);
+  background: var(--bg-hover);
+  border-color: var(--text-faint);
+  transform: translateY(-1px);
+}
+
+.trust {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-normal);
+  max-width: 46ch;
+}
+
+.heroDemo {
+  min-width: 0;
+}
+
+/* ── Stat strip ───────────────────────────────────────────────────────── */
+
+/*
+ * Hairline-divided rather than four boxes: the numbers belong to one claim,
+ * and four bordered cards would compete with the algorithm cards below.
+ */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+@container home (min-width: 760px) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 22px 20px;
+  background: var(--bg-panel);
+}
+
+.statValue {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xl);
+  line-height: 1;
+  color: var(--signal);
+  font-variant-numeric: tabular-nums;
+}
+
+.statLabel {
+  font-size: var(--fs-sm);
+  color: var(--text);
+}
+
+.statNote {
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+  line-height: var(--lh-snug);
+}
+
+/* ── Section scaffolding ──────────────────────────────────────────────── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--signal);
+  font-family: var(--font-mono);
   font-size: var(--fs-2xs);
   text-transform: uppercase;
   letter-spacing: var(--tracking-wider);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: clamp(1.6rem, 3cqi, 2.1rem);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.sectionLead {
+  margin: 0 0 22px;
+  max-width: 62ch;
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+}
+
+/* ── Feature triptych ─────────────────────────────────────────────────── */
+
+.features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+@container home (min-width: 820px) {
+  .features {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.feature {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 26px 24px 28px;
+  background: var(--bg-panel);
+}
+
+.featureIcon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--signal-dim);
+  background: var(--signal-glow);
+  color: var(--signal);
+}
+
+.featureNum {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--tracking-wider);
   color: var(--text-dim);
-  margin-bottom: 16px;
+}
+
+.featureTitle {
+  grid-column: 1 / -1;
+  margin: 10px 0 0;
+  font-size: var(--fs-lg);
+  line-height: var(--lh-snug);
+  letter-spacing: -0.01em;
+}
+
+.featureBody {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+}
+
+/* ── Catalogue ────────────────────────────────────────────────────────── */
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 46px;
+}
+
+.group {
+  min-width: 0;
+}
+
+/*
+ * Title and count on one line, blurb wrapping under both. The count is the
+ * fastest answer to "how much is in here", so it sits next to the name rather
+ * than at the end of a sentence.
+ */
+.groupHead {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.groupTitle {
+  margin: 0;
+  font-size: var(--fs-lg);
+  letter-spacing: -0.01em;
+}
+
+.groupCount {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  color: var(--signal);
+  padding: 2px 8px;
+  border: 1px solid var(--signal-dim);
+  border-radius: 999px;
+}
+
+.groupBlurb {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  max-width: 70ch;
+}
+
+@container home (min-width: 720px) {
+  .groupBlurb {
+    grid-column: 3;
+    justify-self: end;
+    text-align: right;
+  }
 }
 
 .grid {
@@ -46,66 +388,171 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
   gap: 14px;
 }
 
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
   height: 100%;
-  padding: 18px;
+  padding: 18px 18px 16px;
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   color: var(--text);
+  overflow: hidden;
   transition:
     border-color var(--dur) var(--ease),
     transform var(--dur) var(--ease),
     background var(--dur) var(--ease);
 }
-.card:hover {
+
+/* A signal hairline that wipes in along the top edge on hover. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  height: 2px;
+  width: 100%;
+  background: var(--signal);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur) var(--ease);
+}
+
+.card:hover,
+.card:focus-visible {
   color: var(--text);
-  border-color: var(--signal-dim);
-  transform: translateY(-2px);
+  border-color: var(--border-strong);
   background: var(--bg-raised);
+  transform: translateY(-2px);
+}
+
+.card:hover::before,
+.card:focus-within::before {
+  transform: scaleX(1);
 }
 
 .cardTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
+  font-family: var(--font-mono);
   font-size: var(--fs-2xs);
-}
-.cardCat {
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: var(--signal);
-}
-.cardEra {
   color: var(--text-dim);
 }
 
+.cardEra {
+  letter-spacing: var(--tracking-wide);
+}
+
+.cardDiff {
+  letter-spacing: 1.5px;
+  color: var(--signal);
+  font-size: 0.62rem;
+}
+
+/* Decorative pips; the meaning is carried by the sr-only text beside them. */
+.cardDiffOff {
+  color: var(--text-faint);
+}
+
 .cardName {
-  font-size: var(--fs-lg);
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: var(--lh-snug);
+  letter-spacing: -0.01em;
 }
 
 .cardTag {
   margin: 0;
+  flex: 1;
   color: var(--text-muted);
   font-size: var(--fs-sm);
-  flex: 1;
+  line-height: var(--lh-snug);
 }
 
 .cardGo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
   color: var(--text-dim);
-  font-size: var(--fs-xs);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
   transition: color var(--dur) var(--ease);
 }
+.cardGo svg {
+  transition: transform var(--dur) var(--ease);
+}
+
 .card:hover .cardGo,
 .card:focus-visible .cardGo,
 .card:focus-within .cardGo {
   color: var(--signal);
+}
+.card:hover .cardGo svg,
+.card:focus-within .cardGo svg {
+  transform: translateX(3px);
+}
+
+/* ── Closer ───────────────────────────────────────────────────────────── */
+
+.closer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+  align-items: center;
+  padding: 38px 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--bg-panel);
+  box-shadow: var(--shadow-panel);
+}
+
+@container home (min-width: 900px) {
+  .closer {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, auto);
+    gap: 56px;
+    padding: 44px 44px;
+  }
+}
+
+.closerCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.closerCopy .sectionLead {
+  margin-bottom: 0;
+}
+
+.caveat {
+  margin: 6px 0 0;
+  padding-left: 16px;
+  border-left: 2px solid var(--border-strong);
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  max-width: 62ch;
+}
+
+.closerCta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.closerCta .ctaPrimary,
+.closerCta .ctaSecondary {
+  justify-content: center;
 }

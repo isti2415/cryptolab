@@ -1,0 +1,14 @@
+# Cloudflare Pages project configuration.
+#
+# The Git integration reads its build command from the dashboard, so this file
+# is what makes `wrangler pages deploy` and `wrangler pages dev` work from a
+# checkout without remembering flags:
+#
+#   pnpm build && npx wrangler pages deploy
+#
+# It also pins the output directory, which is the one setting that silently
+# breaks a deploy if the dashboard and the repo disagree.
+
+name = "cryptolab"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-08-20"

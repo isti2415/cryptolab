@@ -8,7 +8,9 @@
  * sync — that duplication is exactly how theme drift starts.
  *
  * Contrast rule: every text token must clear WCAG AA against every surface it
- * is used on, in BOTH themes. `scripts/audit-contrast.mjs` enforces this.
+ * is used on, in BOTH themes. The `--text-dim` / `--text-faint` split exists for
+ * exactly this: `dim` is safe at body sizes, `faint` only for large or
+ * decorative text. Check both themes before introducing a new text colour.
  */
 
 :root {
@@ -105,6 +107,10 @@
 
   /* --- Measure ------------------------------------------------------------ */
   --maxw-page: 1720px;
+  /* The landing page is prose and cards, not a walkthrough, so it stops well
+     short of the app's full width. The topbar matches it there so the brand
+     lines up with the hero rather than floating out at the window edge. */
+  --maxw-landing: 1300px;
   --maxw-read: 68ch;
 
   /* Minimum comfortable hit target. */

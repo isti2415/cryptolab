@@ -8,7 +8,7 @@ import { Tabs, type TabSpec } from '@/components/ui/Tabs';
 import { StepPlayer } from '@/components/walkthrough/StepPlayer';
 import { Seo } from '@/components/Seo';
 import { CATEGORIES, getAlgorithm } from '@/core/registry';
-import { SITE_NAME, SITE_URL, absoluteUrl } from '@/core/site';
+import { SITE_NAME, SITE_URL, absoluteUrl, ogImageForPath } from '@/core/site';
 import type { AnyAlgorithm, Direction, Params } from '@/core/types';
 import { NotFoundPage } from './NotFoundPage';
 import styles from './AlgorithmPage.module.css';
@@ -35,11 +35,15 @@ function algorithmSeo(algo: AnyAlgorithm) {
       headline: `${meta.name}, how it works, step by step`,
       description: content.overview[0] ?? content.tagline,
       url: absoluteUrl(path),
+      image: absoluteUrl(ogImageForPath(path)),
       learningResourceType: 'Interactive visualization',
       educationalLevel: 'Beginner to intermediate',
       about: { '@type': 'Thing', name: `${meta.name} (cryptographic algorithm)` },
       isAccessibleForFree: true,
       inLanguage: 'en',
+      keywords: [meta.name, categoryLabel(meta.category), 'cryptography', 'visualization']
+        .join(', '),
+      provider: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     },
     {
       '@context': 'https://schema.org',
@@ -55,7 +59,8 @@ function algorithmSeo(algo: AnyAlgorithm) {
       ],
     },
   ];
-  return { title, description, path, jsonLd };
+  const imageAlt = `${meta.name}: ${content.tagline}`;
+  return { title, description, path, imageAlt, jsonLd };
 }
 
 export function AlgorithmPage() {
@@ -99,6 +104,7 @@ function AlgorithmExperience({ algo }: { algo: AnyAlgorithm }) {
         description={seo.description}
         path={seo.path}
         type="article"
+        imageAlt={seo.imageAlt}
         jsonLd={seo.jsonLd}
       />
       <header className={styles.head}>

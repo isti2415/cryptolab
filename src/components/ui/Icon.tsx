@@ -23,7 +23,10 @@ export type IconName =
   | 'check'
   | 'code'
   | 'chevron'
-  | 'sidebar';
+  | 'sidebar'
+  | 'steps'
+  | 'terminal'
+  | 'arrow';
 
 const STROKE = {
   fill: 'none',
@@ -90,6 +93,26 @@ const PATHS: Record<IconName, React.ReactNode> = {
     <>
       <rect x="2" y="3" width="12" height="10" rx="1.4" {...STROKE} />
       <path d="M6.4 3v10" {...STROKE} />
+    </>
+  ),
+  /* A trace: three rungs climbing, the middle one lit by the player. */
+  steps: (
+    <>
+      <path d="M2 12.5h3.5V9H9V5.5h5" {...STROKE} />
+      <circle cx="9" cy="5.5" r="1.5" {...STROKE} />
+    </>
+  ),
+  terminal: (
+    <>
+      <rect x="1.8" y="2.8" width="12.4" height="10.4" rx="1.4" {...STROKE} />
+      <path d="m4.8 6.6 2 1.8-2 1.8" {...STROKE} />
+      <path d="M8.6 10.4h2.8" {...STROKE} />
+    </>
+  ),
+  arrow: (
+    <>
+      <path d="M2.8 8h10.4" {...STROKE} />
+      <path d="m9.4 4.2 3.8 3.8-3.8 3.8" {...STROKE} />
     </>
   ),
 };

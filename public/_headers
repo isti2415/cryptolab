@@ -1,13 +1,23 @@
 # Cloudflare Pages headers.
+#
+# Rules are matched most-specific-first by Pages, and header sets are merged,
+# so the site-wide block below applies everywhere and the path blocks only add
+# caching on top of it.
 
 /*
   # No third-party scripts, styles, fonts or frames: everything is self-hosted,
-  # including the webfonts, so the policy can be this tight.
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'
+  # including the webfonts, so the policy can be this tight. 'unsafe-inline' is
+  # needed for the pre-paint theme script in index.html and for the style
+  # attributes React writes for progress bars and grid spans.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   # No camera, microphone or geolocation is used anywhere on the site.
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  # Everything is served over HTTPS by Pages; pin it for two years.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  Cross-Origin-Opener-Policy: same-origin
+  X-Frame-Options: DENY
 
 # Fingerprinted build output can be cached indefinitely.
 /assets/*
@@ -17,6 +27,31 @@
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
 
+# Share cards and icons are stable but not fingerprinted, so they revalidate
+# daily rather than being pinned for a year: regenerating one should reach the
+# social scrapers without waiting out a long TTL.
+/og/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/icon-*.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/apple-touch-icon.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/favicon.svg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
 # HTML must revalidate so a deploy is picked up immediately.
 /*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Crawler files change with the deploy; never let an edge cache pin them.
+/sitemap.xml
+  Cache-Control: public, max-age=0, must-revalidate
+
+/robots.txt
   Cache-Control: public, max-age=0, must-revalidate

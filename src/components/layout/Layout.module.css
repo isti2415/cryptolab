@@ -10,10 +10,13 @@
   flex-direction: column;
 }
 
+/*
+ * Full-bleed rule and blur, but the contents ride the same rail the page below
+ * uses. Without this the brand sits hard against the window edge while the
+ * content starts a couple of hundred pixels in, and the two never line up.
+ */
 .topbar {
   display: flex;
-  align-items: center;
-  gap: 16px;
   height: var(--topbar-h);
   padding: 0 24px;
   border-bottom: 1px solid var(--border);
@@ -24,6 +27,20 @@
   position: sticky;
   top: 0;
   z-index: 20;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: var(--maxw-page);
+  margin-inline: auto;
+}
+
+/* On the landing route the rail narrows to match the page's own container. */
+.landing .bar {
+  max-width: var(--maxw-landing);
 }
 
 .brand {
@@ -302,5 +319,9 @@
 
   .main {
     padding: 24px 16px 64px;
+  }
+
+  .topbar {
+    padding: 0 16px;
   }
 }

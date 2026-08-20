@@ -1,5 +1,5 @@
 /**
- * Generates dist/sitemap.xml from the prerendered HTML output.
+ * Generates dist/sitemap.xml and dist/robots.txt from the prerendered output.
  *
  * Runs after `vite-react-ssg build`. It walks the emitted .html files rather
  * than a hand-kept route list, so every prerendered page — including any newly
@@ -7,6 +7,9 @@
  *
  * Override the origin with SITE_URL to match a custom domain, e.g.
  *   SITE_URL=https://cryptolab.dev pnpm build
+ *
+ * robots.txt is written here rather than kept in /public so its `Sitemap:` line
+ * cannot disagree with the sitemap it points at; both come from SITE_URL.
  */
 
 import { readdirSync, statSync, writeFileSync } from 'node:fs';
@@ -53,4 +56,14 @@ const urls = routes
 const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 
 writeFileSync(join(DIST, 'sitemap.xml'), xml);
-console.log(`sitemap.xml written with ${routes.length} routes (origin ${SITE_URL})`);
+
+const robots = `User-agent: *
+Allow: /
+
+Sitemap: ${SITE_URL}/sitemap.xml
+`;
+writeFileSync(join(DIST, 'robots.txt'), robots);
+
+console.log(
+  `sitemap.xml + robots.txt written with ${routes.length} routes (origin ${SITE_URL})`,
+);
