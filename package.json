@@ -7,7 +7,7 @@
   "packageManager": "pnpm@10.32.1",
   "scripts": {
     "dev": "vite-react-ssg dev",
-    "build": "tsc -b && vite-react-ssg build && node scripts/generate-sitemap.mjs && node scripts/verify-og.mjs",
+    "build": "node scripts/preflight.mjs && tsc -b && vite-react-ssg build && node scripts/generate-sitemap.mjs && node scripts/verify-og.mjs",
     "preview": "vite preview --outDir dist",
     "test": "vitest run",
     "test:watch": "vitest",

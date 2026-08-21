@@ -22,34 +22,11 @@ const FALLBACK_ORIGIN = 'https://cryptolab.workers.dev';
 const SITE_URL = (process.env.SITE_URL || FALLBACK_ORIGIN).replace(/\/$/, '');
 
 if (!process.env.SITE_URL) {
-  /*
-   * WORKERS_CI is set only by Cloudflare Workers Builds, i.e. only on a build
-   * that is about to be deployed. A missing origin is a warning locally and in
-   * GitHub Actions (where CI builds purely to check the build), but a hard
-   * failure there: shipping the placeholder would point every canonical tag,
-   * the sitemap and every share card at an origin that is not this site, and
-   * that is the sort of mistake that surfaces weeks later in Search Console.
-   *
-   * This guard used to live in the GitHub Actions deploy workflow. It lives
-   * here so it applies to whichever path actually does the deploying.
-   */
-  if (process.env.WORKERS_CI) {
-    console.error(
-      '\n  ✗ SITE_URL is not set, and this is a Workers Builds deploy.\n' +
-        '\n    Absolute URLs (canonical tags, sitemap, Open Graph images) are' +
-        '\n    baked in at build time, so they would all point at the' +
-        `\n    placeholder ${FALLBACK_ORIGIN}.` +
-        '\n' +
-        '\n    Fix: Workers → cryptolab → Settings → Build → Variables, add' +
-        '\n      SITE_URL       = https://<your-origin>' +
-        '\n      VITE_SITE_URL  = https://<your-origin>\n',
-    );
-    process.exit(1);
-  }
+  // The hard failure for a deploy lives in scripts/preflight.mjs, which runs
+  // before anything is compiled and validates VITE_SITE_URL too. By the time
+  // this file runs the build has already happened, so this is only a reminder.
   console.warn(
-    `\n  ⚠ SITE_URL is not set, so absolute URLs fall back to ${FALLBACK_ORIGIN}.` +
-      '\n    Fine locally; wrong for anything you publish. Build with' +
-      '\n    VITE_SITE_URL=<origin> SITE_URL=<origin> pnpm build\n',
+    `\n  ⚠ SITE_URL is not set; sitemap and robots.txt use ${FALLBACK_ORIGIN}.\n`,
   );
 }
 
