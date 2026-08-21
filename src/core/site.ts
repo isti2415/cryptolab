@@ -3,17 +3,25 @@
  *
  * `SITE_URL` is the single source of truth for absolute URLs (canonical tags,
  * Open Graph, sitemap, JSON-LD), and it is baked in at build time — there is no
- * server to work it out at request time. Set it for any build you intend to
- * publish:
+ * server to work it out at request time, because the site deploys as an
+ * assets-only Worker with no runtime code.
+ *
+ * The default below is the real production origin, committed deliberately. An
+ * earlier version used a placeholder and required two build variables to be set
+ * on every deploy, which meant a mis-set variable produced a site that quietly
+ * advertised an origin that was not its own. A committed default cannot be
+ * forgotten, and is visible in review.
+ *
+ * Override it when building for somewhere else — a custom domain, a staging
+ * origin — by setting BOTH variables, since they are read by two processes:
  *
  *   VITE_SITE_URL=https://example.com SITE_URL=https://example.com pnpm build
  *
- * The value below is a development placeholder only. Shipping with it would
- * point every canonical tag and share card at an origin that is not this site,
- * so the deploy workflow refuses to run without SITE_URL set.
+ * `scripts/preflight.mjs` validates the override; `src/core/site.test.ts`
+ * keeps this constant in step with the copy in `scripts/generate-sitemap.mjs`.
  */
 
-const DEFAULT_SITE_URL = 'https://cryptolab.workers.dev';
+const DEFAULT_SITE_URL = 'https://cryptolab.istiaqahmed87.workers.dev';
 
 /** Absolute origin, no trailing slash. */
 /**

@@ -12,24 +12,22 @@
  * pages it lists disagree about what this site is called. Nothing downstream
  * notices, and the damage is invisible until a crawler acts on it.
  *
- * So both are validated, together, before `tsc` and `vite` have done any work:
- * a misconfigured deploy should fail in seconds with an actionable message, not
- * after a full build with a misleading one.
+ * Leaving both unset is fine and is the normal case: the production origin is
+ * committed as the default in `src/core/site.ts`. This checks the *override*,
+ * which is what a custom domain or a staging build uses.
  *
- * Enforcement is conditional. On Workers Builds (`WORKERS_CI`, set only there)
- * a bad origin is fatal, because that build is about to be published. Locally
- * and in GitHub CI it is a warning, so `pnpm build` on a laptop still works.
+ * A broken override is fatal wherever it happens, because there is no reading
+ * of "https:/example.com" or of two origins that disagree that is worth
+ * guessing at. Running before `tsc` and `vite` means that failure costs seconds
+ * rather than a full build.
  */
 
-const isDeploy = Boolean(process.env.WORKERS_CI);
 const problems = [];
 
-/** Returns a normalised origin, or records why the value is unusable. */
+/** Returns a normalised origin, `null` if unset, or records why it is unusable. */
 function check(name, raw) {
-  if (!raw || !raw.trim()) {
-    problems.push(`${name} is not set.`);
-    return null;
-  }
+  // Unset is not a problem: the committed default takes over.
+  if (!raw?.trim()) return null;
   const value = raw.trim();
 
   if (!/^https?:\/\//i.test(value)) {
@@ -66,10 +64,21 @@ function check(name, raw) {
   return url.origin;
 }
 
+const siteSet = Boolean(process.env.SITE_URL?.trim());
+const viteSet = Boolean(process.env.VITE_SITE_URL?.trim());
 const site = check('SITE_URL', process.env.SITE_URL);
 const vite = check('VITE_SITE_URL', process.env.VITE_SITE_URL);
 
-if (site && vite && site !== vite) {
+// Half an override is the dangerous state: the two are read by different
+// processes, so the sitemap would list URLs the pages themselves do not claim,
+// and nothing downstream would notice.
+if (siteSet !== viteSet) {
+  problems.push(
+    `Only ${siteSet ? 'SITE_URL' : 'VITE_SITE_URL'} is set. Set both, or neither.\n` +
+      '      SITE_URL is read by the postbuild scripts (sitemap, robots.txt);\n' +
+      '      VITE_SITE_URL is read by the bundle (canonical tags, Open Graph).',
+  );
+} else if (site && vite && site !== vite) {
   problems.push(
     `SITE_URL (${site}) and VITE_SITE_URL (${vite}) disagree.\n` +
       '      The sitemap would list URLs that the pages themselves do not claim.',
@@ -77,28 +86,23 @@ if (site && vite && site !== vite) {
 }
 
 if (problems.length === 0) {
-  if (site) console.log(`\n  Building for ${site}\n`);
-  process.exit(0);
-}
-
-const bullet = problems.map((p) => `    • ${p}`).join('\n');
-
-if (!isDeploy) {
-  console.warn(
-    `\n  ⚠ Origin not configured; absolute URLs will use the development` +
-      `\n    placeholder. Fine locally, wrong for anything published.\n\n${bullet}\n`,
+  console.log(
+    site
+      ? `\n  Building for ${site} (from SITE_URL)\n`
+      : '\n  Building for the default origin in src/core/site.ts.\n' +
+          '  Set SITE_URL and VITE_SITE_URL to build for somewhere else.\n',
   );
   process.exit(0);
 }
 
 console.error(
-  '\n  ✗ Cannot build for deployment: the site origin is not usable.\n\n' +
-    `${bullet}\n\n` +
-    '    Set BOTH of these as *build* variables — Workers → cryptolab →\n' +
-    '    Settings → Build → Variables and Secrets. The runtime "Variables and\n' +
-    '    Secrets" section on the Worker itself is a different thing and is not\n' +
-    '    visible to the build.\n\n' +
-    '      SITE_URL       = https://<your-origin>\n' +
-    '      VITE_SITE_URL  = https://<your-origin>\n',
+  '\n  \u2717 The site origin override is not usable:\n\n' +
+    problems.map((p) => `    \u2022 ${p}`).join('\n') +
+    '\n\n    Both must be a bare https origin and must match, e.g.\n' +
+    '      SITE_URL       = https://example.com\n' +
+    '      VITE_SITE_URL  = https://example.com\n\n' +
+    '    On Workers Builds these go under Settings \u2192 Build \u2192 Variables and\n' +
+    "    Secrets, not the Worker's own runtime Variables and Secrets screen.\n" +
+    '    Unset them entirely to use the committed production origin.\n',
 );
 process.exit(1);

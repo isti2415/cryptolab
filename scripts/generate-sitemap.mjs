@@ -18,17 +18,9 @@ import { join, relative, sep } from 'node:path';
 const DIST = 'dist';
 // Kept in step with DEFAULT_SITE_URL in src/core/site.ts: the page's canonical
 // tag and the sitemap it appears in must not disagree.
-const FALLBACK_ORIGIN = 'https://cryptolab.workers.dev';
+const FALLBACK_ORIGIN = 'https://cryptolab.istiaqahmed87.workers.dev';
 const SITE_URL = (process.env.SITE_URL || FALLBACK_ORIGIN).replace(/\/$/, '');
 
-if (!process.env.SITE_URL) {
-  // The hard failure for a deploy lives in scripts/preflight.mjs, which runs
-  // before anything is compiled and validates VITE_SITE_URL too. By the time
-  // this file runs the build has already happened, so this is only a reminder.
-  console.warn(
-    `\n  ⚠ SITE_URL is not set; sitemap and robots.txt use ${FALLBACK_ORIGIN}.\n`,
-  );
-}
 
 // Pages that should never be indexed / listed.
 const EXCLUDE = new Set(['404']);

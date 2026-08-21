@@ -328,39 +328,41 @@ Build variables (**Settings → Build → Variables and Secrets**):
 
 | Variable | Value | Why |
 | --- | --- | --- |
-| `SITE_URL` | `https://cryptolab.<subdomain>.workers.dev` | Read by the postbuild scripts: sitemap and robots.txt |
-| `VITE_SITE_URL` | *same value* | Read by the bundle: canonical tags, Open Graph, JSON-LD |
 | `PNPM_VERSION` | `10.32.1` | Matches `packageManager`; the build image ships an older pnpm |
 
-Two things these get wrong easily, both of which now fail the build immediately
-rather than producing a broken site:
+That is the whole list. **The production origin is committed** as
+`DEFAULT_SITE_URL` in `src/core/site.ts`, so no origin variables are needed for
+a normal deploy. An earlier arrangement required two of them on every build,
+which meant a mis-set variable — or one added to the Worker's *runtime*
+Variables screen rather than the *Build* one — produced a site that quietly
+advertised an origin that was not its own. A committed default cannot be
+forgotten and is visible in review.
 
-- **They must be *build* variables** — Settings → **Build** → Variables and
-  Secrets. The Worker's own "Variables and Secrets" screen is a different thing
-  (runtime bindings) and is not visible to the build. An assets-only Worker has
-  no runtime code to read them anyway.
-- **They must include the scheme.** `cryptolab.example.workers.dev` is not an
-  origin; without `https://` every canonical tag and share-card URL is emitted
-  as a relative-looking string that resolves to nothing.
-
-No API token or account ID is needed — Cloudflare authenticates itself. Node
-comes from `.nvmrc` (22), which the build image reads automatically, and the
-`wrangler` version comes from `package.json`, which is why it is pinned as a
+No API token or account ID is needed either — Cloudflare authenticates itself.
+Node comes from `.nvmrc` (22), which the build image reads automatically, and
+the `wrangler` version comes from `package.json`, which is why it is pinned as a
 devDependency rather than run through `npx` at an unknown version.
 
-Both are genuinely required, not conveniences: absolute URLs (canonical tags,
-the sitemap, all 25 share cards) are baked in at build time, because there is no
-server to work them out per request. Without them the whole site advertises a
-placeholder origin — a failure that looks like nothing at all until it surfaces
-in Search Console weeks later.
+### Building for a different origin
 
-`scripts/preflight.mjs` runs first in the build and validates both: present,
-`https://`, a bare origin, and *agreeing with each other*. The last check
-matters because they are read by two different processes, so setting only one
-yields a build whose sitemap and pages disagree about what the site is called,
-which nothing downstream would notice. On Workers Builds (`WORKERS_CI`, set only
-there) any of these is fatal; locally and in GitHub CI it is a warning, so
-`pnpm build` on a laptop is unaffected.
+Absolute URLs (canonical tags, the sitemap, all 25 share cards) are baked in at
+build time — there is no server to work them out per request. To build for a
+custom domain or a staging origin, override **both** variables:
+
+```bash
+VITE_SITE_URL=https://example.com SITE_URL=https://example.com pnpm build
+```
+
+They are separate because they are read by separate processes: `VITE_SITE_URL`
+by the bundle, `SITE_URL` by the postbuild scripts. Setting only one yields a
+build whose sitemap and pages disagree about the site's own name, which nothing
+downstream would notice — so `scripts/preflight.mjs` runs before anything is
+compiled and rejects a half-set, scheme-less, or self-contradicting override.
+Leaving both unset is fine and uses the committed origin.
+
+When a custom domain becomes permanent, change `DEFAULT_SITE_URL` (and the
+matching `FALLBACK_ORIGIN` in `scripts/generate-sitemap.mjs` — a test asserts
+the two agree) rather than carrying build variables forever.
 
 ### After a deploy
 
