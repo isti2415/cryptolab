@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/hill.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type HillStepState } from './engine';
 import { HillVisualizer } from './Visualizer';
 
 const hill: AlgorithmDefinition<HillStepState> = {
-  meta: {
-    id: 'hill',
-    name: 'Hill Cipher',
-    category: 'classical',
-    era: '1929',
-    difficulty: 3,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

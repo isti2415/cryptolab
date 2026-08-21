@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Seo } from "@/components/Seo";
 import { HeroDemo } from "@/components/home/HeroDemo";
 import { Icon } from "@/components/ui/Icon";
+import { Difficulty } from "@/components/ui/Difficulty";
 import { CATEGORIES, algorithmGroups, algorithms } from "@/core/registry";
 import {
   SITE_DESCRIPTION,
@@ -212,20 +213,13 @@ export function HomePage() {
                         <span className={styles.cardEra}>
                           {a.meta.era ?? ""}
                         </span>
-                        <span className={styles.cardDiff}>
-                          <span className="sr-only">
-                            Difficulty {a.meta.difficulty} of 5
-                          </span>
-                          <span aria-hidden="true">
-                            {"●".repeat(a.meta.difficulty)}
-                            <span className={styles.cardDiffOff}>
-                              {"●".repeat(5 - a.meta.difficulty)}
-                            </span>
-                          </span>
-                        </span>
+                        <Difficulty
+                          level={a.meta.difficulty}
+                          className={styles.cardDiff}
+                        />
                       </span>
                       <h4 className={styles.cardName}>{a.meta.name}</h4>
-                      <p className={styles.cardTag}>{a.content.tagline}</p>
+                      <p className={styles.cardTag}>{a.meta.tagline}</p>
                       <span className={styles.cardGo}>
                         open
                         <Icon name="arrow" size={13} />

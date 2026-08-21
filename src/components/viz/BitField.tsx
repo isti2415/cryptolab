@@ -7,6 +7,7 @@
  */
 
 import { Cell, type CellState } from './Cell';
+import { describeCells, inferUnit } from './describe';
 import styles from './BitField.module.css';
 
 export interface BitCell {
@@ -30,7 +31,21 @@ export function BitField({ cells, label, size, groupEvery }: BitFieldProps) {
   return (
     <div className={styles.row}>
       {label && <span className={styles.label}>{label}</span>}
-      <div className={styles.cells}>
+      {/*
+        One label for the whole row, and the cells themselves hidden: read
+        individually a 64-bit block is sixty-four announcements of a single
+        digit. Scrollable, so it also needs a tab stop (WCAG 2.1.1).
+      */}
+      <div
+        className={styles.cells}
+        tabIndex={0}
+        role="img"
+        aria-label={describeCells(
+          label,
+          cells.map((c) => c.text),
+          { groupEvery, unit: inferUnit(cells.map((c) => c.text)) },
+        )}
+      >
         {cells.map((c, i) => (
           <span
             key={i}

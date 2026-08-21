@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/affine.py?code';
 import { content } from './content';
@@ -7,12 +8,7 @@ import { run, type AffineStepState } from './engine';
 import { AffineVisualizer } from './Visualizer';
 
 const affine: AlgorithmDefinition<AffineStepState> = {
-  meta: {
-    id: 'affine',
-    name: 'Affine Cipher',
-    category: 'classical',
-    difficulty: 2,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

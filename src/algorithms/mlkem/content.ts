@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Kyber; Module-LWE key encapsulation, the first NIST post-quantum standard.',
   formula: [
     {
       label: "the ring",
@@ -65,5 +64,12 @@ export const content: AlgorithmContent = {
     'Implementations leak. Lattice schemes sample noise and perform rejection and comparison steps whose timing can depend on secrets; several published attacks recover keys from timing or power traces rather than from the mathematics. The reference implementations go to considerable lengths to be constant-time.',
     'Security estimates are less settled than for RSA or elliptic curves. Lattice attack costs are modelled through BKZ, whose concrete cost is still debated, so quoted security levels have moved as the analysis improved.',
     'This lab is Kyber’s structure at toy parameters and is explicitly not FIPS 203. The ring degree is 8 rather than 256, the module rank is 2, and the Fujisaki–Okamoto transform is absent, so what is shown is the CPA-secure core only. It produces none of the standard’s test vectors and must not be mistaken for an implementation of it.',
+  ],
+  sources: [
+    {
+      label: 'FIPS 203: ML-KEM',
+      url: 'https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.203.pdf',
+      note: 'The standard this page models the structure of, and is explicitly not.',
+    },
   ],
 };

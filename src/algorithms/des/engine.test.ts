@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { run } from './engine';
+import { run, keyWarning } from './engine';
 
 const enc = (data: string, key: string) => run(data, { key }, 'encrypt').output;
 const dec = (data: string, key: string) => run(data, { key }, 'decrypt').output;
@@ -79,5 +79,49 @@ describe('DES validation', () => {
   });
   it('tolerates spaces in the hex input', () => {
     expect(enc('0123 4567 89AB CDEF', '1334 5779 9BBC DFF1')).toBe('85E813540F0AB405');
+  });
+});
+
+describe('weak keys', () => {
+  it('flags all four weak keys', () => {
+    for (const k of [
+      '0101010101010101',
+      'FEFEFEFEFEFEFEFE',
+      'E0E0E0E0F1F1F1F1',
+      '1F1F1F1F0E0E0E0E',
+    ]) {
+      expect(keyWarning(k), k).toMatch(/weak key/);
+    }
+  });
+
+  it('flags a semi-weak key as semi-weak, not weak', () => {
+    const w = keyWarning('01FE01FE01FE01FE');
+    expect(w).toMatch(/semi-weak/);
+  });
+
+  it('says nothing about an ordinary key', () => {
+    expect(keyWarning('133457799BBCDFF1')).toBeUndefined();
+    expect(keyWarning('0E329232EA6D0D73')).toBeUndefined();
+  });
+
+  it('ignores parity bits, which DES itself discards', () => {
+    // 0101…01 is the canonical weak key; 0000…00 differs only in the parity
+    // bits PC-1 throws away, so it is the same key and must warn too.
+    expect(keyWarning('0000000000000000')).toMatch(/weak key/);
+    expect(keyWarning('FFFFFFFFFFFFFFFF')).toMatch(/weak key/);
+  });
+
+  it('is a note, not an error: the run still produces correct DES', () => {
+    const r = run('0123456789ABCDEF', { key: '0101010101010101' }, 'encrypt');
+    expect(r.error).toBeUndefined();
+    expect(r.output).toHaveLength(16);
+    expect(r.steps[0].warning).toMatch(/weak key/);
+  });
+
+  it('is its own inverse under a weak key, which is the point', () => {
+    const key = { key: '0101010101010101' };
+    const once = run('0123456789ABCDEF', key, 'encrypt').output;
+    const twice = run(once, key, 'encrypt').output;
+    expect(twice).toBe('0123456789ABCDEF');
   });
 });

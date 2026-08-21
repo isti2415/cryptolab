@@ -22,7 +22,10 @@ export function Notation({
         {formula.map((f) => (
           <li className={styles.line} key={f.label}>
             <span className={styles.label}>{f.label}</span>
-            <code className={styles.expr}>{f.expr}</code>
+            {/* Scrollable: long expressions overflow; needs a tab stop (WCAG 2.1.1). */}
+            <code className={styles.expr} tabIndex={0}>
+              {f.expr}
+            </code>
             <p className={styles.note}>{f.note}</p>
           </li>
         ))}

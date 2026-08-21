@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/vigenere.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type VigenereStepState } from './engine';
 import { VigenereVisualizer } from './Visualizer';
 
 const vigenere: AlgorithmDefinition<VigenereStepState> = {
-  meta: {
-    id: 'vigenere',
-    name: 'Vigenère Cipher',
-    category: 'classical',
-    era: '1553',
-    difficulty: 2,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

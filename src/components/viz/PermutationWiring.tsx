@@ -10,6 +10,7 @@
  * land exactly on the cells they connect at any zoom level.
  */
 
+import type { CSSProperties } from 'react';
 import { useId } from 'react';
 import styles from './PermutationWiring.module.css';
 
@@ -64,7 +65,24 @@ export function PermutationWiring({
           <span>{labels?.output}</span>
         </div>
       )}
-      <div className={styles.scroll}>
+      {/*
+        Scrollable, so it needs a tab stop (WCAG 2.1.1). The two custom
+        properties let the diagram shrink to fit its container instead of
+        forcing a scroll at full size: DES permutes 64 positions, which is
+        1408px natural width, or roughly four screenfuls on a phone. It stops
+        shrinking at 60%, below which the digits in the slots stop being
+        readable, and only then does it scroll.
+      */}
+      <div
+        className={styles.scroll}
+        tabIndex={0}
+        style={
+          {
+            '--wiring-natural': `${width}px`,
+            '--wiring-floor': `${Math.round(width * 0.6)}px`,
+          } as CSSProperties
+        }
+      >
         <svg
           width={width}
           height={height}

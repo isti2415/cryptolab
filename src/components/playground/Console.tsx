@@ -7,6 +7,7 @@
 
 import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
+import { ExportBar } from './ExportBar';
 import type {
   AlgorithmResult,
   AnyAlgorithm,
@@ -24,6 +25,8 @@ interface ConsoleProps {
   onInputChange: (v: string) => void;
   onParamChange: (key: string, v: string | number) => void;
   onDirectionChange: (d: Direction) => void;
+  /** Current walkthrough position, so a copied link can pin it. */
+  step?: number;
 }
 
 export function Console({
@@ -35,6 +38,7 @@ export function Console({
   onInputChange,
   onParamChange,
   onDirectionChange,
+  step,
 }: ConsoleProps) {
   const err = result.error;
   const takesInput = algo.takesInput !== false;
@@ -61,6 +65,7 @@ export function Console({
             <div className={styles.toggle} role="group" aria-label="Direction">
               {(['encrypt', 'decrypt'] as Direction[]).map((d) => (
                 <button
+                  type="button"
                   key={d}
                   className={`${styles.toggleBtn} ${direction === d ? styles.toggleOn : ''}`}
                   aria-pressed={direction === d}
@@ -144,7 +149,7 @@ export function Console({
 
         <div className={styles.field}>
           <div className={styles.outputHead}>
-            <label className={styles.label}>
+            <label className={styles.label} htmlFor="pg-output">
               {!takesInput
                 ? 'Shared secret'
                 : direction === 'encrypt'
@@ -153,6 +158,7 @@ export function Console({
             </label>
             {!err && result.output && (
               <button
+                type="button"
                 className={`${styles.copy} ${copied ? styles.copied : ''}`}
                 onClick={copyOutput}
                 title="Copy output"
@@ -167,10 +173,20 @@ export function Console({
               <span className={styles.errBadge}>error</span> {err.message}
             </p>
           ) : (
-            <output className={styles.result}>
-              {result.output || <span className={styles.placeholder}>, </span>}
+            <output id="pg-output" className={styles.result}>
+              {result.output || <span className={styles.placeholder}>—</span>}
             </output>
           )}
+
+          <ExportBar
+            algo={algo}
+            input={input}
+            params={params}
+            direction={direction}
+            output={result.output}
+            steps={result.steps}
+            step={step}
+          />
         </div>
       </div>
     </section>

@@ -74,7 +74,8 @@ function Tape({
   return (
     <div className={styles.tapeRow}>
       <span className={styles.tapeLabel}>{label}</span>
-      <div className={`${styles.tape} ${accent ? styles.tapeAccent : ''}`}>
+      {/* Scrollable: needs a tab stop (WCAG 2.1.1). */}
+      <div className={`${styles.tape} ${accent ? styles.tapeAccent : ''}`} tabIndex={0}>
         {chars.map((ch, i) => (
           <span
             key={i}
@@ -89,7 +90,7 @@ function Tape({
             {ch === ' ' ? ' ' : ch}
           </span>
         ))}
-        {chars.length === 0 && <span className={styles.empty}>, </span>}
+        {chars.length === 0 && <span className={styles.empty}>—</span>}
         {cursor && <span className={styles.cursor} aria-hidden />}
       </div>
     </div>

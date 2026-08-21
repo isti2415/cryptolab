@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Two strangers agree a shared secret in public, without ever sending it.',
   formula: [
     {
       label: "public setup",
@@ -61,5 +60,17 @@ export const content: AlgorithmContent = {
     'Static exponents destroy forward secrecy. If the same private exponent is reused across sessions, recovering it once retroactively decrypts every recorded past session. Ephemeral Diffie–Hellman generates fresh exponents per connection so that a later key compromise does not reach backwards, and that property is much of why it is preferred today.',
     'The raw shared secret is not a key. Its bits are biased and it may have algebraic structure, so using it directly weakens whatever cipher consumes it. A key derivation function is mandatory, not a nicety.',
     'Shor’s algorithm breaks the discrete logarithm as thoroughly as it breaks factoring, so a sufficiently large quantum computer defeats Diffie–Hellman outright. Traffic recorded today can be decrypted later, which is why deployments are moving to hybrid exchanges combining a classical group with a post-quantum KEM.',
+  ],
+  sources: [
+    {
+      label: 'Diffie and Hellman, New Directions in Cryptography (1976)',
+      url: 'https://ee.stanford.edu/~hellman/publications/24.pdf',
+      note: 'The paper that started public-key cryptography.',
+    },
+    {
+      label: 'Logjam: weak Diffie–Hellman',
+      url: 'https://weakdh.org/',
+      note: 'Why small and shared primes are a practical problem.',
+    },
   ],
 };

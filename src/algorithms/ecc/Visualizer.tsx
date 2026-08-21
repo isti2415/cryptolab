@@ -32,14 +32,14 @@ export function EccVisualizer({ step }: AlgorithmVisualizerProps<EccStepState>) 
           marks={s.highlight.map((h) => ({ point: h.point, role: h.role }))}
         />
         <dl className={styles.legend}>
-          <Row label="G" value={fmt(s.curve.g)} role="generator" />
+          <Row label="G" value={fmt(s.curve.g)} tone="generator" />
           <Row label="order" value={String(s.order ?? '?')} />
-          <Row label="A = a·G" value={s.kind === 'curve' || s.kind === 'secrets' ? '; ': fmt(s.publicA)} role="public" />
-          <Row label="B = b·G" value={s.kind === 'curve' || s.kind === 'secrets' || s.kind === 'publicA' ? '; ': fmt(s.publicB)} role="public" />
+          <Row label="A = a·G" value={s.kind === 'curve' || s.kind === 'secrets' ? '—': fmt(s.publicA)} tone="public" />
+          <Row label="B = b·G" value={s.kind === 'curve' || s.kind === 'secrets' || s.kind === 'publicA' ? '—': fmt(s.publicB)} tone="public" />
           <Row
             label="shared"
-            value={s.kind === 'sharedA' || s.kind === 'sharedB' || s.kind === 'agree' ? fmt(s.shared): ', '}
-            role="shared"
+            value={s.kind === 'sharedA' || s.kind === 'sharedB' || s.kind === 'agree' ? fmt(s.shared): '—'}
+            tone="shared"
           />
         </dl>
       </VizStage.Context>
@@ -95,16 +95,16 @@ export function EccVisualizer({ step }: AlgorithmVisualizerProps<EccStepState>) 
 function Row({
   label,
   value,
-  role,
+  tone,
 }: {
   label: string;
   value: string;
-  role?: 'generator' | 'public' | 'shared';
+  tone?: 'generator' | 'public' | 'shared';
 }) {
   return (
     <div className={styles.row}>
       <dt className={styles.rowLabel}>
-        {role && <span className={`${styles.swatch} ${styles[role]}`} />}
+        {tone && <span className={`${styles.swatch} ${styles[tone]}`} />}
         {label}
       </dt>
       <dd className={styles.rowValue}>{value}</dd>

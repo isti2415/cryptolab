@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Turn a hash into a keyed tag, so only the key holder can produce it.',
   formula: [
     {
       label: "the construction",
@@ -38,7 +37,7 @@ export const content: AlgorithmContent = {
   ],
   overview: [
     'A hash detects change but proves nothing about origin: anyone can compute SHA-256, so anyone can recompute a digest after altering the message. A message authentication code adds a key, so a valid tag can only be produced by someone who holds it.',
-    'The obvious way to build one (hash the key followed by the message); is broken against SHA-256, and instructively so. A SHA-256 digest is the hash function’s complete internal state, so an attacker holding H(key ‖ m) can resume from it and compute H(key ‖ m ‖ padding ‖ anything) without ever knowing the key. That is the length-extension attack, and it forged real signatures in real APIs.',
+    'The obvious way to build one (hash the key followed by the message) is broken against SHA-256, and instructively so. A SHA-256 digest is the hash function’s complete internal state, so an attacker holding H(key ‖ m) can resume from it and compute H(key ‖ m ‖ padding ‖ anything) without ever knowing the key. That is the length-extension attack, and it forged real signatures in real APIs.',
     'HMAC nests two hashes to close it. The inner hash processes the message with one masked copy of the key in front; the outer hash processes the inner digest with a differently masked copy. Because the outer hash consumes a fixed 32 bytes, there is nothing left for an attacker to append; that, rather than the masks themselves, is what defeats the attack.',
     'The key is first normalised to exactly one hash block: hashed down if longer than 64 bytes, zero-padded if shorter. It is then XORed with 0x36 repeated to give the inner key, and with 0x5C repeated for the outer. Those two constants differ in four of their eight bits, so the two masked keys are unrelated in any way an attacker can exploit.',
     'HMAC is deliberately agnostic about its hash. Swap SHA-256 for SHA-1 or SHA-512 and the construction is unchanged, which is why it survived the collapse of MD5 and SHA-1 largely intact; HMAC-MD5 was never broken by the collision attacks that destroyed MD5 signatures.',
@@ -56,5 +55,17 @@ export const content: AlgorithmContent = {
     'Keys longer than the block size are hashed first, which has a surprising consequence: a 100-byte key and its 32-byte SHA-256 digest produce identical tags. Two keys that look completely different are the same key as far as HMAC is concerned.',
     'The pad is applied to the hash’s *block* size, 64 bytes for SHA-256, not its 32-byte output size. Implementations that confuse the two produce tags that are wrong but look plausible, and interoperate with nothing.',
     'HMAC inherits its hash’s security level, so HMAC-MD5 should not be used in new systems even though it is not broken by MD5 collisions. It also does nothing about replay: a valid tag stays valid forever unless the message includes a nonce or timestamp.',
+  ],
+  sources: [
+    {
+      label: 'RFC 2104: HMAC',
+      url: 'https://www.rfc-editor.org/rfc/rfc2104',
+      note: 'The construction and why the two nested pads exist.',
+    },
+    {
+      label: 'RFC 4231: HMAC test vectors',
+      url: 'https://www.rfc-editor.org/rfc/rfc4231',
+      note: "Cases 1, 2, 3 and 6 are asserted in this engine's tests.",
+    },
   ],
 };

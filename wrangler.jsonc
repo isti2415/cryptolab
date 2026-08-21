@@ -1,0 +1,38 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+
+  // CryptoLab is a fully prerendered static site: 26 real HTML pages plus
+  // fingerprinted assets, and no server-side logic at all. So this is an
+  // assets-only Worker — there is no `main`, which means asset requests are
+  // served by Cloudflare's asset layer and never invoke a Worker.
+  "name": "cryptolab",
+  "compatibility_date": "2026-08-20",
+
+  "assets": {
+    "directory": "./dist",
+
+    // THE setting that matters here. The default is
+    // "single-page-application", which answers every unknown path with
+    // index.html and a **200**. This site prerenders a real page per route and
+    // has a real dist/404.html, so SPA mode would tell crawlers that every
+    // typo'd URL is a valid page — silently undoing the SEO work.
+    "not_found_handling": "404-page",
+
+    // Routes are emitted flat (dist/a/caesar.html), and this serves them at
+    // /a/caesar while redirecting /a/caesar/ to match. Canonical tags are
+    // written without trailing slashes, so the two agree.
+    "html_handling": "auto-trailing-slash"
+  },
+
+  // Workers Logs. Off by default; on a public site the first thing you want
+  // after a bad deploy is to see what is actually being requested.
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+
+  // No "routes" block: the Worker publishes to <name>.<subdomain>.workers.dev
+  // until a custom domain is attached. See README → Deployment for how to add
+  // one, and remember to rebuild with VITE_SITE_URL set so the canonical tags,
+  // sitemap and share cards point at the real origin.
+}

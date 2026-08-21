@@ -1,5 +1,24 @@
 # CryptoLab — Project Handoff
 
+> **Historical document — not current documentation.**
+>
+> This is the original project brief, written *before* any code existed. It is
+> kept because the reasoning behind the constraints is still worth reading, and
+> because the "explicit non-decisions" below record what was deliberately left
+> open rather than overlooked.
+>
+> It is **out of date as a description of the project**: it names nine launch
+> algorithms (there are twenty-four) and lists Diffie–Hellman, ECC, hashes, MACs
+> and post-quantum schemes as things that "may come later" — all of which
+> shipped. It also predates the code-split registry, the permalink layer and the
+> current extension contract.
+>
+> **For how the project actually works, read [README.md](README.md)**, which is
+> maintained. In particular, "Adding a new algorithm" there is the real recipe;
+> the architecture notes here are aspiration, not record.
+
+---
+
 ## What this project is
 
 A web app that teaches cryptography by visualizing algorithms step by step, alongside the real, working code that performs each step. Someone should be able to land on the page, pick an algorithm, watch it transform actual input into actual output one step at a time, and separately play with it live — type their own input and key, and see real output update.

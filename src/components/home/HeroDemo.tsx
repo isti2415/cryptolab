@@ -14,6 +14,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { run, type CaesarStepState } from '@/algorithms/caesar/engine';
 import styles from './HeroDemo.module.css';
 
@@ -32,8 +33,15 @@ const HOLD_MS = 2600;
 export function HeroDemo() {
   const [index, setIndex] = useState(0);
 
+  /*
+   * The shared hook rather than a one-off `matchMedia` read: this subscribes,
+   * so turning reduced motion on while the page is open stops the loop instead
+   * of only being honoured for visitors who had it set before arriving.
+   */
+  const reducedMotion = useReducedMotion();
+
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (reducedMotion) {
       setIndex(steps.length - 1);
       return;
     }
@@ -47,7 +55,7 @@ export function HeroDemo() {
     };
     timer = window.setTimeout(tick, STEP_MS);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [reducedMotion]);
 
   const step = steps[index];
   const s = step.state as CaesarStepState;

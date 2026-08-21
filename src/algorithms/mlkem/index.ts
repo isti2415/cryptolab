@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/mlkem.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type MlkemStepState } from './engine';
 import { MlkemVisualizer } from './Visualizer';
 
 const mlkem: AlgorithmDefinition<MlkemStepState> = {
-  meta: {
-    id: 'ml-kem',
-    name: 'ML-KEM (Kyber)',
-    category: 'pqc',
-    era: '2024',
-    difficulty: 5,
-  },
+  meta,
   content,
   supportsDecrypt: false,
   params: [

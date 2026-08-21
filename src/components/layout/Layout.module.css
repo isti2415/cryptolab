@@ -289,15 +289,27 @@
     overscroll-behavior: contain;
     transform: translateX(0);
     opacity: 1;
+    /*
+     * `visibility` must flip at 0s when opening, not be interpolated: CSS
+     * switches a transitioned visibility at the midpoint, so the panel spent
+     * the first half of the animation still `hidden` and the focus move that
+     * accompanies opening was silently dropped on an invisible element.
+     * Closing keeps the old behaviour via the delay below, so the drawer stays
+     * on screen for the whole slide-out.
+     */
     transition:
       transform var(--dur) var(--ease),
-      visibility var(--dur) var(--ease);
+      visibility 0s;
   }
 
   /* Closed: slid out and taken out of the layout entirely. */
   .navCollapsed .sidebar {
     transform: translateX(-100%);
     visibility: hidden;
+    /* Hide only once it has finished sliding away. */
+    transition:
+      transform var(--dur) var(--ease),
+      visibility 0s var(--dur);
     padding-left: 12px;
     padding-right: 12px;
     opacity: 1;
@@ -324,4 +336,21 @@
   .topbar {
     padding: 0 16px;
   }
+}
+
+/* Shell-level error boundary fallback. Deliberately plain: if the page shell
+   failed, the less this depends on, the better. */
+.pageFailed {
+  max-width: var(--maxw-read);
+  margin: 64px auto;
+  padding: 0 20px;
+  color: var(--text-dim);
+}
+.pageFailed h1 {
+  font-size: var(--fs-lg);
+  color: var(--text);
+  margin: 0 0 8px;
+}
+.pageFailed p {
+  margin: 0;
 }

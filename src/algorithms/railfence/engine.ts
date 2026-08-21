@@ -104,7 +104,7 @@ export function run(
   const steps: Step<RailFenceStepState>[] = [];
   const base = { direction, rails, letters };
 
-  let grid = emptyGrid(rails, letters.length);
+  const grid = emptyGrid(rails, letters.length);
   let out = '';
 
   steps.push({

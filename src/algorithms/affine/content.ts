@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Multiply, then shift: a Caesar cipher with a scaling factor.',
   formula: [
     {
       label: "encrypt",
@@ -34,7 +33,7 @@ export const content: AlgorithmContent = {
   ],
   history: [
     'The affine cipher has no single inventor and no famous deployment. It appears in the historical record as one member of a broad family of "decimation" ciphers that Renaissance and early-modern cryptographers experimented with, in which the alphabet is stepped through at intervals rather than shifted whole.',
-    'Its real significance is pedagogical and mathematical rather than operational. It is the smallest cipher in which the key must satisfy a genuine number-theoretic condition (gcd(a, 26) = 1); rather than merely being a number someone picked. That condition, and the modular inverse used to undo it, are exactly the machinery that reappears at full scale in RSA.',
+    'Its real significance is pedagogical and mathematical rather than operational. It is the smallest cipher in which the key must satisfy a genuine number-theoretic condition (gcd(a, 26) = 1) rather than merely being a number someone picked. That condition, and the modular inverse used to undo it, are exactly the machinery that reappears at full scale in RSA.',
     'It also demonstrates something that took cryptographers centuries to internalise: enlarging the key space is not the same as improving security. The affine cipher has twelve times Caesar’s keys and is broken by precisely the same attack, in precisely the same amount of time.',
   ],
   weaknesses: [
@@ -42,5 +41,12 @@ export const content: AlgorithmContent = {
     'With 312 keys, brute force is instant. An attacker can enumerate all twelve valid multipliers against all 26 shifts and score each candidate decryption automatically against English letter statistics.',
     'Two known plaintext-ciphertext letter pairs are enough to solve for the key directly, with no searching at all: they give two linear congruences in a and b, which can be solved simultaneously mod 26. A single guessed common word usually supplies both pairs.',
     'The gcd condition is a usability trap as much as a mathematical one. Nothing about the encryption side fails when a = 2 (it produces plausible-looking ciphertext quite happily), and the problem only surfaces when decryption produces nonsense. A cipher that can silently accept a broken key is dangerous in a way its key length does not capture.',
+  ],
+  sources: [
+    {
+      label: 'Modular multiplicative inverse',
+      url: 'https://en.wikipedia.org/wiki/Modular_multiplicative_inverse',
+      note: 'The condition gcd(a, 26) = 1, and the machinery reused by RSA.',
+    },
   ],
 };

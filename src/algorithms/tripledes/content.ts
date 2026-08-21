@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'DES three times over: the stopgap that kept a broken key length usable.',
   formula: [
     {
       label: "encrypt",
@@ -39,7 +38,7 @@ export const content: AlgorithmContent = {
     'By the 1990s DES’s 56-bit key was visibly too short, but DES hardware was installed everywhere, in ATMs, payment terminals and smartcards that could not simply be replaced. Triple DES is the answer that ran on what already existed: apply DES three times with two or three keys.',
     'The middle operation is a decryption, which surprises everyone the first time. It is there for backwards compatibility. Set K1 = K2 = K3 and the decryption exactly undoes the first encryption, so the whole construction collapses to plain single DES and a 3DES device can still talk to a DES-only one. Cryptographically the D buys nothing; an E–E–E ordering would be just as strong.',
     'Two keying options survived into practice. Three-key 3DES uses three independent keys; two-key 3DES sets K3 = K1, which shortens the key material at some cost in strength. A third option, all keys equal, is single DES by another name.',
-    'Doubling rather than tripling is not an option, and the reason is instructive. Double DES with two keys looks like it should give 112 bits, but a meet-in-the-middle attack (encrypt the plaintext under every K1, decrypt the ciphertext under every K2, look for a match); breaks it in about 2⁵⁷ operations with enough memory. Adding a third pass is what actually raises the bar.',
+    'Doubling rather than tripling is not an option, and the reason is instructive. Double DES with two keys looks like it should give 112 bits, but a meet-in-the-middle attack (encrypt the plaintext under every K1, decrypt the ciphertext under every K2, look for a match) breaks it in about 2⁵⁷ operations with enough memory. Adding a third pass is what actually raises the bar.',
   ],
   history: [
     'Walter Tuchman of IBM, who had worked on DES itself, proposed the triple construction in 1978. Merkle and Hellman had already shown in 1977 that double encryption was a poor bargain, which is why the answer was three passes rather than two.',
@@ -54,5 +53,17 @@ export const content: AlgorithmContent = {
     'It is roughly three times slower than DES, which was already slow in software because its bit permutations map badly onto CPU word operations. AES is faster in software and vastly faster with hardware instructions, so 3DES lost on performance as well as security.',
     'DES’s weak keys are inherited. If K1 or K2 happens to be one of the four DES weak keys, the corresponding pass becomes its own inverse, and careless key generation can produce a configuration far weaker than the key length suggests.',
     'The all-equal-keys mode is a real hazard rather than a curiosity: a misconfiguration that silently produces single DES looks exactly like working 3DES from the outside, and this lab flags it for that reason.',
+  ],
+  sources: [
+    {
+      label: 'NIST SP 800-67 Rev. 2: Triple DES',
+      url: 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-67r2.pdf',
+      note: 'Including the deprecation that disallows it for new applications.',
+    },
+    {
+      label: 'Sweet32: Birthday attacks on 64-bit block ciphers',
+      url: 'https://sweet32.info/',
+      note: 'Why a 64-bit block is the problem, independent of key length.',
+    },
   ],
 };

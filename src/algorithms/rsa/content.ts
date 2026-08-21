@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Public-key encryption built on the difficulty of factoring large numbers.',
   formula: [
     {
       label: "the modulus",
@@ -58,11 +57,28 @@ export const content: AlgorithmContent = {
   ],
   weaknesses: [
     'Textbook RSA, what this lab implements, is deterministic. The same message always encrypts to the same ciphertext under the same key, so an attacker who can guess the plaintext can simply encrypt candidates and compare. Encrypting one character at a time, as here, makes it a substitution cipher with expensive arithmetic: there are only as many possible ciphertexts as there are characters.',
-    'It is also malleable. Because (m₁·m₂)ᵉ ≡ c₁·c₂ (mod n), an attacker can multiply a ciphertext by a chosen factor and predictably transform the plaintext without ever decrypting it. Real systems use randomised padding (OAEP for encryption, PSS for signatures); precisely to destroy both determinism and malleability. RSA without padding is not a weaker RSA; it is a different and broken thing.',
+    'It is also malleable. Because (m₁·m₂)ᵉ ≡ c₁·c₂ (mod n), an attacker can multiply a ciphertext by a chosen factor and predictably transform the plaintext without ever decrypting it. Real systems use randomised padding (OAEP for encryption, PSS for signatures) precisely to destroy both determinism and malleability. RSA without padding is not a weaker RSA; it is a different and broken thing.',
     'Padding schemes themselves have been a rich source of failures. Bleichenbacher showed in 1998 that PKCS#1 v1.5 could be attacked by feeding a server modified ciphertexts and watching which ones it rejected, recovering the plaintext from the error responses alone. Variants of that attack have resurfaced repeatedly, most recently against TLS implementations decades later.',
     'Key generation is a common failure point. Primes must be large, random, and independently generated. Surveys of deployed TLS and SSH keys have found large numbers sharing a prime factor with another key, because devices generated keys at first boot with insufficient entropy, and two moduli sharing a factor are both recovered instantly by computing a gcd. The ROCA vulnerability in 2017 broke keys from a widely deployed Infineon library whose prime generation left an exploitable structure.',
     'RSA is slow and its keys are large compared with elliptic-curve alternatives at equivalent security, which is why modern protocols increasingly prefer ECDH and Ed25519.',
     'A cryptographically relevant quantum computer running Shor’s algorithm would factor n efficiently and break RSA completely, not weaken it. Data encrypted today can be captured and stored against that possibility, which is why migration to post-quantum schemes is being planned now rather than later.',
     'This lab uses small primes so the arithmetic stays legible, and encrypts one character code at a time with no padding. It demonstrates the mathematics faithfully and is deliberately, explicitly not secure. Never use textbook RSA for anything real.',
+  ],
+  sources: [
+    {
+      label: 'Rivest, Shamir and Adleman (1978)',
+      url: 'https://people.csail.mit.edu/rivest/Rsapaper.pdf',
+      note: 'The original paper.',
+    },
+    {
+      label: 'RFC 8017 (PKCS #1 v2.2): OAEP and PSS',
+      url: 'https://www.rfc-editor.org/rfc/rfc8017',
+      note: 'The padding this lab deliberately omits, and why it is mandatory.',
+    },
+    {
+      label: 'Bleichenbacher (1998)',
+      url: 'https://link.springer.com/content/pdf/10.1007/BFb0055716.pdf',
+      note: 'The padding-oracle attack on PKCS #1 v1.5.',
+    },
   ],
 };

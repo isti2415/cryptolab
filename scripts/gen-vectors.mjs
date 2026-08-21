@@ -14,7 +14,7 @@
  * Run: node scripts/gen-vectors.mjs
  */
 
-import { writeFileSync } from 'node:fs';
+import { readdirSync, writeFileSync } from 'node:fs';
 import { createServer } from 'vite';
 import { fileURLToPath, URL } from 'node:url';
 
@@ -172,6 +172,43 @@ const server = await createServer({
     alias: { '@': fileURLToPath(new URL('../src', import.meta.url)) },
   },
 });
+
+/*
+ * A new algorithm that nobody added to CASES used to get no vectors at all, in
+ * silence: `pnpm vectors` would report success, `vectors.json` would never be
+ * written, and the cross-language check would then cover nothing for it. The
+ * folders on disk are the source of truth for what exists, so compare against
+ * them and refuse to run rather than half-run.
+ *
+ * The comparison is by folder, not by id, because six ids differ from their
+ * folder name — which is also why DIRS exists.
+ */
+const foldersOnDisk = readdirSync(new URL('../src/algorithms', import.meta.url), {
+  withFileTypes: true,
+})
+  .filter((e) => e.isDirectory())
+  .map((e) => e.name)
+  .sort();
+const foldersCovered = Object.keys(CASES).map(dirOf).sort();
+const uncovered = foldersOnDisk.filter((f) => !foldersCovered.includes(f));
+const phantom = foldersCovered.filter((f) => !foldersOnDisk.includes(f));
+
+if (uncovered.length || phantom.length) {
+  const lines = [];
+  if (uncovered.length) {
+    lines.push(
+      `  no CASES entry for: ${uncovered.join(', ')}`,
+      '  Add one keyed by the algorithm id (and a DIRS entry if the id differs',
+      '  from the folder name), then re-run.',
+    );
+  }
+  if (phantom.length) {
+    lines.push(`  CASES names folders that do not exist: ${phantom.join(', ')}`);
+  }
+  console.error(`\nCASES does not match src/algorithms:\n${lines.join('\n')}\n`);
+  await server.close();
+  process.exit(1);
+}
 
 let total = 0;
 for (const [id, cases] of Object.entries(CASES)) {

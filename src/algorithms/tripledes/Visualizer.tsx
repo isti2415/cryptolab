@@ -43,7 +43,7 @@ export function TripleDesVisualizer({
                   </span>
                 </span>
                 <span className={styles.passValue}>
-                  {pass ? pass.outputHex: ', '}
+                  {pass ? pass.outputHex: '—'}
                 </span>
               </li>
             );

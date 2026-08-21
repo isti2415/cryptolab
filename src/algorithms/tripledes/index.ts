@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/tripledes.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type TripleDesStepState } from './engine';
 import { TripleDesVisualizer } from './Visualizer';
 
 const tripledes: AlgorithmDefinition<TripleDesStepState> = {
-  meta: {
-    id: '3des',
-    name: 'Triple DES',
-    category: 'symmetric',
-    era: '1978',
-    difficulty: 4,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

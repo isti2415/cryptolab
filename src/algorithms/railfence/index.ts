@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/railfence.py?code';
 import { content } from './content';
@@ -7,12 +8,7 @@ import { run, type RailFenceStepState } from './engine';
 import { RailFenceVisualizer } from './Visualizer';
 
 const railfence: AlgorithmDefinition<RailFenceStepState> = {
-  meta: {
-    id: 'railfence',
-    name: 'Rail Fence',
-    category: 'classical',
-    difficulty: 1,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

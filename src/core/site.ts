@@ -2,14 +2,27 @@
  * Site-wide constants and SEO helpers.
  *
  * `SITE_URL` is the single source of truth for absolute URLs (canonical tags,
- * Open Graph, sitemap, JSON-LD). Override it at build time with VITE_SITE_URL
- * when a custom domain is attached, e.g. `VITE_SITE_URL=https://cryptolab.dev`.
- * The postbuild scripts read the same value from `SITE_URL`.
+ * Open Graph, sitemap, JSON-LD), and it is baked in at build time — there is no
+ * server to work it out at request time. Set it for any build you intend to
+ * publish:
+ *
+ *   VITE_SITE_URL=https://example.com SITE_URL=https://example.com pnpm build
+ *
+ * The value below is a development placeholder only. Shipping with it would
+ * point every canonical tag and share card at an origin that is not this site,
+ * so the deploy workflow refuses to run without SITE_URL set.
  */
 
-const DEFAULT_SITE_URL = 'https://cryptolab-3db.pages.dev';
+const DEFAULT_SITE_URL = 'https://cryptolab.workers.dev';
 
 /** Absolute origin, no trailing slash. */
+/**
+ * The repository. Used for the footer's source and "report an error" links:
+ * a site that asks to be believed about cryptography needs a visible route for
+ * telling it that it is wrong.
+ */
+export const REPO_URL = 'https://github.com/isti2415/cryptolab';
+
 export const SITE_URL = (
   import.meta.env.VITE_SITE_URL || DEFAULT_SITE_URL
 ).replace(/\/$/, '');

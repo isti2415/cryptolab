@@ -15,7 +15,14 @@
     "typecheck": "tsc -b --noEmit",
     "vectors": "node scripts/gen-vectors.mjs",
     "og": "node scripts/generate-og.mjs",
-    "check": "pnpm typecheck && pnpm test && pnpm test:python"
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm test:python",
+    "lint": "biome lint src plugins scripts",
+    "lint:fix": "biome lint --write src plugins scripts",
+    "validate:jsonld": "node scripts/validate-jsonld.mjs",
+    "preview:worker": "wrangler dev",
+    "deploy": "pnpm build && pnpm validate:jsonld && wrangler deploy",
+    "deploy:dry": "wrangler deploy --dry-run",
+    "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
     "@fontsource-variable/ibm-plex-sans": "^5.3.0",
@@ -25,16 +32,27 @@
     "react-router-dom": "^6.30.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.9",
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "@resvg/resvg-js": "^2.6.2",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.5",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^4.3.4",
+    "jsdom": "^30.0.1",
     "typescript": "^5.7.2",
     "vite": "^6.0.5",
     "vite-react-ssg": "^0.9.2",
     "vitest": "^3.2.0",
-    "wawoff2": "^2.0.1"
+    "wawoff2": "^2.0.1",
+    "wrangler": "^4.125.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "nanoid": ">=3.3.18",
+      "postcss": ">=8.5.23"
+    }
   }
 }

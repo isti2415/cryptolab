@@ -8,6 +8,7 @@
  */
 
 import { useEffect, useRef } from 'react';
+import { describeLookup } from './describe';
 import styles from './LookupTable.module.css';
 
 interface LookupTableProps {
@@ -38,13 +39,40 @@ export function LookupTable({
    * 26 rows inside a scroll box a third that tall, sat parked at row A while
    * the highlight it exists to show was somewhere below the fold.
    */
+  const activeRow = active?.row;
+  const activeCol = active?.col;
+  // activeRow/activeCol are change triggers, not values the body reads:
+  // dropping them would run this once on mount and never follow the
+  // highlight again.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: see above.
   useEffect(() => {
     hitRef.current?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-  }, [active?.row, active?.col]);
+  }, [activeRow, activeCol]);
+
+  // The wrapper scrolls, so it needs a tab stop or keyboard users cannot pan
+  // the tableau at all (WCAG 2.1.1).
+  /*
+   * The table itself is already good for a screen reader: real <th scope>
+   * headers mean a user can walk it and hear "row E, column 3". What was
+   * missing is the answer to "which cell is this step reading?", which the
+   * highlight conveys visually and nothing conveyed otherwise. A caption
+   * states it outright; the S-box lookups in DES and AES are the whole point
+   * of the step they appear in.
+   */
+  const lookup =
+    active && rows[active.row]?.[active.col] !== undefined
+      ? describeLookup(
+          corner,
+          rowHeaders[active.row],
+          colHeaders[active.col],
+          rows[active.row][active.col],
+        )
+      : undefined;
 
   return (
-    <div className={styles.wrap}>
+    <div className={styles.wrap} tabIndex={0}>
       <table className={`${styles.table} ${dense ? styles.dense : ''}`}>
+        {lookup && <caption className="sr-only">{lookup}</caption>}
         <thead>
           <tr>
             <th className={styles.corner} scope="col">

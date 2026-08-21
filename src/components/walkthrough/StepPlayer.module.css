@@ -81,10 +81,23 @@
 }
 
 /* Chapter rail: phases sized in proportion to how many steps each holds. */
+/*
+ * DES has nineteen phases. Divided across a 375px screen that is twelve pixels
+ * per chapter, and the narrow ones came out at three: a rail you cannot hit.
+ * Each chapter therefore holds a 24px floor and the rail scrolls when they no
+ * longer fit, which keeps every phase reachable instead of evenly untappable.
+ * No tab stop is needed on the scroller itself: its children are buttons, so
+ * keyboard focus moves through them and carries the scroll with it.
+ */
 .chapters {
   display: flex;
   gap: 3px;
   min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.chapters::-webkit-scrollbar {
+  display: none;
 }
 
 /*
@@ -93,23 +106,42 @@
  * in the header pill above; the rail's job is to show shape and offer a jump
  * target, which it does with proportional width plus a tooltip.
  */
+/*
+ * The bar stays 10px; the *button* is 24px so it clears WCAG 2.2 target size
+ * (2.5.8) on touch. The visible rail is drawn by ::before and centred in that
+ * box, so the hit area grows without the rail getting fatter. It stops short of
+ * the project's own --tap (44px) deliberately: `.controls` is a 12px-gap column,
+ * and a 44px band here would reach over the scrubber above it and swallow its
+ * clicks.
+ */
 .chapter {
   flex: 1 1 0;
-  min-width: 0;
-  height: 10px;
+  height: 24px;
+  /* Replaces the old `min-width: 0`: chapters now hold a floor and the rail
+     scrolls, rather than shrinking to an untappable sliver. */
+  min-width: 24px;
   padding: 0;
+  background: none;
+  border: 0;
+  display: flex;
+  align-items: center;
+}
+.chapter::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 10px;
   background: var(--bg-raised);
   border: 1px solid var(--border);
   border-radius: 2px;
   transition:
-    color var(--dur-fast) var(--ease),
     border-color var(--dur-fast) var(--ease),
     background var(--dur-fast) var(--ease);
 }
-.chapter:hover {
+.chapter:hover::before {
   background: var(--border-strong);
 }
-.chapterOn {
+.chapterOn::before {
   background: var(--signal);
   border-color: var(--signal);
 }
@@ -189,6 +221,10 @@
   background: transparent;
   border: none;
   color: var(--text-dim);
+  /* The transport row already reserves --tap via .scrubberWrap, so meeting the
+     project's own hit-target minimum here costs no layout. */
+  min-height: 40px;
+  min-width: 40px;
   padding: 8px 10px;
   border-radius: var(--r-sm);
   font-size: var(--fs-2xs);
@@ -212,4 +248,28 @@
   background: var(--bg-panel);
   border: 1px dashed var(--border);
   border-radius: var(--r-lg);
+}
+
+/* A valid-but-notable property of this run (a DES weak key, say). Warn, not
+   danger: the output is correct, the choice of input is the point. */
+.warning {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  font-size: var(--fs-sm);
+  color: var(--text);
+  background: var(--bg-raised);
+  border: 1px solid var(--warn);
+  border-radius: var(--r-sm);
+  text-wrap: pretty;
+}
+.warnBadge {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--warn);
 }

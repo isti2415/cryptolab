@@ -14,7 +14,12 @@ import {
   useState,
 } from 'react';
 import { Icon } from '@/components/ui/Icon';
-import type { AlgorithmVisualizerProps, Direction, Step } from '@/core/types';
+import type {
+  AlgorithmVisualizerProps,
+  Direction,
+  Step,
+  ValidationError,
+} from '@/core/types';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import styles from './StepPlayer.module.css';
 
@@ -22,6 +27,20 @@ interface StepPlayerProps<S> {
   steps: Step<S>[];
   Visualizer: ComponentType<AlgorithmVisualizerProps<S>>;
   direction: Direction;
+  /**
+   * The error from the same `run()` that produced `steps`, if there was one.
+   * An engine returns no steps both when there is nothing to do and when the
+   * parameters were rejected, and those need to say different things: telling
+   * someone to "enter some input" while the console beside it explains that
+   * their Hill matrix is not invertible sends them looking in the wrong place.
+   */
+  error?: ValidationError;
+  /**
+   * Current step, lifted so the page can put it in the URL and a shared link
+   * can land on the step someone wanted to show you. Uncontrolled if omitted.
+   */
+  index?: number;
+  onIndexChange?: (index: number) => void;
 }
 
 const SPEEDS = [
@@ -56,13 +75,34 @@ export function StepPlayer<S>({
   steps,
   Visualizer,
   direction,
+  error,
+  index: controlledIndex,
+  onIndexChange,
 }: StepPlayerProps<S>) {
-  const [index, setIndex] = useState(0);
+  const [uncontrolledIndex, setUncontrolledIndex] = useState(0);
+  const index = controlledIndex ?? uncontrolledIndex;
+
+  /*
+   * `setIndex` is kept referentially stable via refs rather than memoised on
+   * `index`. Every callback below depends on it, so an identity that changed
+   * once per step would rebuild the whole transport and re-run the autoplay
+   * effect on every tick.
+   */
+  const indexRef = useRef(index);
+  indexRef.current = index;
+  const onIndexChangeRef = useRef(onIndexChange);
+  onIndexChangeRef.current = onIndexChange;
+
+  const setIndex = useCallback((next: number | ((prev: number) => number)) => {
+    const resolve = (prev: number) =>
+      typeof next === 'function' ? next(prev) : next;
+    setUncontrolledIndex(resolve);
+    onIndexChangeRef.current?.(resolve(indexRef.current));
+  }, []);
   const [playing, setPlaying] = useState(false);
   const [speedIdx, setSpeedIdx] = useState(1);
   const [animating, setAnimating] = useState(false);
   const reducedMotion = useReducedMotion();
-  const rootRef = useRef<HTMLDivElement>(null);
 
   const count = steps.length;
   const clamped = Math.min(index, Math.max(0, count - 1));
@@ -76,14 +116,14 @@ export function StepPlayer<S>({
   // snap back into range and stop playing.
   useEffect(() => {
     setIndex((i) => Math.min(i, Math.max(0, count - 1)));
-  }, [count]);
+  }, [count, setIndex]);
 
   const go = useCallback(
     (next: number, viaPlay = false) => {
       setAnimating(viaPlay);
       setIndex(() => Math.max(0, Math.min(next, count - 1)));
     },
-    [count],
+    [count, setIndex],
   );
 
   const stopAnd = useCallback(
@@ -180,7 +220,9 @@ export function StepPlayer<S>({
   if (count === 0) {
     return (
       <div className={styles.empty}>
-        Enter some input to generate a walkthrough.
+        {error
+          ? 'No walkthrough yet: fix the highlighted field above and it will appear here.'
+          : 'Enter some input to generate a walkthrough.'}
       </div>
     );
   }
@@ -191,7 +233,6 @@ export function StepPlayer<S>({
   return (
     <div
       className={styles.player}
-      ref={rootRef}
       role="group"
       aria-roledescription="algorithm walkthrough"
       aria-label="Step-by-step walkthrough"
@@ -207,6 +248,14 @@ export function StepPlayer<S>({
         </div>
         <h3 className={styles.title}>{step.title}</h3>
         <p className={styles.desc}>{step.description}</p>
+        {step.warning && (
+          // `note`, not `alert`: nothing has gone wrong and nothing needs
+          // interrupting; the run is valid and this is a remark about it.
+          <p className={styles.warning} role="note">
+            <span className={styles.warnBadge}>note</span>
+            {step.warning}
+          </p>
+        )}
       </div>
 
       {/*
@@ -256,6 +305,7 @@ export function StepPlayer<S>({
         <div className={styles.transport}>
           <div className={styles.buttons}>
             <button
+              type="button"
               className={styles.ctrl}
               onClick={() => stopAnd(0)}
               disabled={atStart}
@@ -265,6 +315,7 @@ export function StepPlayer<S>({
               <Icon name="first" />
             </button>
             <button
+              type="button"
               className={styles.ctrl}
               onClick={() => stopAnd(clamped - 1)}
               disabled={atStart}
@@ -274,6 +325,7 @@ export function StepPlayer<S>({
               <Icon name="prev" />
             </button>
             <button
+              type="button"
               className={`${styles.ctrl} ${styles.play}`}
               onClick={togglePlay}
               aria-label={playing ? 'Pause' : 'Play'}
@@ -282,6 +334,7 @@ export function StepPlayer<S>({
               <Icon name={playing ? 'pause' : 'play'} />
             </button>
             <button
+              type="button"
               className={styles.ctrl}
               onClick={() => stopAnd(clamped + 1)}
               disabled={atEnd}
@@ -291,6 +344,7 @@ export function StepPlayer<S>({
               <Icon name="next" />
             </button>
             <button
+              type="button"
               className={styles.ctrl}
               onClick={() => stopAnd(count - 1)}
               disabled={atEnd}
@@ -318,6 +372,7 @@ export function StepPlayer<S>({
           <div className={styles.speed} role="group" aria-label="Playback speed">
             {SPEEDS.map((sp, i) => (
               <button
+                type="button"
                 key={sp.label}
                 className={`${styles.speedBtn} ${i === speedIdx ? styles.speedOn : ''}`}
                 onClick={() => setSpeedIdx(i)}

@@ -1,8 +1,9 @@
-# Cloudflare Pages headers.
+# Static-asset response headers.
 #
-# Rules are matched most-specific-first by Pages, and header sets are merged,
-# so the site-wide block below applies everywhere and the path blocks only add
-# caching on top of it.
+# Read natively by Cloudflare Workers' asset layer from the root of the assets
+# directory (Vite copies this file from public/ into dist/). Rules are matched
+# most-specific-first and header sets are merged, so the site-wide block below
+# applies everywhere and the path blocks only add caching on top of it.
 
 /*
   # Everything the site itself needs is self-hosted, fonts included, so the
@@ -10,18 +11,19 @@
   # script in index.html and for the style attributes React writes for progress
   # bars and grid spans.
   #
-  # The one third party allowed is Cloudflare Web Analytics. Pages injects
-  # `static.cloudflareinsights.com/beacon.min.js` when it is enabled in the
-  # dashboard, and without the host here the browser blocks it and the panel
-  # silently reads zero. `connect-src 'self'` already covers the automatic
-  # setup, which reports to this domain's own /cdn-cgi/rum; the explicit host
-  # covers the manual snippet, which posts to cloudflareinsights.com directly.
+  # The one third party allowed is Cloudflare Web Analytics. Unlike Pages,
+  # Workers does not inject `static.cloudflareinsights.com/beacon.min.js` for
+  # you: enabling Web Analytics on a Worker means adding the snippet to
+  # index.html yourself. The allowance is kept so that doing so does not also
+  # require a CSP change and a redeploy to discover. `connect-src 'self'`
+  # covers the same-origin /cdn-cgi/rum path; the explicit host covers the
+  # manual snippet, which posts to cloudflareinsights.com directly.
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   # No camera, microphone or geolocation is used anywhere on the site.
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
-  # Everything is served over HTTPS by Pages; pin it for two years.
+  # Everything is served over HTTPS; pin it for two years.
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   Cross-Origin-Opener-Policy: same-origin
   X-Frame-Options: DENY

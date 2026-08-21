@@ -217,6 +217,55 @@ export interface DesStepState {
   outputHex?: string;
 }
 
+/*
+ * The four weak and twelve semi-weak keys, as the 56 key bits actually used.
+ *
+ * They are listed here with their parity bits (the conventional form, which is
+ * what a reader will find in the literature) and compared after PC-1 has
+ * discarded those bits, because parity is not part of the key: 0101…01 and
+ * 0000…00 differ only in bits DES throws away, and both are the same weak key.
+ * Comparing the hex as typed would miss that and quietly fail to warn.
+ */
+const WEAK_KEYS = [
+  '0101010101010101',
+  'FEFEFEFEFEFEFEFE',
+  'E0E0E0E0F1F1F1F1',
+  '1F1F1F1F0E0E0E0E',
+];
+
+const SEMI_WEAK_KEYS = [
+  '01FE01FE01FE01FE', 'FE01FE01FE01FE01',
+  '1FE01FE00EF10EF1', 'E01FE01FF10EF10E',
+  '01E001E001F101F1', 'E001E001F101F101',
+  '1FFE1FFE0EFE0EFE', 'FE1FFE1FFE0EFE0E',
+  '011F011F010E010E', '1F011F010E010E01',
+  'E0FEE0FEF1FEF1FE', 'FEE0FEE0FEF1FEF1',
+];
+
+/** The 56 bits PC-1 keeps, as a string, so parity variants compare equal. */
+function effectiveKey(hex: string): string {
+  return permute(hexToBits(hex), PC1).join('');
+}
+
+const WEAK_SET = new Set(WEAK_KEYS.map(effectiveKey));
+const SEMI_WEAK_SET = new Set(SEMI_WEAK_KEYS.map(effectiveKey));
+
+/**
+ * A note for a key that is valid but notable. Weak keys make all sixteen round
+ * keys identical, so DES becomes its own inverse; semi-weak keys pair up, so
+ * one of the pair decrypts the other.
+ */
+export function keyWarning(keyHex: string): string | undefined {
+  const eff = effectiveKey(keyHex);
+  if (WEAK_SET.has(eff)) {
+    return 'This is one of the four DES weak keys. Its key schedule produces sixteen identical round keys, which makes encryption its own inverse: run this block through DES twice with this key and you get the original back. The output below is still correct DES.';
+  }
+  if (SEMI_WEAK_SET.has(eff)) {
+    return 'This is one of the twelve DES semi-weak keys. They come in pairs that produce each other’s round keys in reverse, so the partner key decrypts what this one encrypts. The output below is still correct DES.';
+  }
+  return undefined;
+}
+
 export function run(
   input: string,
   params: Params,
@@ -257,8 +306,16 @@ export function run(
     title: string,
     description: string,
     state: Omit<DesStepState, keyof typeof base>,
+    warning?: string,
   ) => {
-    steps.push({ id, title, description, phase, state: { ...base, ...state } });
+    steps.push({
+      id,
+      title,
+      description,
+      phase,
+      state: { ...base, ...state },
+      ...(warning ? { warning } : {}),
+    });
   };
 
   const L0 = dataHex.slice(0, 8);
@@ -270,6 +327,7 @@ export function run(
     `${direction === 'encrypt' ? 'Encrypt' : 'Decrypt'} block ${dataHex}`,
     `DES derives sixteen 48-bit round keys from the 64-bit key, then runs the block through an initial permutation, sixteen Feistel rounds and a final permutation.${direction === 'decrypt' ? ' Decryption is the identical process with the round keys applied in reverse order.' : ''}`,
     { kind: 'setup', L: L0, R: R0 },
+    keyWarning(keyHex),
   );
 
   /* -------------------------------------------------------- key schedule */

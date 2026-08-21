@@ -24,7 +24,11 @@ jobs:
           python-version: '3.12'
 
       - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm test:python
       - run: pnpm build
+      # Structured data is validated against the built HTML, so a broken
+      # JSON-LD block fails the build rather than being noticed in Search Console.
+      - run: pnpm validate:jsonld

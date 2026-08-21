@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'A sponge: absorb the message into a big state, squeeze the digest back out.',
   formula: [
     {
       label: "the sponge",
@@ -63,5 +62,12 @@ export const content: AlgorithmContent = {
     'Like any general-purpose hash it is far too fast for password storage. Billions of evaluations per second on a GPU means a plain SHA-3 of a password is weak; Argon2 or bcrypt is what that job needs.',
     'The SHAKE functions will happily produce as many bytes as asked, which invites misuse: output length is not security level, and squeezing 1024 bytes from SHAKE128 does not give 8192 bits of strength; it gives 128.',
     'Domain separation matters more than it looks. SHA3-256 and SHAKE256 use the same rate and the same permutation, and are kept apart only by two padding bits. An implementation that gets those bits wrong produces digests that look perfectly plausible and match nothing.',
+  ],
+  sources: [
+    {
+      label: 'FIPS 202: SHA-3 and SHAKE',
+      url: 'https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf',
+      note: 'The sponge construction, the permutation, and the SHAKE outputs.',
+    },
   ],
 };

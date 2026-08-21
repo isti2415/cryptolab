@@ -91,6 +91,16 @@ export interface Step<S = unknown> {
    * chapter markers, so long traces (DES ~70 steps, AES ~80) stay navigable.
    */
   phase?: string;
+  /**
+   * Something true and worth knowing about *this* run that is not an error.
+   *
+   * A DES weak key is the motivating case: it is a perfectly valid key that
+   * produces a perfectly correct result, and also makes the cipher its own
+   * inverse. Rejecting it would be wrong and staying silent would waste the
+   * best teachable moment the page has, so it is surfaced beside the step it
+   * concerns rather than left in the prose two tabs away.
+   */
+  warning?: string;
 }
 
 /* ------------------------------------------------------------------ result */
@@ -155,8 +165,6 @@ export interface CodeSample {
 /* ------------------------------------------------------------ definition */
 
 export interface AlgorithmContent {
-  /** One-liner shown in cards/nav. */
-  tagline: string;
   /**
    * The algorithm in notation, shown as its own tab.
    *
@@ -173,6 +181,14 @@ export interface AlgorithmContent {
   history: string[];
   /** How it breaks. Honest; this is a teaching tool. */
   weaknesses: string[];
+  /**
+   * Where to read further: the standard, the paper that broke it, the archive.
+   *
+   * The prose names attacks and authors constantly ("Fluhrer, Mantin and
+   * Shamir", "Sweet32", Kasiski) and cited none of them, which is a poor habit
+   * in something that asks to be believed about cryptography.
+   */
+  sources?: { label: string; url: string; note?: string }[];
 }
 
 export interface AlgorithmMeta {
@@ -184,6 +200,32 @@ export interface AlgorithmMeta {
   era?: string;
   /** 1 (gentlest) … 5 (hardest), for ordering/《at-a-glance》. */
   difficulty: 1 | 2 | 3 | 4 | 5;
+  /**
+   * One-liner shown in cards and nav. Lives here rather than in `content`
+   * because the catalogue needs it for all 24 algorithms at once, and
+   * `content` is only loaded for the algorithm actually being viewed.
+   */
+  tagline: string;
+  /**
+   * Ids of algorithms this one builds on or is usually confused with.
+   *
+   * The prose already makes these connections — Affine explains itself as
+   * Caesar with a multiply, ML-KEM as LWE with structure — but a reader had no
+   * way to follow them except by hunting the sidebar. Kept in `meta` so a card
+   * can be rendered without loading the other algorithm.
+   */
+  related?: string[];
+}
+
+/**
+ * What the app knows about an algorithm *before* loading it: its catalogue
+ * entry plus the loader for the rest. Keeping these apart is what lets a page
+ * ship one algorithm's engine, prose and visualizer instead of all of them.
+ */
+export interface AlgorithmEntry {
+  meta: AlgorithmMeta;
+  /** Resolves the full definition. Code-split; call it, then cache the result. */
+  load: () => Promise<AnyAlgorithm>;
 }
 
 export interface AlgorithmVisualizerProps<S = unknown> {
@@ -214,7 +256,7 @@ export interface AlgorithmVisualizerProps<S = unknown> {
  * point of view; only its Visualizer needs to know it, and that pairing is
  * fixed inside the definition. `any` here is the deliberate erasure.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: the erasure is the point; see above.
 export type AnyAlgorithm = AlgorithmDefinition<any>;
 
 export interface AlgorithmDefinition<S = unknown> {

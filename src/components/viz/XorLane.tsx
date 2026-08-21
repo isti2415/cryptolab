@@ -11,6 +11,7 @@
 
 import { Cell } from './Cell';
 import type { CellState } from './Cell';
+import { describeCells } from './describe';
 import styles from './XorLane.module.css';
 
 interface XorLaneProps {
@@ -50,7 +51,13 @@ export function XorLane({
             {r === 2 && <span className={styles.op}>⊕</span>}
             {row.label}
           </span>
-          <div className={styles.cells}>
+          {/* One label per lane; see BitField. Scrollable, so also a tab stop. */}
+          <div
+            className={styles.cells}
+            tabIndex={0}
+            role="img"
+            aria-label={describeCells(row.label, row.values, { groupEvery })}
+          >
             {row.values.map((v, i) => (
               <span
                 key={i}

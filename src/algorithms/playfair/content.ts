@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Encrypt letters two at a time using a 5×5 key square.',
   formula: [
     {
       label: "same row",
@@ -33,7 +32,7 @@ export const content: AlgorithmContent = {
   overview: [
     'Playfair enciphers pairs of letters rather than single ones. A keyword fills a 5×5 grid (duplicates dropped, then the rest of the alphabet in order), and I and J share a cell so that 25 letters fit. Every pair of plaintext letters is located in that grid and replaced according to where the two letters sit relative to each other.',
     'Three rules cover every case. If the letters share a row, each is replaced by the letter to its right, wrapping past the edge. If they share a column, each is replaced by the letter below, wrapping past the bottom. Otherwise the two letters form the corners of a rectangle, and each is replaced by the corner in its own row and the other letter’s column.',
-    'Two letters must never be identical within a pair, because the rules have nothing to say about a letter and itself. A filler (X, or Q when the doubled letter is already X); is inserted to break them apart, and an odd-length message is padded the same way. This is why the digraph stream can be slightly longer than the text you typed.',
+    'Two letters must never be identical within a pair, because the rules have nothing to say about a letter and itself. A filler (X, or Q when the doubled letter is already X) is inserted to break them apart, and an odd-length message is padded the same way. This is why the digraph stream can be slightly longer than the text you typed.',
     'Working on digraphs is the point. There are 600 possible pairs rather than 26 single letters, and the frequency distribution over pairs is far flatter than over letters, so the straightforward frequency attack that dismantles every monoalphabetic cipher no longer applies directly. It was the first cipher to achieve that while remaining workable in the field with nothing but a memorised keyword and a pencil.',
   ],
   history: [
@@ -48,5 +47,12 @@ export const content: AlgorithmContent = {
     'Known plaintext is close to fatal. A handful of matched digraphs pins down enough grid relationships to reconstruct the square, and because the square comes from a keyword, partial recovery often suggests the rest by guessing at English.',
     'The filler letters and the I/J merge introduce ambiguity in the other direction: decryption produces a padded, upper-case letter stream that a human has to interpret. Playfair does not round-trip cleanly to the original text.',
     'The key is a memorable word, so the effective key space is a dictionary rather than the 25! arrangements of the grid. Human key choice is a recurring theme in the failure of classical ciphers.',
+  ],
+  sources: [
+    {
+      label: 'Playfair cipher',
+      url: 'https://en.wikipedia.org/wiki/Playfair_cipher',
+      note: 'Including the standard worked example this engine is tested against.',
+    },
   ],
 };

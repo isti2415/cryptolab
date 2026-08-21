@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/dh.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type DhStepState } from './engine';
 import { DhVisualizer } from './Visualizer';
 
 const dh: AlgorithmDefinition<DhStepState> = {
-  meta: {
-    id: 'diffie-hellman',
-    name: 'Diffie–Hellman',
-    category: 'publickey',
-    era: '1976',
-    difficulty: 3,
-  },
+  meta,
   content,
   supportsDecrypt: false,
   takesInput: false,

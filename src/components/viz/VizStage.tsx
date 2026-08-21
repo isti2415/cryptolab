@@ -17,7 +17,7 @@
  * diagram out to the panel edge.
  */
 
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import styles from './VizStage.module.css';
 
 function Region({
@@ -29,9 +29,28 @@ function Region({
   label?: ReactNode;
   className: string;
 }) {
+  const labelId = useId();
+  /*
+   * The heading was already on screen but was not attached to anything, so to a
+   * screen reader every region was an anonymous box: "Key square", "Round keys"
+   * and "Output so far" all announced as nothing at all. Naming the group is the
+   * one fix that reaches all twenty-four visualizers, since every one of them is
+   * built out of these three regions.
+   *
+   * `role="group"` rather than letting <section aria-labelledby> become a region
+   * landmark: there are up to three of these per step, and landmarks are for
+   * navigating the page, not the contents of one panel.
+   */
   return (
-    <section className={className}>
-      {label && <h4 className={styles.label}>{label}</h4>}
+    <section
+      className={className}
+      {...(label ? { role: 'group', 'aria-labelledby': labelId } : {})}
+    >
+      {label && (
+        <h4 className={styles.label} id={labelId}>
+          {label}
+        </h4>
+      )}
       <div className={styles.regionBody}>{children}</div>
     </section>
   );

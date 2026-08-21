@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/sha3.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type Sha3StepState } from './engine';
 import { Sha3Visualizer } from './Visualizer';
 
 const sha3: AlgorithmDefinition<Sha3StepState> = {
-  meta: {
-    id: 'sha3',
-    name: 'SHA-3 / Keccak',
-    category: 'hash',
-    era: '2015',
-    difficulty: 5,
-  },
+  meta,
   content,
   supportsDecrypt: false,
   params: [

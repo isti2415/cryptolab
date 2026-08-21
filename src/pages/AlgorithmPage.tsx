@@ -1,13 +1,16 @@
-import { useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
 import { CodePanel } from '@/components/code/CodePanel';
 import { Icon } from '@/components/ui/Icon';
 import { Console } from '@/components/playground/Console';
+import { Difficulty } from '@/components/ui/Difficulty';
 import { Notation } from '@/components/ui/Notation';
 import { Tabs, type TabSpec } from '@/components/ui/Tabs';
 import { StepPlayer } from '@/components/walkthrough/StepPlayer';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Seo } from '@/components/Seo';
-import { CATEGORIES, getAlgorithm } from '@/core/registry';
+import { AlgorithmNav } from '@/components/layout/AlgorithmNav';
+import { CATEGORIES } from '@/core/registry';
+import { decodeState, encodeState } from '@/core/permalink';
 import {
   SITE_NAME,
   SITE_URL,
@@ -15,8 +18,12 @@ import {
   clampText,
   ogImageForPath,
 } from '@/core/site';
-import type { AnyAlgorithm, Direction, Params } from '@/core/types';
-import { NotFoundPage } from './NotFoundPage';
+import type {
+  AlgorithmContent,
+  AnyAlgorithm,
+  Direction,
+  Params,
+} from '@/core/types';
 import styles from './AlgorithmPage.module.css';
 
 /** The human-facing name of a category, rather than its enum value. */
@@ -29,17 +36,17 @@ function algorithmSeo(algo: AnyAlgorithm) {
   const path = `/a/${meta.id}`;
   const title = `${meta.name}: Interactive Visualizer and Playground | ${SITE_NAME}`;
   const description = clampText(
-    `${content.tagline} Step through it on real input, then try your own keys.`,
+    `${meta.tagline} Step through it on real input, then try your own keys.`,
     155,
   );
-  const socialDescription = clampText(content.tagline, 125);
+  const socialDescription = clampText(meta.tagline, 125);
   const jsonLd = [
     {
       '@context': 'https://schema.org',
       '@type': 'LearningResource',
       name: meta.name,
       headline: `${meta.name}, how it works, step by step`,
-      description: content.overview[0] ?? content.tagline,
+      description: content.overview[0] ?? meta.tagline,
       url: absoluteUrl(path),
       image: absoluteUrl(ogImageForPath(path)),
       learningResourceType: 'Interactive visualization',
@@ -65,16 +72,16 @@ function algorithmSeo(algo: AnyAlgorithm) {
       ],
     },
   ];
-  const imageAlt = `${meta.name}: ${content.tagline}`;
+  const imageAlt = `${meta.name}: ${meta.tagline}`;
   return { title, description, socialDescription, path, imageAlt, jsonLd };
 }
 
-export function AlgorithmPage() {
-  const { id } = useParams();
-  const algo = id ? getAlgorithm(id) : undefined;
-
-  if (!algo) return <NotFoundPage />;
-
+/**
+ * The algorithm arrives as a prop from the route's `lazy()` (see `App.tsx`)
+ * rather than being looked up in a fully-loaded registry, which is what allows
+ * the other twenty-three algorithms to stay out of this page's chunk.
+ */
+export function AlgorithmPage({ algo }: { algo: AnyAlgorithm }) {
   // `key` resets all interactive state when navigating between algorithms.
   return <AlgorithmExperience key={algo.meta.id} algo={algo} />;
 }
@@ -93,6 +100,50 @@ function AlgorithmExperience({ algo }: { algo: AnyAlgorithm }) {
   const [direction, setDirection] = useState<Direction>(
     algo.sample.direction ?? 'encrypt',
   );
+  const [step, setStep] = useState(0);
+
+  /*
+   * The URL is read once, after mount, and never during render. That ordering
+   * is what keeps prerendering intact: the server and the first client render
+   * both produce the sample, so the HTML matches and hydration is clean, and
+   * only then does a shared link take effect.
+   */
+  const [shareReady, setShareReady] = useState(false);
+  useEffect(() => {
+    const shared = decodeState(window.location.search, algo.params, algo.sample);
+    setInput(shared.input);
+    setParams(shared.params);
+    setDirection(shared.direction);
+    if (shared.step !== undefined) setStep(shared.step);
+    setShareReady(true);
+  }, [algo]);
+
+  /*
+   * Writes back with `replaceState`, not `pushState`: typing a message would
+   * otherwise stack one history entry per keystroke and make the Back button
+   * useless. The address bar stays shareable; Back still leaves the page.
+   */
+  useEffect(() => {
+    /*
+     * State, not a ref. Both effects run in the same commit, so a ref set by
+     * the one above would already read true here while `input` and friends
+     * still held the sample — which rewrote the address bar to the defaults
+     * for one frame and threw away the very link that was being opened.
+     * A state flag only becomes true on the render that also carries the
+     * decoded values.
+     */
+    if (!shareReady) return;
+    const query = encodeState(
+      { input, params, direction, step },
+      algo.params,
+      algo.sample,
+    );
+    window.history.replaceState(
+      null,
+      '',
+      `${window.location.pathname}${query}${window.location.hash}`,
+    );
+  }, [algo, input, params, direction, step, shareReady]);
 
   // The single source of truth: both the console output and the walkthrough
   // steps come from this one call. They cannot disagree.
@@ -121,22 +172,10 @@ function AlgorithmExperience({ algo }: { algo: AnyAlgorithm }) {
           {algo.meta.era && (
             <span className={styles.badgeDim}>{algo.meta.era}</span>
           )}
-          {/* Pips are decoration; the sr-only text carries the meaning, so
-              the unfilled ones are exempt from text-contrast rules. */}
-          <span className={styles.difficulty}>
-            <span className="sr-only">
-              Difficulty {algo.meta.difficulty} of 5
-            </span>
-            <span aria-hidden="true">
-              {'\u25cf'.repeat(algo.meta.difficulty)}
-              <span className={styles.difficultyOff}>
-                {'\u25cf'.repeat(5 - algo.meta.difficulty)}
-              </span>
-            </span>
-          </span>
+          <Difficulty level={algo.meta.difficulty} className={styles.difficulty} />
         </div>
           <h1 className={styles.title}>{algo.meta.name}</h1>
-          <p className={styles.tagline}>{algo.content.tagline}</p>
+          <p className={styles.tagline}>{algo.meta.tagline}</p>
         </div>
 
         {/*
@@ -196,6 +235,7 @@ function AlgorithmExperience({ algo }: { algo: AnyAlgorithm }) {
               setParams((prev) => ({ ...prev, [key]: v }))
             }
             onDirectionChange={setDirection}
+            step={step}
           />
         </div>
 
@@ -204,11 +244,23 @@ function AlgorithmExperience({ algo }: { algo: AnyAlgorithm }) {
             <span className={styles.sectionKicker}>walkthrough</span>
             Watch it work, step by step
           </h2>
-          <StepPlayer
-            steps={result.steps}
-            Visualizer={algo.Visualizer}
-            direction={direction}
-          />
+          <ErrorBoundary
+            fallback={
+              <p className={styles.vizFailed} role="alert">
+                This walkthrough could not be drawn. The playground above still
+                shows the real output; try a different input or key.
+              </p>
+            }
+          >
+            <StepPlayer
+              steps={result.steps}
+              Visualizer={algo.Visualizer}
+              direction={direction}
+              error={result.error}
+              index={step}
+              onIndexChange={setStep}
+            />
+          </ErrorBoundary>
         </section>
       </div>
 
@@ -219,6 +271,8 @@ function AlgorithmExperience({ algo }: { algo: AnyAlgorithm }) {
         </h2>
         <CodePanel samples={algo.code} />
       </section>
+
+      <AlgorithmNav id={algo.meta.id} />
     </article>
   );
 }
@@ -245,7 +299,40 @@ function contentTabs(algo: AnyAlgorithm): TabSpec[] {
       content: <Prose paragraphs={algo.content.weaknesses} accent="warn" />,
     },
   ];
+  if (algo.content.sources?.length) {
+    tabs.push({
+      id: 'sources',
+      label: 'Sources',
+      content: <Sources sources={algo.content.sources} />,
+    });
+  }
   return tabs;
+}
+
+/**
+ * The standards and papers the prose leans on. External, so they open in a new
+ * tab and carry `rel="noreferrer"`; a teaching page that names Kasiski and
+ * Sweet32 and cites neither is asking to be taken on trust.
+ */
+function Sources({
+  sources,
+}: {
+  sources: NonNullable<AlgorithmContent['sources']>;
+}) {
+  return (
+    <div className={styles.block}>
+      <ul className={styles.sources}>
+        {sources.map((s) => (
+          <li key={s.url}>
+            <a href={s.url} target="_blank" rel="noreferrer">
+              {s.label}
+            </a>
+            {s.note && <span className={styles.sourceNote}>{s.note}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 function Prose({

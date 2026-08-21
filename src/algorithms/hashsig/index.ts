@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/hashsig.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type HashSigStepState } from './engine';
 import { HashSigVisualizer } from './Visualizer';
 
 const hashsig: AlgorithmDefinition<HashSigStepState> = {
-  meta: {
-    id: 'hash-signatures',
-    name: 'Hash-Based Signatures',
-    category: 'pqc',
-    era: '1979',
-    difficulty: 5,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

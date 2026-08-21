@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Rotors that step with every keypress, and a reflector that gave it away.',
   formula: [
     {
       label: "signal path",
@@ -50,9 +49,21 @@ export const content: AlgorithmContent = {
   weaknesses: [
     'No letter can encrypt to itself. This is the fatal one. Given a crib, a guessed plaintext fragment, a cryptanalyst can slide it along the ciphertext and immediately discard every position where a letter would have to map to itself, usually eliminating the overwhelming majority of alignments before any real work starts.',
     'The reflector makes the machine self-inverse, which also means the substitution at every position is a set of pairs rather than an arbitrary permutation. That halves the effective structure and is what Turing’s bombe exploited to chain deductions across a crib.',
-    'The plugboard looks like the biggest contributor to the key space and is the easiest part to strip away. Welchman’s diagonal board exploited the fact that plugboard connections are reciprocal (if A is plugged to B then B is plugged to A); turning a contradiction anywhere in a chain into a rejection of the whole configuration.',
+    'The plugboard looks like the biggest contributor to the key space and is the easiest part to strip away. Welchman’s diagonal board exploited the fact that plugboard connections are reciprocal (if A is plugged to B then B is plugged to A), turning a contradiction anywhere in a chain into a rejection of the whole configuration.',
     'Operator procedure leaked constantly. Early practice repeated the message key twice at the start of a transmission, which gave the Polish team the relationship they needed. Predictable openings, formulaic weather reports and lazy choices of rotor start position (initials, or three adjacent keys): all narrowed the search.',
     'Sending the same message on two different networks, one of which used a weaker cipher, gave direct cribs. So did retransmitting a message after a garbled reception with a new setting.',
     'None of this is about the key space. Around 10²³ configurations was genuinely large for the period; the machine fell to structural properties and human habit, which is the more general lesson.',
+  ],
+  sources: [
+    {
+      label: 'Rejewski, How Polish mathematicians broke Enigma',
+      url: 'https://www.impan.pl/~wiadmat/pdf/rejewski.pdf',
+      note: 'The 1932 break, from the mathematician who did it.',
+    },
+    {
+      label: 'Turing, The Applications of Probability to Cryptography',
+      url: 'https://www.nationalarchives.gov.uk/documents/the-applications-of-probability-to-cryptography.pdf',
+      note: 'Declassified in 2012.',
+    },
   ],
 };

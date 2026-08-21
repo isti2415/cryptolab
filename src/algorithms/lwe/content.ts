@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Add a little noise to a solvable equation and it becomes the basis of post-quantum cryptography.',
   formula: [
     {
       label: "the easy problem",
@@ -64,5 +63,12 @@ export const content: AlgorithmContent = {
     'Implementations leak. Lattice schemes involve sampling from noise distributions and rejection loops whose timing can depend on secret values. Several published side-channel attacks recover keys from timing or power traces rather than from the mathematics.',
     'The security estimates are less settled than for factoring. Lattice attacks are analysed through the BKZ algorithm, whose cost model is a matter of ongoing debate, so quoted security levels have shifted as estimates improve. Nobody expects a break; the confidence intervals are simply wider.',
     'And this implementation, specifically, is a toy. Four dimensions and a 97-element field are breakable by exhaustive search in microseconds. Nothing here should be mistaken for a usable scheme.',
+  ],
+  sources: [
+    {
+      label: 'Regev, On lattices, learning with errors… (2005)',
+      url: 'https://cims.nyu.edu/~regev/papers/qcrypto.pdf',
+      note: 'The problem this page is a toy instance of.',
+    },
   ],
 };

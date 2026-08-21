@@ -68,7 +68,7 @@ class PythonSamplesMatchVectors(unittest.TestCase):
         )
 
     def test_samples_reproduce_the_vectors(self):
-        checked = 0
+        per_algorithm = {}
         for algorithm, data in discover():
             module = load_sample(algorithm)
             for case in data["cases"]:
@@ -82,10 +82,26 @@ class PythonSamplesMatchVectors(unittest.TestCase):
                         f"{algorithm} / {case['name']}: the Python sample disagrees "
                         f"with the engine. One of them is wrong.",
                     )
-                    checked += 1
+                    per_algorithm[algorithm] = per_algorithm.get(algorithm, 0) + 1
+
         # A harness that silently checks nothing is the classic way this kind of
-        # test rots into decoration.
-        self.assertGreater(checked, 25, "expected the full vector set to run")
+        # test rots into decoration. The old guard here was a bare `> 25`, which
+        # two thirds of the vector set could disappear behind. Count what is on
+        # disk instead, so the bound cannot go stale and cannot be satisfied by
+        # a partial run.
+        expected = {
+            path.parent.name: len(json.loads(path.read_text())["cases"])
+            for path in ALGORITHMS.glob("*/vectors.json")
+        }
+        self.assertEqual(
+            per_algorithm,
+            expected,
+            "every case in every vectors.json must have been executed",
+        )
+        for algorithm, count in expected.items():
+            self.assertGreater(
+                count, 0, f"{algorithm}: vectors.json contains no cases"
+            )
 
 
 if __name__ == "__main__":

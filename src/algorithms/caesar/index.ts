@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/caesar.py?code';
 import { content } from './content';
@@ -11,13 +12,7 @@ import { CaesarVisualizer } from './Visualizer';
  * must provide is present here; copy this folder's shape to add another.
  */
 const caesar: AlgorithmDefinition<CaesarStepState> = {
-  meta: {
-    id: 'caesar',
-    name: 'Caesar Cipher',
-    category: 'classical',
-    era: '~50 BC',
-    difficulty: 1,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

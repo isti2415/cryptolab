@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'A 256-byte permutation, stirred by the key and then swapped one byte at a time.',
   formula: [
     {
       label: "key schedule (KSA)",
@@ -21,7 +20,7 @@ export const content: AlgorithmContent = {
     {
       label: "the bias",
       expr: "Pr[out₂ = 0] ≈ 2/256",
-      note: "The second output byte is zero about twice as often as it should be, and further biases run through the first few hundred bytes. Given enough ciphertexts of the same plaintext (a browser resending a session cookie, say); those biases recover it.",
+      note: "The second output byte is zero about twice as often as it should be, and further biases run through the first few hundred bytes. Given enough ciphertexts of the same plaintext (a browser resending a session cookie, say), those biases recover it.",
     },
   ],
   symbols: [
@@ -44,12 +43,24 @@ export const content: AlgorithmContent = {
     'The IETF prohibited RC4 in TLS outright in RFC 7465 in February 2015, and browsers removed support during 2015 and 2016. It is one of the few widely deployed ciphers to have been formally banned rather than merely deprecated.',
   ],
   weaknesses: [
-    'The keystream is biased from the very first byte. The second output byte is 0 with roughly twice the probability it should be, and there are further biases across the first few hundred bytes. Given enough ciphertexts of the same plaintext (which a browser will happily generate by re-sending a session cookie); those biases recover the plaintext. This is the basis of the practical TLS attacks.',
+    'The keystream is biased from the very first byte. The second output byte is 0 with roughly twice the probability it should be, and there are further biases across the first few hundred bytes. Given enough ciphertexts of the same plaintext (which a browser will happily generate by re-sending a session cookie), those biases recover the plaintext. This is the basis of the practical TLS attacks.',
     'The key schedule leaks the key when part of it is public. Fluhrer, Mantin and Shamir showed that if an attacker knows some key bytes, the first output bytes reveal information about the rest. WEP prepended a 24-bit initialisation vector directly to the shared key and transmitted it in the clear, handing an attacker exactly that condition; collecting enough frames recovers the key outright.',
     'Being a stream cipher, key reuse is catastrophic in the usual way. Two messages encrypted with the same key produce the same keystream, and XORing the ciphertexts cancels it, leaving the XOR of the two plaintexts. RC4 has no nonce input at all, so implementers had to invent a way to vary the key per message, and WEP’s way of doing that is what broke it.',
     'It provides no integrity. RC4 is malleable in the way every XOR-based stream cipher is: flipping a ciphertext bit flips the same plaintext bit, undetected. WEP paired it with a CRC-32 checksum, which is linear and can be corrected to match a tampered message, so forgeries went undetected too.',
     'The 24-bit IV space in WEP guaranteed repeats after a few hours of ordinary traffic: a design failure layered on top of a cipher weakness, and a good illustration that most real breaks come from the composition rather than the primitive.',
     'There is no safe way to configure RC4. Discarding the first 768 or 3072 bytes of keystream (RC4-drop) mitigates the early biases but not the later ones, and no variant survived scrutiny. The correct action is to use ChaCha20 or AES instead.',
     'This implementation is here to be read, not used. RC4 is prohibited in TLS by RFC 7465 and should not be deployed for anything.',
+  ],
+  sources: [
+    {
+      label: 'Fluhrer, Mantin and Shamir (2001)',
+      url: 'https://www.cs.cornell.edu/people/egs/615/rc4_ksaproc.pdf',
+      note: 'The key-schedule weakness that broke WEP in practice.',
+    },
+    {
+      label: 'RFC 7465: Prohibiting RC4 in TLS',
+      url: 'https://www.rfc-editor.org/rfc/rfc7465',
+      note: 'One of the few ciphers formally banned rather than deprecated.',
+    },
   ],
 };

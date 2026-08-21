@@ -93,7 +93,6 @@ export function addPoints(P: Point, Q: Point, c: Curve, detail?: { value?: AddDe
     return null;
   }
 
-  let lambda: number;
   let numerator: number;
   let denominator: number;
   let kind: AddDetail['kind'];
@@ -107,7 +106,7 @@ export function addPoints(P: Point, Q: Point, c: Curve, detail?: { value?: AddDe
     numerator = mod(Q.y - P.y, c.p);
     denominator = mod(Q.x - P.x, c.p);
   }
-  lambda = mod(numerator * inverse(denominator, c.p), c.p);
+  const lambda = mod(numerator * inverse(denominator, c.p), c.p);
 
   const x = mod(lambda * lambda - P.x - Q.x, c.p);
   const y = mod(lambda * (P.x - x) - P.y, c.p);

@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'The modern standard: a substitution-permutation network on a 4×4 byte grid.',
   formula: [
     {
       label: "the round",
@@ -52,11 +51,24 @@ export const content: AlgorithmContent = {
     'AES now secures a large fraction of everything: TLS, disk encryption, Wi-Fi, VPNs, messaging, backups. It is arguably the most heavily analysed algorithm in the history of the field.',
   ],
   weaknesses: [
+    'This lab is AES-128 on a single block, which is the cipher and not an encryption system. AES-192 and AES-256 change only the key schedule and the number of rounds; what is missing here is everything that turns a block cipher into something you can send a message with, and that missing part is where deployments actually fail.',
     'After more than two decades of concentrated attack there is no practical break of full AES. The best known attack on AES-128 is a biclique technique published in 2011 that recovers a key in about 2¹²⁶·¹ operations rather than 2¹²⁸; a speedup of roughly four times over brute force, which is to say completely infeasible. Reduced-round variants fall, which is exactly what the round count is there to prevent.',
     'Related-key attacks exist against the full AES-192 and AES-256, published by Biryukov and Khovratovich in 2009, exploiting the key schedule being simpler for longer keys. They require an attacker to obtain encryptions under keys with chosen relationships, which no sensible protocol permits, so the practical impact is nil, but it is the reason AES-256’s margin against this particular technique is thinner than AES-128’s, an ordering that surprises people.',
     'The real failures are around the cipher, not inside it. Naïve software implementations use lookup tables whose access patterns depend on secret data, leaking the key through CPU cache timing; Bernstein demonstrated a practical remote attack in 2005 and Osvik, Shamir and Tromer extended it in 2006. Constant-time implementations and AES-NI address this, and code that predates that understanding is still in circulation.',
-    'AES is a block cipher, not an encryption system. Using it in ECB mode (encrypting each block independently); leaks structure so badly that an encrypted bitmap remains recognisable, the well-known "ECB penguin". A mode of operation is mandatory, and the choice of mode is where most real deployments fail.',
+    'AES is a block cipher, not an encryption system. Using it in ECB mode (encrypting each block independently) leaks structure so badly that an encrypted bitmap remains recognisable, the well-known "ECB penguin". A mode of operation is mandatory, and the choice of mode is where most real deployments fail.',
     'Nonce handling is the other recurring failure. In GCM, reusing a nonce with the same key does not merely weaken confidentiality; it exposes the authentication key and lets an attacker forge arbitrary messages. In CTR-style modes, nonce reuse produces the two-time-pad situation that broke Venona.',
     'A large quantum computer would apply Grover’s algorithm and halve the effective key length, taking AES-128 to roughly 2⁶⁴ work. This is why AES-256 is recommended for long-term secrets. Unlike RSA and elliptic curves, AES is not broken by quantum computing; it is merely reduced.',
+  ],
+  sources: [
+    {
+      label: 'FIPS 197: Advanced Encryption Standard',
+      url: 'https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf',
+      note: 'The standard itself; Appendix B and C.1 are the vectors this engine is tested against.',
+    },
+    {
+      label: 'NIST SP 800-38A: Modes of Operation',
+      url: 'https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf',
+      note: 'ECB, CBC, CFB, OFB and CTR, and why the choice matters more than the cipher.',
+    },
   ],
 };

@@ -11,14 +11,54 @@
  * somewhere for the prose.
  */
 
-import { useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import type { CodeSample } from '@/core/types';
 import styles from './CodePanel.module.css';
 
+/*
+ * The tab semantics are implemented here rather than by reusing `ui/Tabs`,
+ * which owns its own chrome and renders every panel: this panel is a header
+ * bar with a copy button and one `<pre>` body. The ARIA contract is the same
+ * one `ui/Tabs` implements, and it has to be complete — a `role="tab"` without
+ * roving focus, arrow keys and a matching `tabpanel` is worse than no role at
+ * all, because it promises a screen-reader user an interaction that isn't there.
+ */
 export function CodePanel({ samples }: { samples: CodeSample[] }) {
   const [activeLang, setActiveLang] = useState(0);
   const [copied, setCopied] = useState(false);
+  const baseId = useId();
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const tabId = (i: number) => `${baseId}-tab-${i}`;
+  const panelId = `${baseId}-panel`;
+
+  function focusTab(i: number) {
+    const next = (i + samples.length) % samples.length;
+    setActiveLang(next);
+    tabRefs.current[next]?.focus();
+  }
+
+  function onTabKeyDown(e: React.KeyboardEvent) {
+    switch (e.key) {
+      case 'ArrowRight':
+        e.preventDefault();
+        focusTab(activeLang + 1);
+        break;
+      case 'ArrowLeft':
+        e.preventDefault();
+        focusTab(activeLang - 1);
+        break;
+      case 'Home':
+        e.preventDefault();
+        focusTab(0);
+        break;
+      case 'End':
+        e.preventDefault();
+        focusTab(samples.length - 1);
+        break;
+    }
+  }
 
   const sample = samples[Math.min(activeLang, samples.length - 1)];
   if (!sample) return null;
@@ -38,13 +78,25 @@ export function CodePanel({ samples }: { samples: CodeSample[] }) {
   return (
     <div className={styles.panel}>
       <div className={styles.head}>
-        <div className={styles.langs} role="tablist" aria-label="Language">
+        <div
+          className={styles.langs}
+          role="tablist"
+          aria-label="Language"
+          onKeyDown={onTabKeyDown}
+        >
           {samples.map((s, i) => (
             <button
               key={s.lang}
+              id={tabId(i)}
+              ref={(el) => {
+                tabRefs.current[i] = el;
+              }}
               role="tab"
               type="button"
               aria-selected={i === activeLang}
+              aria-controls={panelId}
+              // Roving tabindex: the tablist is one stop, arrows move within it.
+              tabIndex={i === activeLang ? 0 : -1}
               className={`${styles.lang} ${i === activeLang ? styles.langOn : ''}`}
               onClick={() => setActiveLang(i)}
               title={s.path}
@@ -54,6 +106,7 @@ export function CodePanel({ samples }: { samples: CodeSample[] }) {
           ))}
         </div>
         <button
+          type="button"
           className={`${styles.copy} ${copied ? styles.copied : ''}`}
           onClick={copy}
           title="Copy source"
@@ -63,7 +116,14 @@ export function CodePanel({ samples }: { samples: CodeSample[] }) {
         </button>
       </div>
 
-      <pre className={styles.pre} tabIndex={0}>
+      {/* tabIndex makes the horizontally scrollable listing reachable by keyboard. */}
+      <pre
+        id={panelId}
+        role="tabpanel"
+        aria-labelledby={tabId(activeLang)}
+        className={styles.pre}
+        tabIndex={0}
+      >
         <code>
           {lines.map((line, i) => (
             <span key={i} className={styles.line}>

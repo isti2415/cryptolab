@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'A stream cipher of nothing but adds, XORs and rotations, no tables, no timing leaks.',
   formula: [
     {
       label: "quarter round",
@@ -41,7 +40,7 @@ export const content: AlgorithmContent = {
   history: [
     'Daniel J. Bernstein published Salsa20 in 2005 as a submission to the eSTREAM project, a European effort to find stream ciphers worth standardising after the collapse of confidence in RC4. Salsa20 was selected for the eSTREAM portfolio in 2008.',
     'ChaCha20 followed in 2008 as a refinement: the same structure with a rearranged quarter-round that diffuses slightly faster per round, and a different state layout. It was not intended as a replacement so much as an improvement Bernstein preferred.',
-    'Google put it into production. In 2013 and 2014, faced with a mobile fleet whose ARM processors had no AES hardware instructions (where AES was both slow and hard to make constant-time); Chrome and Android adopted ChaCha20-Poly1305 for TLS. It was several times faster than AES on those devices.',
+    'Google put it into production. In 2013 and 2014, faced with a mobile fleet whose ARM processors had no AES hardware instructions (where AES was both slow and hard to make constant-time), Chrome and Android adopted ChaCha20-Poly1305 for TLS. It was several times faster than AES on those devices.',
     'The IETF standardised the pairing in RFC 7539 in 2015, revised as RFC 8439 in 2018, with a 96-bit nonce and 32-bit counter chosen to fit TLS record numbering. It is now a mandatory-to-implement option in TLS 1.3 alongside AES-GCM.',
     'The timing matters historically: ChaCha20 arrived as a credible alternative in exactly the years RC4 was being dismantled and prohibited, and it is what most of RC4’s traffic moved to. It is also the generator behind Linux’s /dev/urandom and the basis of the XChaCha20 variant used in libsodium and WireGuard.',
   ],
@@ -52,5 +51,12 @@ export const content: AlgorithmContent = {
     'The best known attacks reach 7 of 20 rounds, and even those are far from practical. The margin is deliberately large (Bernstein argued 8 rounds would likely be enough, and 20 is the conservative choice), so reduced-round variants like ChaCha8 and ChaCha12 exist and are faster, with correspondingly less margin.',
     'Being an ARX design, it resists cache-timing attacks by construction, but it is not automatically safe against every side channel; power analysis and fault injection still apply to any implementation running on hardware an attacker can touch.',
     'It is not a general-purpose random number generator, though it is used to build them. Feeding it a low-entropy key produces a keystream that is exactly as predictable as that key.',
+  ],
+  sources: [
+    {
+      label: 'RFC 8439: ChaCha20 and Poly1305',
+      url: 'https://www.rfc-editor.org/rfc/rfc8439',
+      note: '§2.3.2 and §2.4.2 are the vectors used here.',
+    },
   ],
 };

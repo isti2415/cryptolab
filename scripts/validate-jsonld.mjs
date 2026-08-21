@@ -1,12 +1,24 @@
+import { readFileSync, readdirSync } from 'node:fs';
 /**
- * Fetches live pages, extracts every JSON-LD block, and validates each against
- * JSON validity + Google's documented structured-data requirements for the
- * types we emit. Not a replacement for Google's hosted Rich Results Test, but it
- * catches everything that test checks statically.
+ * Extracts every JSON-LD block from each page and validates it against JSON
+ * validity plus Google's documented structured-data requirements for the types
+ * this site emits. Not a replacement for Google's hosted Rich Results Test, but
+ * it catches everything that test checks statically, and it runs in CI.
  */
 
-const BASE = process.env.SITE_URL || 'https://cryptolab-3db.pages.dev';
-const PAGES = ['/', '/a/caesar', '/a/rsa'];
+/*
+ * Two modes.
+ *
+ * By default this reads the built HTML out of `dist/`, which is what CI does:
+ * the site is fully static, so the file on disk is byte-for-byte the page a
+ * crawler receives, and checking it needs no server and no network. Every
+ * emitted page is checked, not a hand-kept list of three — the list was the
+ * reason a broken algorithm page could pass.
+ *
+ * Set SITE_URL to check a deployed origin instead, which is still worth doing
+ * once after a deploy to catch anything the CDN or the headers do to the page.
+ */
+const BASE = process.env.SITE_URL || '';
 
 let failures = 0;
 let warnings = 0;
@@ -20,11 +32,29 @@ const fail = (m) => {
   console.log(`  \x1b[31m✗\x1b[0m ${m}`);
 };
 
+/** Every file under `dir`, as paths relative to it. */
+function readdirSyncRecursive(dir, prefix = '') {
+  const out = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) out.push(...readdirSyncRecursive(`${dir}/${entry.name}`, rel));
+    else out.push(rel);
+  }
+  return out;
+}
+
+/** Route back to the file that serves it (flat dirStyle: /a/rsa -> a/rsa.html). */
+function fileForRoute(route) {
+  const trimmed = route.replace(/^\//, '');
+  return trimmed === '' ? 'dist/index.html' : `dist/${trimmed}.html`;
+}
+
 function extractJsonLd(html) {
   const re =
     /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi;
   const blocks = [];
   let m;
+  // biome-ignore lint/suspicious/noAssignInExpressions: the idiomatic regex exec() loop.
   while ((m = re.exec(html))) blocks.push(m[1]);
   return blocks;
 }
@@ -97,10 +127,33 @@ function validate(obj) {
   }
 }
 
-for (const path of PAGES) {
+const pages = BASE
+  ? ['/', '/a/caesar', '/a/rsa']
+  : readdirSyncRecursive('dist')
+      .filter((f) => f.endsWith('.html'))
+      .map((f) => '/' + f.replace(/index\.html$/, '').replace(/\.html$/, ''))
+      // The 404 page carries no structured data on purpose: it describes no
+      // resource and is not meant to be indexed.
+      .filter((route) => route !== '/404')
+      .sort();
+
+if (!BASE && pages.length === 0) {
+  console.error('No HTML in dist/. Run `pnpm build` first.');
+  process.exit(1);
+}
+
+console.log(
+  BASE
+    ? `Checking ${pages.length} live page(s) at ${BASE}`
+    : `Checking ${pages.length} built page(s) in dist/`,
+);
+
+for (const path of pages) {
   const url = `${BASE}${path}`;
   console.log(`\n\x1b[1m${url}\x1b[0m`);
-  const html = await fetch(url).then((r) => r.text());
+  const html = BASE
+    ? await fetch(url).then((r) => r.text())
+    : readFileSync(fileForRoute(path), 'utf8');
   const blocks = extractJsonLd(html);
   if (blocks.length === 0) {
     fail('no JSON-LD found');

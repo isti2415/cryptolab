@@ -3,6 +3,7 @@ dist
 dist-ssr
 *.local
 .vite
+.wrangler
 .vite-react-ssg-temp
 coverage
 .DS_Store

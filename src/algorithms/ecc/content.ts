@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Diffie–Hellman on a curve: the same idea, in a group where attacks work far worse.',
   formula: [
     {
       label: "the curve",
@@ -53,7 +52,7 @@ export const content: AlgorithmContent = {
   history: [
     'Neal Koblitz and Victor Miller independently proposed using elliptic curves for cryptography in 1985. The mathematics was already well developed (elliptic curves had been studied for over a century, and had recently been central to Wiles’s proof of Fermat’s Last Theorem), but the cryptographic application was new.',
     'Adoption was slow for two decades, partly through unfamiliarity and partly through a thicket of patents held by Certicom. RSA was understood, implemented and unencumbered by comparison.',
-    'NIST standardised a set of curves in 2000, including P-256, which became the default in TLS. Their generation process was never fully explained, and after the 2013 Snowden disclosures (which revealed the Dual_EC_DRBG backdoor); that opacity became a real problem for confidence.',
+    'NIST standardised a set of curves in 2000, including P-256, which became the default in TLS. Their generation process was never fully explained, and after the 2013 Snowden disclosures (which revealed the Dual_EC_DRBG backdoor), that opacity became a real problem for confidence.',
     'The response was curves designed transparently. Daniel J. Bernstein’s Curve25519, published in 2006, chose every parameter by a stated rule and was built to make implementation mistakes hard: no invalid-curve attacks, no point validation to forget, constant-time by construction. It was standardised as RFC 7748 in 2016 and is now the default in Signal, WireGuard, SSH and TLS 1.3.',
     'Bitcoin uses secp256k1, a Koblitz curve chosen for fast computation and, notably, not one of the NIST curves. That choice looked idiosyncratic in 2009 and looks prescient now.',
   ],
@@ -64,5 +63,17 @@ export const content: AlgorithmContent = {
     'Small-subgroup and twist attacks exploit curves or points whose order has small factors. Cofactor clearing and careful curve choice address these, and getting either wrong silently reduces the effective key size.',
     'Bad randomness is catastrophic for the signature variant. ECDSA requires a fresh random nonce per signature; reuse reveals the private key outright, which is how the Sony PlayStation 3 signing key was extracted in 2010. Deterministic nonce generation (RFC 6979) or Ed25519 avoids the whole problem.',
     'Shor’s algorithm breaks elliptic curves as completely as it breaks RSA, in fact rather more easily, because the smaller key sizes need fewer qubits. Curves are not more quantum-resistant than factoring; they are less.',
+  ],
+  sources: [
+    {
+      label: 'RFC 7748: Curve25519 and Curve448',
+      url: 'https://www.rfc-editor.org/rfc/rfc7748',
+      note: 'Designed so invalid-curve mistakes cannot be made.',
+    },
+    {
+      label: 'SafeCurves',
+      url: 'https://safecurves.cr.yp.to/',
+      note: 'The criteria behind the criticism of the NIST curves.',
+    },
   ],
 };

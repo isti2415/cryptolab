@@ -41,10 +41,6 @@ export function useTheme() {
     setPreference(read());
   }, []);
 
-  const setTheme = useCallback((next: ThemePreference) => {
-    apply(next);
-    setPreference(next);
-  }, []);
 
   const cycleTheme = useCallback(() => {
     setPreference((current) => {
@@ -54,5 +50,7 @@ export function useTheme() {
     });
   }, []);
 
-  return { preference, setTheme, cycleTheme };
+  // `setTheme` is deliberately not returned: the toggle cycles, and an unused
+  // second way to set the same state is how the two drift apart.
+  return { preference, cycleTheme };
 }

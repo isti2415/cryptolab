@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'A Feistel cipher whose S-boxes are built from the key, not fixed.',
   formula: [
     {
       label: "round",
@@ -53,5 +52,12 @@ export const content: AlgorithmContent = {
     'A small fraction of keys produce S-boxes with colliding entries; "weak keys" in Vaudenay’s sense. They do not lead to a practical attack on the full cipher, but they exist and cannot be detected without running the schedule.',
     'The S-boxes need 4 KB of RAM per key, which ruled Blowfish out of the smartcards and embedded hardware of its era and still matters on constrained devices.',
     'None of this makes Blowfish safe to choose today. AES is faster, has a 128-bit block, and has received far more cryptanalytic attention; ChaCha20 is faster still in software without hardware support.',
+  ],
+  sources: [
+    {
+      label: 'Schneier, Description of a New Variable-Length Key Cipher',
+      url: 'https://www.schneier.com/academic/archives/1994/09/description_of_a_new.html',
+      note: 'The original paper and the published test vectors used here.',
+    },
   ],
 };

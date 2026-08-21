@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/enigma.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type EnigmaStepState } from './engine';
 import { EnigmaVisualizer } from './Visualizer';
 
 const enigma: AlgorithmDefinition<EnigmaStepState> = {
-  meta: {
-    id: 'enigma',
-    name: 'Enigma',
-    category: 'classical',
-    era: '1918',
-    difficulty: 4,
-  },
+  meta,
   content,
   // The reflector makes the machine its own inverse, so there is nothing to switch.
   supportsDecrypt: false,

@@ -12,7 +12,13 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    /*
+     * Engines are pure and run fastest in Node; only the component tests need a
+     * DOM. Rather than paying for jsdom on all 400-odd engine assertions, files
+     * opt in with `// @vitest-environment jsdom` at the top.
+     */
     environment: 'node',
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    setupFiles: ['src/test/setup.ts'],
   },
 });

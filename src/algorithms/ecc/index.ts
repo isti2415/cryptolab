@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/ecc.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type EccStepState } from './engine';
 import { EccVisualizer } from './Visualizer';
 
 const ecc: AlgorithmDefinition<EccStepState> = {
-  meta: {
-    id: 'ecdh',
-    name: 'Elliptic Curve (ECDH)',
-    category: 'publickey',
-    era: '1985',
-    difficulty: 5,
-  },
+  meta,
   content,
   supportsDecrypt: false,
   takesInput: false,

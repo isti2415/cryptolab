@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/des.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type DesStepState } from './engine';
 import { DesVisualizer } from './Visualizer';
 
 const des: AlgorithmDefinition<DesStepState> = {
-  meta: {
-    id: 'des',
-    name: 'DES',
-    category: 'symmetric',
-    era: '1977',
-    difficulty: 4,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [
@@ -23,7 +18,7 @@ const des: AlgorithmDefinition<DesStepState> = {
       type: 'text',
       default: '133457799BBCDFF1',
       placeholder: '16 hex digits',
-      help: 'The 64-bit key, as 16 hexadecimal digits.',
+      help: 'The 64-bit key, as 16 hexadecimal digits. Only 56 of them are used: PC-1 discards every eighth bit, which is a parity bit.',
     },
   ],
   run,

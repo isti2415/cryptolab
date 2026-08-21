@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/chacha20.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type ChaCha20StepState } from './engine';
 import { ChaCha20Visualizer } from './Visualizer';
 
 const chacha20: AlgorithmDefinition<ChaCha20StepState> = {
-  meta: {
-    id: 'chacha20',
-    name: 'ChaCha20',
-    category: 'symmetric',
-    era: '2008',
-    difficulty: 4,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

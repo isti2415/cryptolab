@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Compress any message to 256 bits, with no way back.',
   formula: [
     {
       label: "the round",
@@ -65,5 +64,12 @@ export const content: AlgorithmContent = {
     'Reduced-round variants have been attacked: collisions are known for SHA-256 cut to 31 of its 64 rounds, and preimage attacks reach into the mid-40s. Full SHA-256 has a comfortable margin, and these results are what tells us how comfortable.',
     'Grover’s algorithm would let a quantum computer find preimages in about 2¹²⁸ operations rather than 2²⁵⁶, and collision search improves somewhat too. SHA-256 is weakened rather than broken by quantum computing, which is why it remains acceptable where AES-256 is.',
     'The most common failures are not in the function at all. Comparing digests with a non-constant-time string comparison leaks information through timing; hashing without a salt allows rainbow tables; and using a hash where a MAC is required, the length-extension case, is a design error the hash cannot protect against.',
+  ],
+  sources: [
+    {
+      label: 'FIPS 180-4: Secure Hash Standard',
+      url: 'https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf',
+      note: 'Defines SHA-256 and the padding this engine implements.',
+    },
   ],
 };

@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Shift each letter by a different amount, driven by a repeating keyword.',
   formula: [
     {
       label: "encrypt",
@@ -49,5 +48,12 @@ export const content: AlgorithmContent = {
     'Short keys are catastrophically weak and memorable keys are worse. A five-letter keyword against a thousand-letter message gives two hundred samples per column, far more than frequency analysis needs, and human-chosen keywords come from a small dictionary an attacker can simply enumerate.',
     'Known plaintext is fatal and immediate: subtracting known plaintext from the matching ciphertext yields key letters directly, and once m of them are recovered the whole message follows.',
     'The autokey variant Vigenère actually proposed avoids the repetition entirely and is genuinely harder to break: a small historical irony, given which cipher carries his name.',
+  ],
+  sources: [
+    {
+      label: 'Kasiski examination',
+      url: 'https://en.wikipedia.org/wiki/Kasiski_examination',
+      note: 'The 1863 method for recovering the key length.',
+    },
   ],
 };

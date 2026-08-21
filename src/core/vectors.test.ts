@@ -13,7 +13,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { algorithms } from './registry';
+import { algorithms, loadAlgorithm } from './registry';
 import type { Direction, Params } from './types';
 
 interface VectorFile {
@@ -44,14 +44,17 @@ describe('shared vectors', () => {
     expect(missing).toEqual([]);
   });
 
-  for (const algo of algorithms) {
-    const file = byAlgorithm.get(algo.meta.id);
+  for (const entry of algorithms) {
+    const file = byAlgorithm.get(entry.meta.id);
     if (!file) continue;
 
-    describe(algo.meta.id, () => {
+    describe(entry.meta.id, () => {
       for (const c of file.cases) {
-        it(c.name, () => {
-          const result = algo.run(c.input, c.params, c.direction);
+        // The definition is code-split now, so each case resolves the chunk
+        // first; `loadAlgorithm` memoises, so this is one import per algorithm.
+        it(c.name, async () => {
+          const algo = await loadAlgorithm(entry.meta.id);
+          const result = algo!.run(c.input, c.params, c.direction);
           expect(result.error).toBeUndefined();
           expect(result.output).toBe(c.output);
         });

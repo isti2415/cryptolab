@@ -136,7 +136,7 @@ export function DhVisualizer({ step }: AlgorithmVisualizerProps<DhStepState>) {
               {
                 key: 's',
                 label: 'shared',
-                value: s.kind === 'agree' ? s.sharedA! : ', ',
+                value: s.kind === 'agree' ? s.sharedA! : '—',
                 secret: true,
                 active: s.kind === 'agree',
                 note: 'derived independently on both sides',
@@ -174,11 +174,11 @@ function Party({
       <dl className={styles.rows}>
         <Row
           label={`${secretLabel} (secret)`}
-          value={secretKnown ? secret: ', '}
+          value={secretKnown ? secret: '—'}
           tone="secret"
         />
-        <Row label={publicLabel} value={publicValue ?? ', '} tone="public" />
-        <Row label="shared" value={sharedValue ?? ', '} tone="shared" />
+        <Row label={publicLabel} value={publicValue ?? '—'} tone="public" />
+        <Row label="shared" value={sharedValue ?? '—'} tone="shared" />
       </dl>
     </div>
   );

@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Signatures from hash functions alone: the most conservative post-quantum option.',
   formula: [
     {
       label: "the chain",
@@ -65,5 +64,17 @@ export const content: AlgorithmContent = {
     'Grover’s algorithm halves the effective security of the underlying hash, so post-quantum parameters use larger outputs than a classical analysis would suggest. This is a known, quantified cost rather than an open question.',
     'Implementations must get domain separation right. Every hash call needs to be distinguished by its position in the structure, and getting that wrong allows values from one context to be replayed in another.',
     'What this lab shows is XMSS-shaped, a single stateful Merkle tree, rather than full SLH-DSA. The standard adds a hypertree of such trees plus FORS, a few-time signature, to select leaves by hashing the message rather than by counting. Those layers are what make it stateless, and without them a reused leaf index is a break rather than a warning.',
+  ],
+  sources: [
+    {
+      label: 'RFC 8391: XMSS',
+      url: 'https://www.rfc-editor.org/rfc/rfc8391',
+      note: 'A standardised hash-based signature scheme.',
+    },
+    {
+      label: 'Lamport (1979), Constructing digital signatures',
+      url: 'https://lamport.azurewebsites.net/pubs/dig-sig.pdf',
+      note: 'One-time signatures from a one-way function alone.',
+    },
   ],
 };

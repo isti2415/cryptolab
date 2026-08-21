@@ -8,6 +8,7 @@
  */
 
 import { Cell, type CellState } from './Cell';
+import { describeGrid } from './describe';
 import styles from './PolyVecGrid.module.css';
 
 interface PolyVecGridProps {
@@ -39,7 +40,16 @@ export function PolyVecGrid({
   return (
     <div className={styles.wrap}>
       {label && <span className={styles.label}>{label}</span>}
-      <div className={styles.rows}>
+      {/* One label for the whole vector; the coefficients are the values. */}
+      <div
+        className={styles.rows}
+        role="img"
+        aria-label={describeGrid(
+          label,
+          rows.map((row) => row.map((v) => show(v))),
+          rowLabels,
+        )}
+      >
         {rows.map((row, r) => (
           <div className={styles.row} key={r}>
             {rowLabels && <span className={styles.rowLabel}>{rowLabels[r]}</span>}

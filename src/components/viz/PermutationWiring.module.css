@@ -25,6 +25,12 @@
 .svg {
   display: block;
   font-family: var(--font-mono);
+  /* Fit the container when it can, never past the point of illegibility, and
+     never blow up larger than the diagram was drawn. See PermutationWiring.tsx. */
+  width: 100%;
+  max-width: var(--wiring-natural, none);
+  min-width: var(--wiring-floor, 0);
+  height: auto;
 }
 
 .wire {

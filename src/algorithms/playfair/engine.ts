@@ -142,7 +142,6 @@ export function run(
     const [ra1, ca1] = pos.get(a)!;
     const [rb1, cb1] = pos.get(b)!;
 
-    let ra: string, rb: string;
     let posRA: [number, number], posRB: [number, number];
     let rule: 'row' | 'column' | 'rectangle';
 
@@ -159,8 +158,8 @@ export function run(
       posRA = [ra1, cb1];
       posRB = [rb1, ca1];
     }
-    ra = grid[posRA[0]][posRA[1]];
-    rb = grid[posRB[0]][posRB[1]];
+    const ra = grid[posRA[0]][posRA[1]];
+    const rb = grid[posRB[0]][posRB[1]];
     outputPairs.push(ra + rb);
 
     const ruleText = {

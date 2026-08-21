@@ -26,11 +26,11 @@ export function Rc4Visualizer({ step }: AlgorithmVisualizerProps<Rc4StepState>) 
         <div className={styles.pointers}>
           <span className={styles.pointer}>
             <span className={styles.pointerLabel}>i</span>
-            {s.i ?? ', '}
+            {s.i ?? '—'}
           </span>
           <span className={styles.pointer}>
             <span className={styles.pointerLabel}>j</span>
-            {s.j ?? ', '}
+            {s.j ?? '—'}
           </span>
           {s.range && (
             <span className={styles.pointerNote}>

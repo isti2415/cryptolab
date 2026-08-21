@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/mldsa.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type MldsaStepState } from './engine';
 import { MldsaVisualizer } from './Visualizer';
 
 const mldsa: AlgorithmDefinition<MldsaStepState> = {
-  meta: {
-    id: 'ml-dsa',
-    name: 'ML-DSA (Dilithium)',
-    category: 'pqc',
-    era: '2024',
-    difficulty: 5,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

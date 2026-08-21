@@ -42,7 +42,7 @@ export function HmacVisualizer({ step }: AlgorithmVisualizerProps<HmacStepState>
                 }`}
               >
                 <span className={styles.stageLabel}>{stage.label}</span>
-                <span className={styles.stageValue}>{stage.value ?? ', '}</span>
+                <span className={styles.stageValue}>{stage.value ?? '—'}</span>
               </li>
             );
           })}

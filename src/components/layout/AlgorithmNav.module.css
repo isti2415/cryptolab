@@ -1,0 +1,92 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 48px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+
+.heading {
+  margin: 0 0 12px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.relatedBlock {
+  min-width: 0;
+}
+
+.related {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+}
+
+.card,
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: var(--tap);
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md, 10px);
+  background: var(--bg-panel);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.card:hover,
+.step:hover {
+  border-color: var(--signal);
+  background: var(--bg-raised);
+}
+
+.cardName,
+.stepName {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cardTag {
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+  text-wrap: pretty;
+}
+
+.stepDir {
+  font-size: var(--fs-2xs);
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+}
+
+/* Two columns so "next" sits at the trailing edge even when there is no
+   "previous" (the first algorithm) — the empty <span> holds the slot. */
+.sequence {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stepNext {
+  text-align: right;
+}
+
+@container page (max-width: 560px) {
+  .sequence {
+    grid-template-columns: 1fr;
+  }
+  .stepNext {
+    text-align: left;
+  }
+}

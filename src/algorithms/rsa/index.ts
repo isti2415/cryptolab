@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/rsa.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type RsaStepState } from './engine';
 import { RsaVisualizer } from './Visualizer';
 
 const rsa: AlgorithmDefinition<RsaStepState> = {
-  meta: {
-    id: 'rsa',
-    name: 'RSA',
-    category: 'publickey',
-    era: '1977',
-    difficulty: 5,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

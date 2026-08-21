@@ -258,3 +258,51 @@
 .blockWarn {
   border-left-color: var(--warn);
 }
+
+/*
+ * Shown when the walkthrough's error boundary trips. Dashed like the player's
+ * own empty state so it reads as "nothing here", not as a crash dialogue, and
+ * uses --warn rather than --danger: the page is still useful, one panel is not.
+ */
+.vizFailed {
+  margin: 0;
+  padding: 40px 20px;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--text-dim);
+  background: var(--bg-panel);
+  border: 1px dashed var(--warn);
+  border-radius: var(--r-lg);
+  max-width: var(--maxw-read);
+  margin-inline: auto;
+}
+
+/* Sources tab: a reference list, not prose. */
+.sources {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sources li {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.sources a {
+  /* Colour comes from the global `a` rule; only the underline and the hit
+     height are specific to a reference list. */
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  /* External references sit in a list; keep them comfortably tappable. */
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+}
+.sourceNote {
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+  text-wrap: pretty;
+}

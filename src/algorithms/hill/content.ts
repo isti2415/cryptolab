@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Encrypt blocks of letters with matrix multiplication mod 26.',
   formula: [
     {
       label: "encrypt",
@@ -49,5 +48,12 @@ export const content: AlgorithmContent = {
     'Ciphertext-only attacks are harder than against monoalphabetic ciphers, but not out of reach for small matrices: the key space for a 2×2 matrix mod 26 is small enough to search directly, and block-level frequency analysis narrows it further.',
     'Key validity is a real trap. A matrix whose determinant shares a factor with 26 encrypts perfectly happily and then cannot be decrypted, because the inverse does not exist. The failure appears only at the far end, potentially after the message has been sent.',
     'It leaks nothing about block boundaries but everything about block repetition: identical plaintext blocks always produce identical ciphertext blocks, which is the same weakness ECB mode has in modern block ciphers.',
+  ],
+  sources: [
+    {
+      label: 'Hill, Cryptography in an Algebraic Alphabet (1929)',
+      url: 'https://www.jstor.org/stable/2298294',
+      note: 'The original paper.',
+    },
   ],
 };

@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/hmac_sha256.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type HmacStepState } from './engine';
 import { HmacVisualizer } from './Visualizer';
 
 const hmac: AlgorithmDefinition<HmacStepState> = {
-  meta: {
-    id: 'hmac',
-    name: 'HMAC',
-    category: 'hash',
-    era: '1996',
-    difficulty: 3,
-  },
+  meta,
   content,
   supportsDecrypt: false,
   params: [

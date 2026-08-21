@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/otp.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type OtpStepState } from './engine';
 import { OtpVisualizer } from './Visualizer';
 
 const otp: AlgorithmDefinition<OtpStepState> = {
-  meta: {
-    id: 'otp',
-    name: 'One-Time Pad',
-    category: 'classical',
-    era: '1917',
-    difficulty: 2,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

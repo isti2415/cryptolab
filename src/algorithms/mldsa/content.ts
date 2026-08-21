@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Dilithium; lattice signatures that throw away any candidate leaking the key.',
   formula: [
     {
       label: "keys",
@@ -62,8 +61,15 @@ export const content: AlgorithmContent = {
     'The masking vector must be fresh and unpredictable for every signature. Reuse across two signatures allows subtracting them to recover c·s₁ and from there the key: the same failure mode that exposed the PlayStation 3 signing key through ECDSA nonce reuse. Deterministic derivation of y from the message and key avoids relying on a randomness source at signing time.',
     'Signatures are large. ML-DSA-65 produces about 3.3 KB, against 64 bytes for Ed25519, and public keys run to nearly 2 KB. For certificate chains, where several signatures appear in a single handshake, that adds up quickly.',
     'It rests on Module-LWE and Module-SIS, which carry more algebraic structure than plain lattice problems. No attack exploits it, but the assumption is younger and stronger than the ones it replaces.',
-    'Fault attacks are a documented concern. Inducing a fault during signing (skipping a rejection check, or corrupting an intermediate); can produce a signature that leaks key material, and implementations on hardware an attacker can touch need explicit countermeasures.',
+    'Fault attacks are a documented concern. Inducing a fault during signing (skipping a rejection check, or corrupting an intermediate) can produce a signature that leaks key material, and implementations on hardware an attacker can touch need explicit countermeasures.',
     'Security estimates depend on lattice reduction cost models that are still being refined, so quoted levels have shifted over time and may shift again.',
     'This lab is Dilithium’s structure at toy parameters and is explicitly not FIPS 204. The ring degree is 8 rather than 256, the module is rank 2, the bounds are scaled to match, and the challenge derivation is simplified, so it produces none of the standard’s test vectors. The seeded generator is a further simplification: a real signer must never derive its masking vector predictably, because doing so reveals the private key.',
+  ],
+  sources: [
+    {
+      label: 'FIPS 204: ML-DSA',
+      url: 'https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.204.pdf',
+      note: 'The standard this page models the structure of, and is explicitly not.',
+    },
   ],
 };

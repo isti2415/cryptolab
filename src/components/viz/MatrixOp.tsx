@@ -8,6 +8,7 @@
  */
 
 import { Cell, type CellState } from './Cell';
+import { describeGrid } from './describe';
 import styles from './MatrixOp.module.css';
 
 export interface MatrixTerm {
@@ -32,8 +33,11 @@ function Matrix({ rows, label, state = 'idle', highlight }: MatrixTerm) {
     <div className={styles.term}>
       {label && <span className={styles.termLabel}>{label}</span>}
       <div className={styles.bracket}>
+        {/* Read as one grid; cell by cell a matrix is just a run of numbers. */}
         <div
           className={styles.matrix}
+          role="img"
+          aria-label={describeGrid(label, rows)}
           style={{ gridTemplateColumns: `repeat(${rows[0]?.length ?? 1}, auto)` }}
         >
           {rows.map((row, r) =>

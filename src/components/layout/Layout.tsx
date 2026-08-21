@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { Icon } from "@/components/ui/Icon";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { algorithmGroups } from "@/core/registry";
 import { SITE_TAGLINE } from "@/core/site";
-import type { AnyAlgorithm } from "@/core/types";
+import type { AlgorithmEntry } from "@/core/types";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Footer } from "./Footer";
 import styles from "./Layout.module.css";
 
 const NAV_KEY = "cryptolab-nav-collapsed";
@@ -48,17 +50,67 @@ export function Layout() {
   }, []);
 
   /*
+   * Whether the sidebar is currently an overlay rather than a column. Tracked
+   * in state, not read imperatively, because the focus handling below has to
+   * re-run when the viewport crosses the breakpoint.
+   */
+  const [drawerMode, setDrawerMode] = useState(false);
+
+  /*
    * Crossing the breakpoint with the column open would leave a drawer sitting
    * over the page on arrival at a narrow width (rotation, a resized window).
    */
   useEffect(() => {
     const mq = window.matchMedia(DRAWER);
-    const onChange = (e: MediaQueryListEvent) => {
-      if (e.matches) setNavOpen(false);
+    const sync = () => {
+      setDrawerMode(mq.matches);
+      if (mq.matches) setNavOpen(false);
     };
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
+    setDrawerMode(mq.matches);
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
   }, []);
+
+  const navRef = useRef<HTMLElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
+  /** True only when the sidebar is an overlay covering the page. */
+  const drawerOpen = drawerMode && navOpen && !isLanding;
+
+  /*
+   * An overlay that leaves the page behind it focusable is a trap of the worst
+   * kind: tab moves the caret through content the user cannot see. So while the
+   * drawer is open `<main>` is inert, focus moves into the drawer, and closing
+   * it hands focus back to the button that opened it.
+   *
+   * The topbar deliberately stays live: that toggle is the drawer's close
+   * control (`aria-expanded` and all), and inerting it would leave a keyboard
+   * user with no visible way out but the Escape key.
+   */
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const nav = navRef.current;
+    /*
+     * Focus the panel itself rather than its first link. The accordions start
+     * collapsed and collapsed panels are `inert`, so the first anchor in the
+     * markup is usually unfocusable and `.focus()` on it silently does nothing.
+     * Focusing the container is also what a screen reader wants: it announces
+     * the nav's own label before the list, rather than dropping the user onto
+     * an item with no idea where they are.
+     */
+    /*
+     * Next frame, not this one. The drawer is mid-transition when the effect
+     * fires and `focus()` on a not-yet-visible element is silently dropped,
+     * which is exactly the bug this effect exists to fix.
+     */
+    const frame = requestAnimationFrame(() => nav?.focus());
+    return () => {
+      cancelAnimationFrame(frame);
+      // Only reclaim focus if it is still inside the drawer being closed;
+      // following a link has already moved it somewhere more useful.
+      if (nav?.contains(document.activeElement)) toggleRef.current?.focus();
+    };
+  }, [drawerOpen]);
 
   // Escape closes the drawer, which is the expected way out of an overlay.
   useEffect(() => {
@@ -109,6 +161,7 @@ export function Layout() {
           {!isLanding && (
             <button
               type="button"
+              ref={toggleRef}
               className={styles.navButton}
               onClick={toggleNav}
               aria-expanded={navOpen}
@@ -147,8 +200,11 @@ export function Layout() {
 
             <nav
               id="algorithm-nav"
+              ref={navRef}
               className={styles.sidebar}
               aria-label="Algorithms"
+              // Programmatic focus target when it opens as a drawer; not a tab stop.
+              tabIndex={-1}
               {...(navOpen ? {} : { inert: true })}
             >
               {groups.map((g) => (
@@ -163,8 +219,30 @@ export function Layout() {
           </>
         )}
 
-        <main id="main" className={styles.main}>
-          <Outlet />
+        <main
+          id="main"
+          className={styles.main}
+          {...(drawerOpen ? { inert: true } : {})}
+        >
+          {/*
+            Outer net. The walkthrough has its own, tighter boundary; this one
+            only catches a failure in the page shell itself, where the
+            alternative is a blank document with no way back.
+          */}
+          <ErrorBoundary
+            fallback={
+              <div className={styles.pageFailed} role="alert">
+                <h1>Something went wrong on this page.</h1>
+                <p>
+                  Reloading usually clears it. If it keeps happening, the
+                  algorithm list in the sidebar still works.
+                </p>
+              </div>
+            }
+          >
+            <Outlet />
+          </ErrorBoundary>
+          <Footer />
         </main>
       </div>
     </div>
@@ -177,7 +255,7 @@ function NavAccordion({
   onNavigate,
 }: {
   title: string;
-  items: AnyAlgorithm[];
+  items: AlgorithmEntry[];
   onNavigate?: () => void;
 }) {
   // Groups start expanded; each can then be freely collapsed by the user.
@@ -195,22 +273,9 @@ function NavAccordion({
       >
         <span className={styles.navTitle}>{title}</span>
         <span className={styles.navCount}>{items.length}</span>
-        <svg
-          className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`}
-          viewBox="0 0 12 12"
-          width="12"
-          height="12"
-          aria-hidden="true"
-        >
-          <path
-            d="M2.5 4.5 6 8l3.5-3.5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <span className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`}>
+          <Icon name="chevron" size={12} />
+        </span>
       </button>
 
       <div

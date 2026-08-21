@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/lwe.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type LweStepState } from './engine';
 import { LweVisualizer } from './Visualizer';
 
 const lwe: AlgorithmDefinition<LweStepState> = {
-  meta: {
-    id: 'lwe',
-    name: 'Learning With Errors',
-    category: 'pqc',
-    era: '2005',
-    difficulty: 4,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

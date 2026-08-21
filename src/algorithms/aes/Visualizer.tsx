@@ -10,6 +10,7 @@
  * the round key being XORed in.
  */
 
+import { describeGrid } from '@/components/viz/describe';
 import { Cell } from '@/components/viz/Cell';
 import { BitField } from '@/components/viz/BitField';
 import { LookupTable } from '@/components/viz/LookupTable';
@@ -63,25 +64,34 @@ function StateGrid({
   hex,
   prevHex,
   label,
-  role = 'state',
+  tone = 'state',
 }: {
   hex: string;
   prevHex?: string;
   label: string;
-  role?: 'state' | 'key';
+  tone?: 'state' | 'key';
 }) {
   const m = toMatrix(hex);
   const p = prevHex ? toMatrix(prevHex) : undefined;
   return (
     <div className={styles.gridWrap}>
       <span className={styles.gridLabel}>{label}</span>
-      <div className={styles.grid}>
+      {/*
+        AES state is column-major, so reading the grid cell by cell gives the
+        bytes in an order that is not the order of the block. One label, stated
+        as rows, and the individual cells left decorative.
+      */}
+      <div
+        className={styles.grid}
+        role="img"
+        aria-label={describeGrid(label, m)}
+      >
         {m.map((row, r) =>
           row.map((v, c) => (
             <Cell
               key={`${r}-${c}`}
               state={
-                role === 'key'
+                tone === 'key'
                   ? 'key'
                   : p && p[r][c] !== v
                     ? 'changed'
@@ -110,7 +120,7 @@ export function AesVisualizer({
         <div className={styles.matrices}>
           <StateGrid hex={s.state} prevHex={prevHex} label="state" />
           {s.roundKey && (
-            <StateGrid hex={s.roundKey} label={`round key ${s.round}`} role="key" />
+            <StateGrid hex={s.roundKey} label={`round key ${s.round}`} tone="key" />
           )}
         </div>
         {s.outputHex && (

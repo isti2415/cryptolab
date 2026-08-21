@@ -1,0 +1,11 @@
+.pips {
+  font-family: var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--signal);
+  white-space: nowrap;
+}
+
+/* Unfilled pips: decorative only (see Difficulty.tsx), so a dim tone is fine. */
+.off {
+  color: var(--border-strong);
+}

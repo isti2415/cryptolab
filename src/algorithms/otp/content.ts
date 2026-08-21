@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'A random key as long as the message, used exactly once, provably unbreakable.',
   formula: [
     {
       label: "encrypt",
@@ -48,5 +47,17 @@ export const content: AlgorithmContent = {
     'Key distribution is the whole problem. Pads must be generated, physically transported, stored securely at both ends, tracked so neither side reuses a page, and destroyed after use. Every one of those steps has failed historically, and the cipher offers no help with any of them.',
     'It provides confidentiality and nothing else. Because encryption is a per-character combination, an attacker who knows the plaintext can flip it to any other message of the same length by adjusting the ciphertext: the recipient decrypts the forgery cleanly. Real systems need a separate authentication mechanism; the pad will not detect tampering.',
     'It leaks length. Perfect secrecy covers content, not size, and message length is often enough on its own.',
+  ],
+  sources: [
+    {
+      label: 'Shannon, Communication Theory of Secrecy Systems (1949)',
+      url: 'https://ia903406.us.archive.org/33/items/bstj28-4-656/bstj28-4-656.pdf',
+      note: 'The proof of perfect secrecy, and its conditions.',
+    },
+    {
+      label: 'NSA, the VENONA project',
+      url: 'https://www.nsa.gov/Helpful-Links/NSA-FOIA/Declassification-Transparency-Initiatives/Historical-Releases/Venona/',
+      note: 'What happens when a one-time pad is used twice.',
+    },
   ],
 };

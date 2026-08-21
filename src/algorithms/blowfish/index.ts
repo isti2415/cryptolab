@@ -1,5 +1,6 @@
 import { pythonSample, tsEngine } from '@/core/code';
 import type { AlgorithmDefinition } from '@/core/types';
+import { meta } from './meta';
 import engineCode from './engine.ts?code';
 import pythonCode from './code/blowfish.py?code';
 import { content } from './content';
@@ -7,13 +8,7 @@ import { run, type BlowfishStepState } from './engine';
 import { BlowfishVisualizer } from './Visualizer';
 
 const blowfish: AlgorithmDefinition<BlowfishStepState> = {
-  meta: {
-    id: 'blowfish',
-    name: 'Blowfish',
-    category: 'symmetric',
-    era: '1993',
-    difficulty: 4,
-  },
+  meta,
   content,
   supportsDecrypt: true,
   params: [

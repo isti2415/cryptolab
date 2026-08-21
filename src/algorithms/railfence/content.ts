@@ -1,7 +1,6 @@
 import type { AlgorithmContent } from '@/core/types';
 
 export const content: AlgorithmContent = {
-  tagline: 'Write the message in a zigzag across several rails, then read it off row by row.',
   formula: [
     {
       label: "rail of position i",
@@ -34,7 +33,7 @@ export const content: AlgorithmContent = {
   history: [
     'Transposition is at least as old as substitution. The Spartan scytale, described by Plutarch and dated to around the 7th to 5th century BC, wrapped a leather strip around a rod of a particular diameter and wrote across the turns; unwound, the letters were scrambled, and only a rod of matching diameter reassembled them. That is a transposition cipher with the rod as the key.',
     'The rail fence itself is a folk cipher with no clear inventor, familiar from puzzle books and children’s codes. Its more serious relatives were used in earnest: the Union army employed route ciphers during the American Civil War, in which the message was written into a grid and read out along an agreed path, often with null words inserted to confuse the shape.',
-    'Columnar transposition (write into a grid, then read the columns in an order given by a keyword); remained militarily relevant far longer. The German ADFGVX cipher of the First World War combined a substitution step with a columnar transposition specifically because neither alone was sufficient, and it took Georges Painvin months of work to break it.',
+    'Columnar transposition (write into a grid, then read the columns in an order given by a keyword) remained militarily relevant far longer. The German ADFGVX cipher of the First World War combined a substitution step with a columnar transposition specifically because neither alone was sufficient, and it took Georges Painvin months of work to break it.',
     'The lasting idea is the combination. Substitution hides which letters are present; transposition hides where they are. Modern block ciphers do both in every round (AES’s SubBytes is substitution and its ShiftRows is transposition), because each covers the other’s weakness.',
   ],
   weaknesses: [
@@ -43,5 +42,12 @@ export const content: AlgorithmContent = {
     'It preserves letter counts exactly, so an attacker knows the message length and can often anchor on expected words. Short messages are worse still: with few letters the fence barely folds and fragments of the original order survive intact in the output.',
     'Used alone it provides no confusion whatsoever. There is no relationship between key and letter identity at all, only between key and position, so a single correct guess about position is not narrowed by anything else.',
     'Real transposition ciphers mitigated some of this with keyword-driven column orders, multiple passes and null padding. The rail fence has none of those, which is what makes it a teaching cipher rather than a historical one.',
+  ],
+  sources: [
+    {
+      label: 'Transposition cipher',
+      url: 'https://en.wikipedia.org/wiki/Transposition_cipher',
+      note: 'Including the columnar and ADFGVX variants the history mentions.',
+    },
   ],
 };
